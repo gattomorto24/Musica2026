@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MUSICA 2026 | INFO & REGOLAMENTO</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #020202;
+            --accent: #00f2ff;
+            --accent-glow: rgba(0, 242, 255, 0.2);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
+            --text-dim: #666;
+            --card-radius: 28px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 50% -20%, #1a1a1a 0%, transparent 70%);
+            padding: 40px 20px;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; animation: fadeIn 0.8s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { 
+            font-size: 2.5rem; font-weight: 800; letter-spacing: -2px;
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: var(--card-radius);
+            padding: 35px; margin-bottom: 25px;
+        }
+
+        h2 { color: var(--accent); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        .section-content { color: #ccc; font-size: 0.95rem; }
+        
+        ul { list-style: none; }
+        li { margin-bottom: 15px; padding-left: 20px; position: relative; }
+        li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 800; }
+
+        .back-link {
+            display: inline-block; text-decoration: none; color: var(--text-dim);
+            font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 30px; border: 1px solid var(--glass-border);
+            padding: 10px 20px; border-radius: 100px;
+        }
+        .back-link:hover { color: var(--accent); border-color: var(--accent); }
+
+        .version-tag {
+            background: var(--accent); color: #000; padding: 2px 8px;
+            border-radius: 4px; font-size: 0.7rem; font-weight: 800; vertical-align: middle;
+        }
+
+        .code-font { font-family: 'Fira Code', monospace; color: var(--accent); }
+
+        @media (max-width: 600px) {
+            .glass-card { padding: 20px; }
+            header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-link">← Torna alla Dashboard</a>
+
+    <header>
+        <h1>INFO & REGOLAMENTO</h1>
+        <p style="color: var(--text-dim); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 10px;">Musica 2026 Official Documentation</p>
+    </header>
+
+    <div class="glass-card">
+        <h2>🏆 Sistema Punteggi</h2>
+        <div class="section-content">
+            <p style="margin-bottom: 15px;">I punti vengono assegnati settimanalmente in base alla posizione occupata nella classifica di Tony:</p>
+            <ul>
+                <li><b class="code-font">1° Posto:</b> 35 Punti (Vittoria Assoluta)</li>
+                <li><b class="code-font">Top 5:</b> 25 Punti (Zona Champions)</li>
+                <li><b class="code-font">Top 20:</b> 20 Punti (Serie A Permanente)</li>
+                <li><b class="code-font">Serie B (21-50):</b> 10 Punti (Zona Stabile)</li>
+                <li><b class="code-font">Serie C (51+):</b> 2 Punti (Zona Esordienti)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h2>⚖️ Protocollo "Il Notaio"</h2>
+        <div class="section-content">
+            <p>Il sistema integra un algoritmo di controllo coerenza per evitare fluttuazioni irreali dei dati:</p>
+            <ul>
+                <li>Le canzoni stabilizzate in <b>Top 15</b> non possono retrocedere direttamente in Serie B.</li>
+                <li>Le canzoni in <b>Serie B</b> hanno una protezione contro il crollo immediato in Serie C se mantengono una media alta.</li>
+                <li>Ogni forzatura manuale viene registrata nei log del database Cloud.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h2>🚀 Note di Rilascio <span class="version-tag">v1.2</span></h2>
+        <div class="section-content">
+            <p style="margin-bottom: 10px; color: var(--accent);"><b>Aggiornamento Attuale:</b></p>
+            <ul>
+                <li><b>UX Mobile:</b> Ottimizzati i tasti di navigazione per schermi piccoli (Fix spaziatura e font).</li>
+                <li><b>Cloud Core:</b> Sincronizzazione real-time con Supabase DB migliorata.</li>
+                <li><b>Design:</b> Implementato il "Professional Cloud OS" style con animazioni di entrata.</li>
+                <li><b>Nuova Sezione:</b> Rilascio ufficiale della pagina Regolamento.</li>
+            </ul>
+        </div>
+    </div>
+
+    <p style="text-align: center; font-size: 0.6rem; color: #222; letter-spacing: 2px;">TONY EXECUTIVE SYSTEMS © 2026</p>
+</div>
+
+</body>
+</html>
