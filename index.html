@@ -2,343 +2,245 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSICA 2026 | EXECUTIVE CLOUD OS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MUSICA 2026 | CLOUD ELITE OS</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg: #030303;
+            --bg: #020202;
             --accent: #00f2ff;
-            --accent-glow: rgba(0, 242, 255, 0.2);
-            --glass: rgba(255, 255, 255, 0.02);
+            --accent-glow: rgba(0, 242, 255, 0.15);
+            --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
             --danger: #ff2d55;
-            --warning: #ffb800;
             --text: #ffffff;
-            --text-dim: #666;
-            --card-radius: 28px;
+            --card-radius: 24px;
         }
 
-        /* Reset & Base */
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
+            background-image: radial-gradient(circle at 50% -20%, #111, #020202);
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(0, 242, 255, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 90% 90%, rgba(255, 45, 85, 0.03) 0%, transparent 50%);
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-        .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
-
-        /* Loader Overlay */
-        #loader-overlay {
+        /* Effetto Caricamento */
+        #loader {
             position: fixed; inset: 0; background: #000; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .spinner {
-            width: 50px; height: 50px; border: 3px solid var(--glass);
+            width: 40px; height: 40px; border: 2px solid var(--glass);
             border-top-color: var(--accent); border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Header Design */
-        header { text-align: center; margin-bottom: 60px; animation: slideDown 0.8s ease; }
-        header h1 { 
-            font-size: 3.5rem; font-weight: 800; letter-spacing: -3px;
-            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 40px 15px; }
+
+        /* Header & Nav */
+        header { text-align: center; margin-bottom: 40px; animation: slideDown 0.6s ease; }
+        h1 { 
+            font-size: clamp(2rem, 8vw, 3.5rem); font-weight: 800; letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff, #888);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px var(--accent-glow));
         }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Navigation Sticky */
         .nav {
-            display: flex; justify-content: center; gap: 12px; margin-bottom: 50px;
-            position: sticky; top: 20px; z-index: 1000;
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 30px;
+            position: sticky; top: 15px; z-index: 100;
         }
         .nav-btn {
-            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); color: var(--text-dim);
-            padding: 14px 28px; border-radius: 100px; cursor: pointer;
-            font-weight: 600; font-size: 0.85rem; letter-spacing: 1px;
-            text-transform: uppercase;
+            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); color: #666;
+            padding: 12px 20px; border-radius: 50px; cursor: pointer;
+            font-weight: 600; font-size: 0.8rem; text-transform: uppercase;
         }
-        .nav-btn:hover { border-color: var(--accent); color: white; }
         .nav-btn.active { 
             background: var(--accent); color: #000; border-color: var(--accent);
-            box-shadow: 0 10px 30px var(--accent-glow);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         /* Glass Cards */
         .glass-card {
-            background: var(--glass); backdrop-filter: blur(30px);
+            background: var(--glass); backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border); border-radius: var(--card-radius);
-            padding: 40px; margin-bottom: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            padding: clamp(15px, 5vw, 30px); margin-bottom: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             animation: fadeIn 0.8s ease;
         }
         @keyframes fadeIn { from { opacity: 0; scale: 0.98; } to { opacity: 1; scale: 1; } }
 
-        /* Table Aesthetics */
-        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        th { padding: 15px; text-align: left; font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
-        td { padding: 22px 15px; background: rgba(255,255,255,0.015); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
-        td:first-child { border-radius: 16px 0 0 16px; border-left: 1px solid var(--glass-border); }
-        td:last-child { border-radius: 0 16px 16px 0; border-right: 1px solid var(--glass-border); }
+        /* Tabelle e Liste */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        th { padding: 10px; text-align: left; font-size: 0.6rem; color: #444; letter-spacing: 2px; text-transform: uppercase; }
+        td { 
+            padding: 18px 12px; background: rgba(255,255,255,0.01);
+            border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
+        }
+        td:first-child { border-radius: 14px 0 0 14px; border-left: 1px solid var(--glass-border); width: 50px; }
+        td:last-child { border-radius: 0 14px 14px 0; border-right: 1px solid var(--glass-border); text-align: right; }
 
-        tr:hover td { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); }
+        .song-title { font-weight: 600; font-size: 1rem; display: block; margin-bottom: 4px; }
+        .badge { 
+            font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 5px; 
+            text-transform: uppercase; border: 1px solid transparent;
+        }
+        .badge-a { background: var(--accent); color: #000; }
+        .badge-b { border-color: #ffb800; color: #ffb800; }
+        .badge-c { border-color: #333; color: #666; }
 
-        .rank-num { font-family: 'Fira Code', monospace; opacity: 0.4; font-size: 1.1rem; }
-        .song-name { font-weight: 600; font-size: 1.05rem; }
-
-        /* Status Badges */
-        .badge { padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-        .badge-a { background: var(--accent); color: #000; box-shadow: 0 4px 15px var(--accent-glow); }
-        .badge-b { border: 1px solid var(--warning); color: var(--warning); }
-        .badge-c { border: 1px solid #333; color: #666; }
-
-        .tag-risk { color: var(--danger); font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
-        .tag-risk::before { content: '●'; animation: blink 1.5s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        /* Input Styles */
+        /* Input area */
         textarea {
-            width: 100%; height: 350px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border);
-            border-radius: 20px; color: var(--accent); padding: 25px; font-family: 'Fira Code', monospace;
-            font-size: 0.9rem; line-height: 1.6; outline: none; margin-bottom: 30px;
+            width: 100%; height: 280px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border);
+            border-radius: 18px; color: var(--accent); padding: 20px; font-family: 'Fira Code', monospace;
+            font-size: 0.85rem; margin-bottom: 20px; outline: none;
         }
-        textarea:focus { border-color: var(--accent); box-shadow: 0 0 25px var(--accent-glow); }
+        textarea:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
 
-        .btn-publish {
-            background: var(--accent); color: #000; border: none; padding: 22px;
-            border-radius: 18px; font-weight: 800; cursor: pointer; width: 100%;
-            font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;
+        .btn-action {
+            width: 100%; padding: 18px; border-radius: 16px; border: none;
+            font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 1px;
         }
-        .btn-publish:hover { transform: translateY(-4px); box-shadow: 0 20px 40px var(--accent-glow); }
+        .btn-save { background: var(--accent); color: #000; box-shadow: 0 10px 30px var(--accent-glow); }
+        .btn-reset { 
+            background: transparent; border: 1px solid var(--danger); 
+            color: var(--danger); margin-top: 50px; opacity: 0.4; font-size: 0.7rem;
+        }
+        .btn-reset:hover { opacity: 1; background: var(--danger); color: #fff; }
 
-        /* Footer Info */
-        #db-status { font-size: 0.65rem; color: #444; text-align: center; margin-top: 20px; letter-spacing: 1px; }
-
+        /* Mobile specific scroll e layout */
+        @media (max-width: 600px) {
+            .container { padding: 20px 10px; }
+            td { padding: 14px 10px; }
+            .song-title { font-size: 0.9rem; }
+            .nav-btn { padding: 10px 15px; font-size: 0.7rem; }
+        }
     </style>
 </head>
 <body>
 
-<div id="loader-overlay">
-    <div class="spinner"></div>
-    <p style="margin-top: 20px; color: #444; font-size: 0.8rem; letter-spacing: 2px;">SINCRONIZZAZIONE CLOUD</p>
-</div>
+<div id="loader"><div class="spinner"></div></div>
 
 <div class="container">
     <header>
-        <h1>MUSICA 2026</h1>
-        <p style="color: var(--accent); font-weight: 600; font-size: 0.75rem; letter-spacing: 5px; margin-top: 10px;">ANTONINO OS PRO</p>
+        <h1>MUSICA <span style="font-weight: 300;">2026</span></h1>
+        <p id="db-indicator" style="font-size: 10px; color: #333; margin-top: 8px; letter-spacing: 2px;">DISCONNECTED</p>
     </header>
 
     <div class="nav">
-        <button id="nav-main" class="nav-btn active" onclick="showTab('main')">Live Ranking</button>
-        <button id="nav-input" class="nav-btn" onclick="showTab('input')">Aggiorna</button>
-        <button id="nav-hist" class="nav-btn" onclick="showTab('history')">Archivio</button>
+        <button id="nav-live" class="nav-btn active" onclick="showTab('live')">Classifica</button>
+        <button id="nav-upd" class="nav-btn" onclick="showTab('upd')">Aggiorna</button>
     </div>
 
-    <div id="tab-main" class="glass-card">
+    <div id="tab-live" class="glass-card">
         <table>
-            <thead>
-                <tr>
-                    <th>Pos</th>
-                    <th>Canzone</th>
-                    <th>Lega</th>
-                    <th>Punti</th>
-                    <th>Stato</th>
-                </tr>
-            </thead>
-            <tbody id="main-body">
-                </tbody>
+            <thead><tr><th>Pos</th><th>Brano</th><th>Punti</th></tr></thead>
+            <tbody id="ranking-body"></tbody>
         </table>
     </div>
 
-    <div id="tab-input" class="glass-card" style="display:none;">
-        <h2 style="margin-bottom: 25px; font-weight: 800;">Settimana <span id="week-display" style="color:var(--accent)">-</span></h2>
-        <p style="color: #666; margin-bottom: 20px; font-size: 0.9rem;">Incolla la classifica settimanale rispettando l'ordine (1-20 Serie A, 21-50 Serie B, 51+ Serie C).</p>
-        <textarea id="raw-data" placeholder="1. Canzone A&#10;2. Canzone B&#10;..."></textarea>
-        <button class="btn-publish" onclick="pushToCloud()">Pubblica nel Cloud</button>
-    </div>
-
-    <div id="tab-history" class="glass-card" style="display:none;">
-        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:30px;">
-            <button onclick="moveHistory(-1)" class="nav-btn">◀</button>
-            <h2 id="hist-label" style="font-weight: 800;">Settimana 0</h2>
-            <button onclick="moveHistory(1)" class="nav-btn">▶</button>
+    <div id="tab-upd" style="display:none;">
+        <div class="glass-card">
+            <h2 style="margin-bottom:20px; font-weight:800; font-size: 1.2rem;">Settimana <span id="week-id" style="color:var(--accent)">-</span></h2>
+            <textarea id="input-data" placeholder="1. Nome Canzone (Artista)&#10;2. Titolo Brano..."></textarea>
+            <button class="btn-action btn-save" onclick="handleUpdate()">Pubblica nel Cloud</button>
         </div>
-        <table id="hist-table">
-            <thead><tr><th>Pos</th><th>Canzone</th><th>Guadagno</th></tr></thead>
-            <tbody id="hist-body"></tbody>
-        </table>
+        
+        <button class="btn-action btn-reset" onclick="resetDatabase()">RESET DATABASE TOTALE</button>
     </div>
-
-    <p id="db-status">CONNETTENDO AL DATABASE...</p>
 </div>
 
 <script>
-    // --- CONFIGURAZIONE CLOUD (NON MODIFICARE SE GIA' IMPOSTATO) ---
     const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
     const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
-    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+    const client = supabase.createClient(SB_URL, SB_KEY);
 
-    // Stato Iniziale del Campionato (Ibrido tra punti reali e posizioni di partenza)
-    let state = {
-        week: 14,
-        hIdx: 0,
-        songs: {},
-        history: []
-    };
+    let state = { week: 1, songs: {} };
 
-    // Punti indicativi accumulati nelle prime 13 settimane
-    const START_POINTS = {
-        "Di Notte": 365, "Panico": 220, "Berlino": 195, "Cenere": 125, "Nemico": 85,
-        "Fellini": 80, "100 Messaggi": 75, "Puro Sinaloa": 70, "Fentanyl": 65, "Morto Mai": 60,
-        "Buio Davanti": 55, "Superclassico": 50, "Lewandowski VII": 45, "Acqua Tonica": 40, "Per Te": 40,
-        "Tu Mi Piaci Tanto": 75, "Da Denuncia": 70, "Per Soldi e Per Amore": 45, "Giovani Re": 30, "Eva": 30
-    };
-
-    // Inizializzazione automatica se il DB è vuoto
-    function bootstrap() {
-        const listA = ["Di Notte", "Panico", "Berlino", "Cenere", "Nemico", "Fellini", "100 Messaggi", "Puro Sinaloa", "Fentanyl", "Morto Mai", "Buio Davanti", "Superclassico", "Lewandowski VII", "Acqua Tonica", "Per Te", "Giovani Re", "Eva", "Lilith", "Zeri in più", "Molotov"];
-        const listB = ["Tu Mi Piaci Tanto", "Da Denuncia", "Per Soldi e Per Amore", "Non Me ne frega un cazzo", "MeryXSempre", "LUMIERE", "Perchè", "Ricchi x Sempre", "Rockstar", "Cupido", "Bottiglie Privè", "15 Piani", "Push It", "Jolly", "Amelie", "Eroina", "Ex Angelo", "Terr1", "Verdi nei viola", "BIANCA", "Dolce Vita", "Canzone D’odio", "Piove", "Ov3rture", "Uscito di Galera", "Senza Rumore", "Frio", "Gigolò", "Take 6", "Paradiso Artificiale"];
-        const listC = ["Dissing", "PARAFULMINI", "FIGLIO DI", "LEWANDOWSKI X", "BELLA FREGATURA", "Pensavo Di Ucciderti", "Ferma A Guardare", "FIGLIO UNICO", "SIRENA", "DAMME 'NA MANO", "Tran Tran", "Serpenti A Sonagli", "UHLALA", "Baby", "Anche Stasera", "Yakuza", "NEON", "Calipso", "MI FAI IMPAZZIRE", "Davide e Golia", "La violenza Necessaria", "Gilgamesh", "L'ultimo a Cadere", "MEZZE VERITÀ", "OuverFOURe", "TOPBOY", "Re Mida (Piano Solo)", "Volgare", "Hoe", "Anime Libere", "Diluvio A Luglio", "Avvoltoi", "Poesie Clandestine", "OSSESSIONE", "Stupida sfortuna", "MALE NECESSARIO", "Che Gusto C'è", "Oliver Twist", "Die With A Smile", "Perfect", "Let Her Go"];
-
-        listA.forEach((n, i) => state.songs[n] = { pts: START_POINTS[n] || 25, l: 'A', lastPos: i + 1, risk: (i >= 15) });
-        listB.forEach((n, i) => state.songs[n] = { pts: START_POINTS[n] || 10, l: 'B', lastPos: 21 + i, risk: false });
-        listC.forEach((n, i) => state.songs[n] = { pts: 0, l: 'C', lastPos: 51 + i, risk: false });
-    }
-
-    async function syncLoad() {
+    async function load() {
         try {
-            const { data, error } = await supabaseClient.from('classifiche').select('data_json').order('id', { ascending: false }).limit(1);
+            const { data } = await client.from('classifiche').select('data_json').order('id', { ascending: false }).limit(1);
             if (data && data.length > 0) {
                 state = data[0].data_json;
-                document.getElementById('db-status').innerText = "DATABASE CLOUD: ATTIVO";
-            } else {
-                bootstrap();
-                document.getElementById('db-status').innerText = "DATABASE LOCALE: INIZIALIZZATO";
+                document.getElementById('db-indicator').innerText = "CLOUD SYNC ACTIVE";
             }
-            renderMain();
-            document.getElementById('week-display').innerText = state.week;
-        } catch (e) {
-            console.error("Errore sync:", e);
-        }
-        hideLoader();
+            render();
+        } catch(e) { console.error(e); }
+        
+        document.getElementById('loader').style.opacity = '0';
+        setTimeout(() => document.getElementById('loader').style.display='none', 500);
     }
 
-    async function pushToCloud() {
-        const raw = document.getElementById('raw-data').value;
-        if (!raw) return alert("Cosa carichiamo, il vuoto?");
+    function render() {
+        const body = document.getElementById('ranking-body');
+        const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
+        
+        body.innerHTML = sorted.map(([name, d], i) => `
+            <tr>
+                <td style="font-family:'Fira Code'; opacity:0.3; font-size:0.8rem">#${i+1}</td>
+                <td>
+                    <span class="song-title">${name}</span>
+                    <span class="badge badge-${d.l.toLowerCase()}">Serie ${d.l}</span>
+                </td>
+                <td style="color:var(--accent); font-weight:800; font-family:'Fira Code'">${d.pts}</td>
+            </tr>
+        `).join('');
+        document.getElementById('week-id').innerText = state.week;
+    }
 
-        const list = raw.split(/[\n,]+/).map(s => s.replace(/^\d+\.\s*/, '').trim()).filter(s => s !== "");
-        let infractions = [];
+    async function handleUpdate() {
+        const raw = document.getElementById('input-data').value;
+        if(!raw) return alert("Tony, inserisci i dati!");
 
-        // Validazione "Notaio"
-        list.forEach((name, i) => {
-            let pos = i + 1;
-            let currentLega = pos <= 20 ? 'A' : (pos <= 50 ? 'B' : 'C');
-            let song = state.songs[name] || { pts: 0, l: 'C', lastPos: 99, risk: false };
-
-            if (song.l === 'A' && currentLega === 'B' && song.lastPos <= 15) {
-                infractions.push(`⚠️ "${name}" è in Top 15 e non può retrocedere direttamente!`);
-            }
-        });
-
-        if (infractions.length > 0) {
-            if (!confirm(infractions.join('\n') + "\n\nVuoi forzare comunque il sistema?")) return;
-        }
-
-        // Calcolo Punti
-        let newHistory = { week: state.week, results: [] };
-        list.forEach((name, i) => {
-            let pos = i + 1;
-            if (!state.songs[name]) state.songs[name] = { pts: 0, l: 'C', lastPos: 99, risk: false };
+        const lines = raw.split('\n').filter(l => l.trim() !== "");
+        
+        lines.forEach((line, index) => {
+            // PULIZIA: Rimuove numero iniziale e tutto quello che c'è nelle parentesi
+            let name = line.replace(/^\d+\.\s*/, '').split('(')[0].trim();
+            let pos = index + 1;
+            
+            if(!state.songs[name]) state.songs[name] = { pts: 0, l: 'C' };
             let s = state.songs[name];
-            let newLega = pos <= 20 ? 'A' : (pos <= 50 ? 'B' : 'C');
-            let p = 0;
-
-            if (newLega === 'A') {
-                if (pos === 1) p = 30; else if (pos <= 5) p = 25; else if (pos <= 10) p = 20; else if (pos <= 15) p = 15; else p = 10;
-                s.risk = (pos > 15);
-            } else if (newLega === 'B') {
-                if (pos <= 25) p = 10; else if (pos <= 35) p = 7; else if (pos <= 45) p = 5; else p = 4;
-                s.risk = (pos > 45);
-            } else {
-                if (pos <= 55) p = 4; else if (pos <= 60) p = 1; else p = 0;
-                s.risk = false;
-            }
+            let nL = pos <= 20 ? 'A' : (pos <= 50 ? 'B' : 'C');
+            
+            // Punti
+            let p = (nL === 'A') ? 20 : (nL === 'B' ? 10 : 2);
+            if(pos === 1) p = 35; 
 
             s.pts += p;
-            s.l = newLega;
-            s.lastPos = pos;
-            newHistory.results.push({ n: name, p: p });
+            s.l = nL;
         });
 
-        state.history.push(newHistory);
         state.week++;
-
-        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
-        if (error) alert("Errore Cloud: " + error.message);
+        const { error } = await client.from('classifiche').insert([{ data_json: state }]);
+        if(error) alert("Errore: " + error.message);
         else location.reload();
     }
 
-    function renderMain() {
-        const body = document.getElementById('main-body');
-        const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
-        body.innerHTML = sorted.map(([name, d], i) => `
-            <tr>
-                <td class="rank-num">${i+1}</td>
-                <td class="song-name">${name}</td>
-                <td><span class="badge badge-${d.l.toLowerCase()}">Serie ${d.l}</span></td>
-                <td style="color:var(--accent); font-weight:800">${d.pts}</td>
-                <td>${d.risk ? '<span class="tag-risk">RISCHIO</span>' : ''}</td>
-            </tr>
-        `).join('');
-    }
-
-    function renderHistory() {
-        if (!state.history.length) return;
-        const h = state.history[state.hIdx];
-        document.getElementById('hist-label').innerText = "Settimana " + h.week;
-        document.getElementById('hist-body').innerHTML = h.results.map((r, i) => `
-            <tr><td>${i+1}</td><td>${r.n}</td><td style="color:var(--accent)">+${r.p}</td></tr>
-        `).join('');
-    }
-
-    function moveHistory(d) {
-        state.hIdx = Math.max(0, Math.min(state.history.length - 1, state.hIdx + d));
-        renderHistory();
+    async function resetDatabase() {
+        if(!confirm("ATTENZIONE: Questo cancellerà tutta la classifica. Procedo?")) return;
+        state = { week: 1, songs: {} };
+        await client.from('classifiche').insert([{ data_json: state }]);
+        location.reload();
     }
 
     function showTab(t) {
-        ['main', 'input', 'history'].forEach(id => document.getElementById('tab-'+id).style.display = t === id ? 'block' : 'none');
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === 'nav-'+t));
-        if (t === 'history') renderHistory();
+        document.getElementById('tab-live').style.display = t === 'live' ? 'block' : 'none';
+        document.getElementById('tab-upd').style.display = t === 'upd' ? 'block' : 'none';
+        document.getElementById('nav-live').classList.toggle('active', t === 'live');
+        document.getElementById('nav-upd').classList.toggle('active', t === 'upd');
     }
 
-    function hideLoader() {
-        const l = document.getElementById('loader-overlay');
-        l.style.opacity = '0';
-        setTimeout(() => l.style.display = 'none', 500);
-    }
-
-    syncLoad();
+    load();
 </script>
-
 </body>
 </html>
