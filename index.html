@@ -3,244 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>MUSICA 2026 | CLOUD ELITE OS</title>
+    <title>MUSICA 2026 | PROFESSIONAL CLOUD OS</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --bg: #020202;
             --accent: #00f2ff;
-            --accent-glow: rgba(0, 242, 255, 0.15);
+            --accent-glow: rgba(0, 242, 255, 0.2);
             --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
             --danger: #ff2d55;
+            --warning: #ffb800;
             --text: #ffffff;
-            --card-radius: 24px;
+            --text-dim: #666;
+            --card-radius: 28px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
-        
+        /* Reset & Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            background-image: radial-gradient(circle at 50% -20%, #111, #020202);
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            background-image: 
+                radial-gradient(circle at 50% -20%, #1a1a1a 0%, transparent 70%),
+                radial-gradient(circle at 0% 100%, rgba(0, 242, 255, 0.05) 0%, transparent 40%);
         }
 
-        /* Effetto Caricamento */
-        #loader {
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+
+        /* Loader */
+        #loader-overlay {
             position: fixed; inset: 0; background: #000; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .spinner {
-            width: 40px; height: 40px; border: 2px solid var(--glass);
+            width: 50px; height: 50px; border: 2px solid var(--glass);
             border-top-color: var(--accent); border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 40px 15px; }
-
-        /* Header & Nav */
-        header { text-align: center; margin-bottom: 40px; animation: slideDown 0.6s ease; }
-        h1 { 
-            font-size: clamp(2rem, 8vw, 3.5rem); font-weight: 800; letter-spacing: -2px;
-            background: linear-gradient(to bottom, #fff, #888);
+        /* Header Design */
+        header { text-align: center; margin-bottom: 50px; animation: slideDown 0.8s ease; }
+        header h1 { 
+            font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 800; letter-spacing: -3px;
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px var(--accent-glow));
         }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        header p { color: var(--accent); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; font-weight: 600; }
 
+        /* Navigation */
         .nav {
-            display: flex; justify-content: center; gap: 10px; margin-bottom: 30px;
-            position: sticky; top: 15px; z-index: 100;
+            display: flex; justify-content: center; gap: 12px; margin-bottom: 40px;
+            position: sticky; top: 20px; z-index: 1000;
         }
         .nav-btn {
-            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border); color: #666;
-            padding: 12px 20px; border-radius: 50px; cursor: pointer;
-            font-weight: 600; font-size: 0.8rem; text-transform: uppercase;
+            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); color: var(--text-dim);
+            padding: 14px 24px; border-radius: 100px; cursor: pointer;
+            font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
         }
+        .nav-btn:hover { border-color: var(--accent); color: white; }
         .nav-btn.active { 
             background: var(--accent); color: #000; border-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 10px 30px var(--accent-glow);
         }
 
         /* Glass Cards */
         .glass-card {
-            background: var(--glass); backdrop-filter: blur(25px);
+            background: var(--glass); backdrop-filter: blur(30px);
             border: 1px solid var(--glass-border); border-radius: var(--card-radius);
-            padding: clamp(15px, 5vw, 30px); margin-bottom: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            padding: 35px; margin-bottom: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             animation: fadeIn 0.8s ease;
         }
         @keyframes fadeIn { from { opacity: 0; scale: 0.98; } to { opacity: 1; scale: 1; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Tabelle e Liste */
-        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-        th { padding: 10px; text-align: left; font-size: 0.6rem; color: #444; letter-spacing: 2px; text-transform: uppercase; }
+        /* Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        th { padding: 15px; text-align: left; font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 2px; }
         td { 
-            padding: 18px 12px; background: rgba(255,255,255,0.01);
-            border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
+            padding: 20px 15px; background: rgba(255,255,255,0.015); 
+            border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); 
         }
-        td:first-child { border-radius: 14px 0 0 14px; border-left: 1px solid var(--glass-border); width: 50px; }
-        td:last-child { border-radius: 0 14px 14px 0; border-right: 1px solid var(--glass-border); text-align: right; }
+        td:first-child { border-radius: 16px 0 0 16px; border-left: 1px solid var(--glass-border); width: 60px; font-family: 'Fira Code', monospace; color: #444; }
+        td:last-child { border-radius: 0 16px 16px 0; border-right: 1px solid var(--glass-border); text-align: right; }
 
-        .song-title { font-weight: 600; font-size: 1rem; display: block; margin-bottom: 4px; }
+        .song-name { font-weight: 600; font-size: 1.1rem; display: block; margin-bottom: 5px; }
         .badge { 
-            font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 5px; 
-            text-transform: uppercase; border: 1px solid transparent;
+            display: inline-block; padding: 4px 10px; border-radius: 6px; 
+            font-size: 10px; font-weight: 800; text-transform: uppercase; 
         }
         .badge-a { background: var(--accent); color: #000; }
-        .badge-b { border-color: #ffb800; color: #ffb800; }
-        .badge-c { border-color: #333; color: #666; }
+        .badge-b { border: 1px solid var(--warning); color: var(--warning); }
+        .badge-c { border: 1px solid #333; color: #666; }
 
-        /* Input area */
+        /* Inputs */
         textarea {
-            width: 100%; height: 280px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border);
-            border-radius: 18px; color: var(--accent); padding: 20px; font-family: 'Fira Code', monospace;
-            font-size: 0.85rem; margin-bottom: 20px; outline: none;
+            width: 100%; height: 350px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border);
+            border-radius: 20px; color: var(--accent); padding: 25px; font-family: 'Fira Code', monospace;
+            font-size: 0.9rem; line-height: 1.6; outline: none; margin-bottom: 25px;
         }
-        textarea:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        textarea:focus { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
 
-        .btn-action {
-            width: 100%; padding: 18px; border-radius: 16px; border: none;
-            font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 1px;
+        .btn-publish {
+            background: var(--accent); color: #000; border: none; padding: 22px;
+            border-radius: 18px; font-weight: 800; cursor: pointer; width: 100%;
+            font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;
         }
-        .btn-save { background: var(--accent); color: #000; box-shadow: 0 10px 30px var(--accent-glow); }
+        .btn-publish:hover { transform: translateY(-3px); box-shadow: 0 15px 40px var(--accent-glow); }
+
+        /* Archivio Controls */
+        .archive-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .btn-arrow { background: var(--glass); border: 1px solid var(--glass-border); color: #fff; width: 50px; height: 50px; border-radius: 15px; cursor: pointer; }
+        .btn-arrow:disabled { opacity: 0.2; cursor: not-allowed; }
+
         .btn-reset { 
-            background: transparent; border: 1px solid var(--danger); 
-            color: var(--danger); margin-top: 50px; opacity: 0.4; font-size: 0.7rem;
+            background: transparent; border: 1px solid var(--danger); color: var(--danger); 
+            padding: 15px; border-radius: 15px; width: 100%; margin-top: 60px;
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; opacity: 0.4;
         }
         .btn-reset:hover { opacity: 1; background: var(--danger); color: #fff; }
 
-        /* Mobile specific scroll e layout */
+        /* Mobile Adjustments */
         @media (max-width: 600px) {
-            .container { padding: 20px 10px; }
-            td { padding: 14px 10px; }
-            .song-title { font-size: 0.9rem; }
-            .nav-btn { padding: 10px 15px; font-size: 0.7rem; }
+            .container { padding: 20px 15px; }
+            .glass-card { padding: 20px; }
+            td { padding: 15px 10px; }
+            .song-name { font-size: 0.95rem; }
+            .nav-btn { padding: 12px 16px; font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
 
-<div id="loader"><div class="spinner"></div></div>
+<div id="loader-overlay">
+    <div class="spinner"></div>
+    <p style="margin-top: 20px; color: #444; font-size: 0.7rem; letter-spacing: 3px;">INITIALIZING CLOUD CORE</p>
+</div>
 
 <div class="container">
     <header>
-        <h1>MUSICA <span style="font-weight: 300;">2026</span></h1>
-        <p id="db-indicator" style="font-size: 10px; color: #333; margin-top: 8px; letter-spacing: 2px;">DISCONNECTED</p>
+        <h1>MUSICA 2026</h1>
+        <p>Tony Executive Dashboard</p>
     </header>
 
     <div class="nav">
-        <button id="nav-live" class="nav-btn active" onclick="showTab('live')">Classifica</button>
-        <button id="nav-upd" class="nav-btn" onclick="showTab('upd')">Aggiorna</button>
+        <button id="nav-live" class="nav-btn active" onclick="showTab('live')">Classifica Generale</button>
+        <button id="nav-upd" class="nav-btn" onclick="showTab('upd')">Nuova Settimana</button>
+        <button id="nav-hist" class="nav-btn" onclick="showTab('hist')">Archivio Storico</button>
     </div>
 
     <div id="tab-live" class="glass-card">
         <table>
-            <thead><tr><th>Pos</th><th>Brano</th><th>Punti</th></tr></thead>
-            <tbody id="ranking-body"></tbody>
+            <thead>
+                <tr>
+                    <th>Pos</th>
+                    <th>Canzone / Lega</th>
+                    <th>Punti Totali</th>
+                </tr>
+            </thead>
+            <tbody id="live-body"></tbody>
         </table>
     </div>
 
     <div id="tab-upd" style="display:none;">
         <div class="glass-card">
-            <h2 style="margin-bottom:20px; font-weight:800; font-size: 1.2rem;">Settimana <span id="week-id" style="color:var(--accent)">-</span></h2>
-            <textarea id="input-data" placeholder="1. Nome Canzone (Artista)&#10;2. Titolo Brano..."></textarea>
-            <button class="btn-action btn-save" onclick="handleUpdate()">Pubblica nel Cloud</button>
+            <h2 style="margin-bottom: 25px; font-weight: 800;">Carica Settimana <span id="next-week-id" style="color:var(--accent)">-</span></h2>
+            <p style="color: #666; margin-bottom: 20px; font-size: 0.8rem;">Incolla la classifica (1-20 Serie A, 21-50 Serie B, 51+ Serie C). Il sistema pulirà i nomi automaticamente.</p>
+            <textarea id="input-raw" placeholder="1. Nome Canzone&#10;2. Nome Canzone..."></textarea>
+            <button class="btn-publish" onclick="processUpdate()">Pubblica nel Cloud</button>
         </div>
-        
-        <button class="btn-action btn-reset" onclick="resetDatabase()">RESET DATABASE TOTALE</button>
+        <button class="btn-reset" onclick="hardReset()">Formatta Database (Reset Totale)</button>
     </div>
+
+    <div id="tab-hist" style="display:none;" class="glass-card">
+        <div class="archive-nav">
+            <button id="prev-btn" class="btn-arrow" onclick="changeArchive(-1)">◀</button>
+            <h2 id="archive-title" style="font-weight: 800;">Settimana -</h2>
+            <button id="next-btn" class="btn-arrow" onclick="changeArchive(1)">▶</button>
+        </div>
+        <table id="archive-table">
+            <thead>
+                <tr>
+                    <th>Pos</th>
+                    <th>Canzone</th>
+                    <th>Punti Guadagnati</th>
+                </tr>
+            </thead>
+            <tbody id="archive-body"></tbody>
+        </table>
+    </div>
+
+    <p id="db-status" style="text-align: center; font-size: 0.6rem; color: #222; margin-top: 30px; letter-spacing: 2px;">SECURE CONNECTION: PENDING</p>
 </div>
 
 <script>
+    // --- SUPABASE CONFIG ---
     const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
     const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
-    const client = supabase.createClient(SB_URL, SB_KEY);
+    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    let state = { week: 1, songs: {} };
+    // --- STATE MANAGEMENT ---
+    let state = {
+        week: 14,
+        songs: {}, // { "Nome": { pts: 0, l: 'A', lastPos: 1 } }
+        history: [], // [{ week: 14, data: [{n: "Nome", p: 20}] }]
+        hIdx: 0
+    };
 
-    async function load() {
-        try {
-            const { data } = await client.from('classifiche').select('data_json').order('id', { ascending: false }).limit(1);
-            if (data && data.length > 0) {
-                state = data[0].data_json;
-                document.getElementById('db-indicator').innerText = "CLOUD SYNC ACTIVE";
-            }
-            render();
-        } catch(e) { console.error(e); }
+    // --- CLOUD LOGIC ---
+    async function loadData() {
+        const { data, error } = await supabaseClient
+            .from('classifiche')
+            .select('data_json')
+            .order('id', { ascending: false })
+            .limit(1);
+
+        if (data && data.length > 0) {
+            state = data[0].data_json;
+            if(!state.history) state.history = [];
+            document.getElementById('db-status').innerText = "SYSTEM ONLINE: CLOUD SYNCHRONIZED";
+        } else {
+            document.getElementById('db-status').innerText = "SYSTEM ONLINE: LOCAL MODE";
+        }
         
-        document.getElementById('loader').style.opacity = '0';
-        setTimeout(() => document.getElementById('loader').style.display='none', 500);
+        refreshUI();
+        hideLoader();
     }
 
-    function render() {
-        const body = document.getElementById('ranking-body');
+    function refreshUI() {
+        renderLive();
+        document.getElementById('next-week-id').innerText = state.week;
+    }
+
+    // --- RENDERING ---
+    function renderLive() {
+        const body = document.getElementById('live-body');
+        // Ordina per punti decrescenti
         const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
         
         body.innerHTML = sorted.map(([name, d], i) => `
             <tr>
-                <td style="font-family:'Fira Code'; opacity:0.3; font-size:0.8rem">#${i+1}</td>
+                <td>#${i+1}</td>
                 <td>
-                    <span class="song-title">${name}</span>
+                    <span class="song-name">${name}</span>
                     <span class="badge badge-${d.l.toLowerCase()}">Serie ${d.l}</span>
                 </td>
-                <td style="color:var(--accent); font-weight:800; font-family:'Fira Code'">${d.pts}</td>
+                <td style="color:var(--accent); font-weight:800; font-family:'Fira Code'; font-size:1.1rem">${d.pts}</td>
             </tr>
         `).join('');
-        document.getElementById('week-id').innerText = state.week;
     }
 
-    async function handleUpdate() {
-        const raw = document.getElementById('input-data').value;
-        if(!raw) return alert("Tony, inserisci i dati!");
-
-        const lines = raw.split('\n').filter(l => l.trim() !== "");
+    function renderArchive() {
+        if (!state.history || state.history.length === 0) {
+            document.getElementById('archive-body').innerHTML = "<tr><td colspan='3' style='text-align:center'>Nessun dato registrato.</td></tr>";
+            return;
+        }
+        const entry = state.history[state.hIdx];
+        document.getElementById('archive-title').innerText = "Settimana " + entry.week;
+        document.getElementById('archive-body').innerHTML = entry.data.map((item, i) => `
+            <tr>
+                <td>${i+1}</td>
+                <td><span class="song-name">${item.n}</span></td>
+                <td style="color:var(--accent)">+${item.p}</td>
+            </tr>
+        `).join('');
         
-        lines.forEach((line, index) => {
-            // PULIZIA: Rimuove numero iniziale e tutto quello che c'è nelle parentesi
+        document.getElementById('prev-btn').disabled = (state.hIdx === 0);
+        document.getElementById('next-btn').disabled = (state.hIdx === state.history.length - 1);
+    }
+
+    // --- UPDATE LOGIC (IL NOTAIO) ---
+    async function processUpdate() {
+        const raw = document.getElementById('input-raw').value;
+        if (!raw) return alert("Inserisci i dati, Tony!");
+
+        const lines = raw.split('\n').map(l => l.trim()).filter(l => l !== "");
+        let infractions = [];
+        let weekSnapshot = [];
+
+        // 1. Validazione & Cleaning
+        const processedList = lines.map((line, index) => {
+            // Pulisce il nome (toglie numeri e parentesi)
             let name = line.replace(/^\d+\.\s*/, '').split('(')[0].trim();
             let pos = index + 1;
-            
-            if(!state.songs[name]) state.songs[name] = { pts: 0, l: 'C' };
-            let s = state.songs[name];
-            let nL = pos <= 20 ? 'A' : (pos <= 50 ? 'B' : 'C');
-            
-            // Punti
-            let p = (nL === 'A') ? 20 : (nL === 'B' ? 10 : 2);
-            if(pos === 1) p = 35; 
-
-            s.pts += p;
-            s.l = nL;
+            return { name, pos };
         });
 
+        processedList.forEach(item => {
+            const oldData = state.songs[item.name];
+            const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
+
+            // Logica Notaio: Se eri in Serie A (1-15) non puoi finire in B/C direttamente
+            if (oldData && oldData.l === 'A' && oldData.lastPos <= 15 && item.pos > 20) {
+                infractions.push(`⚠️ "${item.name}" era in Top 15 e non può retrocedere direttamente in Serie ${newLega}!`);
+            }
+            // Logica Notaio: Dalla Serie B non si scende in C se eri tra i primi (21-45)
+            if (oldData && oldData.l === 'B' && oldData.lastPos <= 45 && item.pos > 50) {
+                infractions.push(`⚠️ "${item.name}" era stabile in Serie B e non può crollare in Serie C!`);
+            }
+        });
+
+        if (infractions.length > 0) {
+            if (!confirm("IL NOTAIO SEGNALA ERRORI:\n\n" + infractions.join('\n') + "\n\nVuoi forzare comunque l'aggiornamento?")) return;
+        }
+
+        // 2. Calcolo Punti e Update Stato
+        processedList.forEach(item => {
+            if (!state.songs[item.name]) {
+                state.songs[item.name] = { pts: 0, l: 'C', lastPos: 99 };
+            }
+            
+            const s = state.songs[item.name];
+            const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
+            let ptsAdded = 0;
+
+            if (newLega === 'A') {
+                if (item.pos === 1) ptsAdded = 35;
+                else if (item.pos <= 5) ptsAdded = 25;
+                else ptsAdded = 20;
+            } else if (newLega === 'B') {
+                ptsAdded = 10;
+            } else {
+                ptsAdded = 2;
+            }
+
+            s.pts += ptsAdded;
+            s.l = newLega;
+            s.lastPos = item.pos;
+            weekSnapshot.push({ n: item.name, p: ptsAdded });
+        });
+
+        // 3. Salvataggio Storico
+        state.history.push({ week: state.week, data: weekSnapshot });
         state.week++;
-        const { error } = await client.from('classifiche').insert([{ data_json: state }]);
-        if(error) alert("Errore: " + error.message);
+
+        // 4. Push to Supabase
+        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+        if (error) alert("Errore Cloud: " + error.message);
         else location.reload();
     }
 
-    async function resetDatabase() {
-        if(!confirm("ATTENZIONE: Questo cancellerà tutta la classifica. Procedo?")) return;
-        state = { week: 1, songs: {} };
-        await client.from('classifiche').insert([{ data_json: state }]);
+    // --- UI HELPERS ---
+    function showTab(t) {
+        ['live', 'upd', 'hist'].forEach(id => {
+            document.getElementById('tab-' + id).style.display = (t === id ? 'block' : 'none');
+            document.getElementById('nav-' + id).classList.toggle('active', t === id);
+        });
+        if (t === 'hist') {
+            state.hIdx = state.history.length - 1;
+            renderArchive();
+        }
+    }
+
+    function changeArchive(dir) {
+        state.hIdx = Math.max(0, Math.min(state.history.length - 1, state.hIdx + dir));
+        renderArchive();
+    }
+
+    async function hardReset() {
+        if (!confirm("Tony, questo cancellerà TUTTO l'archivio e resetterà i punti. Sei sicuro?")) return;
+        state = { week: 1, songs: {}, history: [] };
+        await supabaseClient.from('classifiche').insert([{ data_json: state }]);
         location.reload();
     }
 
-    function showTab(t) {
-        document.getElementById('tab-live').style.display = t === 'live' ? 'block' : 'none';
-        document.getElementById('tab-upd').style.display = t === 'upd' ? 'block' : 'none';
-        document.getElementById('nav-live').classList.toggle('active', t === 'live');
-        document.getElementById('nav-upd').classList.toggle('active', t === 'upd');
+    function hideLoader() {
+        const l = document.getElementById('loader-overlay');
+        l.style.opacity = '0';
+        setTimeout(() => l.style.display = 'none', 500);
     }
 
-    load();
+    // Init
+    loadData();
 </script>
+
 </body>
 </html>
