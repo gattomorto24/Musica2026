@@ -65,7 +65,7 @@
         }
         header p { color: var(--accent); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; font-weight: 600; }
 
-        /* Navigation */
+        /* Navigation Desk */
         .nav {
             display: flex; justify-content: center; gap: 12px; margin-bottom: 40px;
             position: sticky; top: 20px; z-index: 1000;
@@ -81,6 +81,23 @@
             background: var(--accent); color: #000; border-color: var(--accent);
             box-shadow: 0 10px 30px var(--accent-glow);
         }
+
+        /* Hamburger & Mobile Menu UI */
+        .hamburger {
+            display: none; cursor: pointer; background: var(--glass);
+            border: 1px solid var(--glass-border); padding: 12px;
+            border-radius: 15px; z-index: 2001; position: fixed; top: 20px; right: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .hamburger div { width: 22px; height: 2px; background: var(--accent); margin: 5px 0; border-radius: 5px; }
+
+        #mobile-menu {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
+            backdrop-filter: blur(25px); z-index: 2000;
+            display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        #mobile-menu .nav-btn { width: 80%; font-size: 1rem; padding: 20px; text-align: center; }
 
         /* Glass Cards */
         .glass-card {
@@ -138,28 +155,15 @@
         }
         .btn-reset:hover { opacity: 1; background: var(--danger); color: #fff; }
 
-                /* Mobile Adjustments */
+        /* Mobile Adjustments */
         @media (max-width: 600px) {
             .container { padding: 15px 10px; }
             .glass-card { padding: 15px; }
             td { padding: 12px 8px; }
             .song-name { font-size: 0.9rem; }
-            
-            /* FIX TASTI NAVIGAZIONE */
-            .nav-tabs { 
-                gap: 4px; /* Riduce lo spazio tra i bottoni */
-                justify-content: center; 
-            }
-            .nav-btn { 
-                padding: 10px 8px; /* Molto più stretti ai lati */
-                font-size: 0.6rem; /* Testo più piccolo */
-                flex: 1; /* Li rende tutti della stessa larghezza */
-                text-align: center;
-                white-space: nowrap; /* Impedisce di andare a capo */
-                letter-spacing: -0.5px; /* Avvicina le lettere */
-            }
+            .nav { display: none !important; } /* Nasconde i tasti orizzontali */
+            .hamburger { display: block; } /* Mostra hamburger */
         }
-
     </style>
 </head>
 <body>
@@ -167,6 +171,19 @@
 <div id="loader-overlay">
     <div class="spinner"></div>
     <p style="margin-top: 20px; color: #444; font-size: 0.7rem; letter-spacing: 3px;">INITIALIZING CLOUD CORE</p>
+</div>
+
+<div class="hamburger" onclick="toggleMenu()">
+    <div></div><div></div><div></div>
+</div>
+
+<div id="mobile-menu">
+    <h2 style="color: var(--accent); letter-spacing: 4px; margin-bottom: 20px; font-size: 0.8rem;">MENU SISTEMA</h2>
+    <button class="nav-btn" onclick="mobileTab('live')">Classifica Generale</button>
+    <button class="nav-btn" onclick="mobileTab('upd')">Nuova Settimana</button>
+    <button class="nav-btn" onclick="mobileTab('hist')">Archivio Storico</button>
+    <button class="nav-btn" onclick="window.location.href='info.html'">Info & Regolamento</button>
+    <button class="nav-btn" onclick="toggleMenu()" style="margin-top: 40px; border-color: var(--danger); color: var(--danger); font-size: 0.7rem;">CHIUDI MENU</button>
 </div>
 
 <div class="container">
@@ -268,7 +285,6 @@
     // --- RENDERING ---
     function renderLive() {
         const body = document.getElementById('live-body');
-        // Ordina per punti decrescenti
         const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
         
         body.innerHTML = sorted.map(([name, d], i) => `
@@ -311,9 +327,7 @@
         let infractions = [];
         let weekSnapshot = [];
 
-        // 1. Validazione & Cleaning
         const processedList = lines.map((line, index) => {
-            // Pulisce il nome (toglie numeri e parentesi)
             let name = line.replace(/^\d+\.\s*/, '').split('(')[0].trim();
             let pos = index + 1;
             return { name, pos };
@@ -323,11 +337,9 @@
             const oldData = state.songs[item.name];
             const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
 
-            // Logica Notaio: Se eri in Serie A (1-15) non puoi finire in B/C direttamente
             if (oldData && oldData.l === 'A' && oldData.lastPos <= 15 && item.pos > 20) {
                 infractions.push(`⚠️ "${item.name}" era in Top 15 e non può retrocedere direttamente in Serie ${newLega}!`);
             }
-            // Logica Notaio: Dalla Serie B non si scende in C se eri tra i primi (21-45)
             if (oldData && oldData.l === 'B' && oldData.lastPos <= 45 && item.pos > 50) {
                 infractions.push(`⚠️ "${item.name}" era stabile in Serie B e non può crollare in Serie C!`);
             }
@@ -337,7 +349,6 @@
             if (!confirm("IL NOTAIO SEGNALA ERRORI:\n\n" + infractions.join('\n') + "\n\nVuoi forzare comunque l'aggiornamento?")) return;
         }
 
-        // 2. Calcolo Punti e Update Stato
         processedList.forEach(item => {
             if (!state.songs[item.name]) {
                 state.songs[item.name] = { pts: 0, l: 'C', lastPos: 99 };
@@ -363,11 +374,9 @@
             weekSnapshot.push({ n: item.name, p: ptsAdded });
         });
 
-        // 3. Salvataggio Storico
         state.history.push({ week: state.week, data: weekSnapshot });
         state.week++;
 
-        // 4. Push to Supabase
         const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
         if (error) alert("Errore Cloud: " + error.message);
         else location.reload();
@@ -377,12 +386,24 @@
     function showTab(t) {
         ['live', 'upd', 'hist'].forEach(id => {
             document.getElementById('tab-' + id).style.display = (t === id ? 'block' : 'none');
-            document.getElementById('nav-' + id).classList.toggle('active', t === id);
+            const navBtn = document.getElementById('nav-' + id);
+            if(navBtn) navBtn.classList.toggle('active', t === id);
         });
         if (t === 'hist') {
             state.hIdx = state.history.length - 1;
             renderArchive();
         }
+    }
+
+    // --- NUOVE FUNZIONI HAMBURGER ---
+    function toggleMenu() {
+        const menu = document.getElementById('mobile-menu');
+        menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function mobileTab(t) {
+        showTab(t);
+        toggleMenu();
     }
 
     function changeArchive(dir) {
@@ -403,7 +424,6 @@
         setTimeout(() => l.style.display = 'none', 500);
     }
 
-    // Init
     loadData();
 </script>
 
