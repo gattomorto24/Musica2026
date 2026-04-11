@@ -167,15 +167,27 @@
 
         /* --- EXPORT MENU STYLES --- */
         #export-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(20px); z-index: 3000;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(25px); z-index: 3000;
             display: none; align-items: center; justify-content: center;
             animation: fadeIn 0.3s ease;
         }
         .export-modal {
             background: var(--glass); border: 1px solid var(--accent);
-            padding: 30px; border-radius: 25px; width: 300px; text-align: center;
+            padding: 30px; border-radius: 25px; width: 340px; text-align: center;
         }
+        .export-toggle-group {
+            display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; text-align: left;
+        }
+        .export-toggle {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 12px;
+            cursor: pointer; border: 1px solid transparent;
+        }
+        .export-toggle:hover { border-color: var(--glass-border); }
+        .export-toggle input { display: none; }
+        .export-toggle .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
+        .export-toggle input:checked + .dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
     </style>
 </head>
 <body>
@@ -200,10 +212,32 @@
 
 <div id="export-overlay">
     <div class="export-modal glass-card">
-        <h3 style="color: var(--accent); margin-bottom: 20px; font-size: 0.9rem; letter-spacing: 2px;">ESPORTA DATABASE</h3>
-        <button class="nav-btn" style="width:100%; margin-bottom:10px; border-color:var(--accent); color:var(--accent)" onclick="exportData('txt')">Formato .TXT</button>
-        <button class="nav-btn" style="width:100%; margin-bottom:25px;" onclick="exportData('csv')">Formato .CSV</button>
-        <p onclick="toggleExportOverlay()" style="color: var(--danger); font-size: 0.6rem; font-weight: 800; cursor: pointer; text-transform: uppercase;">Annulla</p>
+        <h3 style="color: var(--accent); margin-bottom: 20px; font-size: 0.9rem; letter-spacing: 2px;">OPZIONI ESPORTAZIONE</h3>
+        
+        <div class="export-toggle-group">
+            <label class="export-toggle">
+                <span style="font-size: 0.8rem;">Posizione (#1, #2...)</span>
+                <input type="checkbox" id="chk-pos" checked>
+                <div class="dot"></div>
+            </label>
+            <label class="export-toggle">
+                <span style="font-size: 0.8rem;">Punti Totali</span>
+                <input type="checkbox" id="chk-pts" checked>
+                <div class="dot"></div>
+            </label>
+            <label class="export-toggle">
+                <span style="font-size: 0.8rem;">Serie (A, B, C)</span>
+                <input type="checkbox" id="chk-lega">
+                <div class="dot"></div>
+            </label>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="nav-btn" style="flex: 1; border-color:var(--accent); color:var(--accent); font-size: 0.6rem;" onclick="exportData('txt')">ESPORTA TXT</button>
+            <button class="nav-btn" style="flex: 1; font-size: 0.6rem;" onclick="exportData('csv')">ESPORTA CSV</button>
+        </div>
+        
+        <p onclick="toggleExportOverlay()" style="color: var(--danger); font-size: 0.6rem; font-weight: 800; cursor: pointer; text-transform: uppercase;">Chiudi</p>
     </div>
 </div>
 
@@ -221,9 +255,9 @@
     </div>
 
     <div id="tab-live" class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <h2 style="font-weight: 800;">Ranking</h2>
-            <button class="nav-btn" style="padding: 8px 16px; font-size: 0.6rem; border-color: var(--accent); color: var(--accent);" onclick="toggleExportOverlay()">📊 ESPORTA</button>
+            <button class="nav-btn" style="padding: 10px 20px; font-size: 0.7rem; border-color: var(--accent); color: var(--accent); font-weight: 800;" onclick="toggleExportOverlay()">📊 ESPORTA</button>
         </div>
         <table>
             <thead>
@@ -343,7 +377,7 @@
         document.getElementById('next-btn').disabled = (state.hIdx === state.history.length - 1);
     }
 
-    // --- UPDATE LOGIC (IL NOTAIO) ---
+    // --- UPDATE LOGIC ---
     async function processUpdate() {
         const raw = document.getElementById('input-raw').value;
         if (!raw) return alert("Inserisci i dati, Tony!");
@@ -421,7 +455,6 @@
         }
     }
 
-    // --- NUOVE FUNZIONI HAMBURGER ---
     function toggleMenu() {
         const menu = document.getElementById('mobile-menu');
         menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
@@ -450,7 +483,7 @@
         setTimeout(() => l.style.display = 'none', 500);
     }
 
-    // --- FUNZIONI EXPORT ---
+    // --- LOGICA EXPORT AVANZATA ---
     function toggleExportOverlay() {
         const overlay = document.getElementById('export-overlay');
         overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
@@ -458,16 +491,42 @@
 
     function exportData(format) {
         const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
+        const incPos = document.getElementById('chk-pos').checked;
+        const incPts = document.getElementById('chk-pts').checked;
+        const incLega = document.getElementById('chk-lega').checked;
+
         let content = "";
-        const fileName = `CRONOSOUND_EXPORT_W${state.week-1}.${format}`;
+        const fileName = `CRONOSOUND_DATA_W${state.week-1}.${format}`;
 
         if (format === 'txt') {
-            content = sorted.map(([name, d], i) => `${i + 1}. ${name}`).join('\n');
+            content = sorted.map(([name, d], i) => {
+                let row = "";
+                if (incPos) row += `${i + 1}. `;
+                row += name;
+                if (incLega) row += ` [Serie ${d.l}]`;
+                if (incPts) row += ` (${d.pts} pts)`;
+                return row;
+            }).join('\n');
         } else {
-            content = "Pos,Canzone,Punti,Lega\n" + sorted.map(([name, d], i) => `${i + 1},"${name}",${d.pts},${d.l}`).join('\n');
+            // CSV Header dinamico
+            let headers = [];
+            if (incPos) headers.push("Posizione");
+            headers.push("Canzone");
+            if (incLega) headers.push("Serie");
+            if (incPts) headers.push("Punti");
+            
+            content = headers.join(",") + "\n";
+            content += sorted.map(([name, d], i) => {
+                let cols = [];
+                if (incPos) cols.push(i + 1);
+                cols.push(`"${name}"`);
+                if (incLega) cols.push(d.l);
+                if (incPts) cols.push(d.pts);
+                return cols.join(",");
+            }).join('\n');
         }
 
-        const blob = new Blob([content], { type: 'text/plain' });
+        const blob = new Blob([content], { type: format === 'txt' ? 'text/plain' : 'text/csv' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
