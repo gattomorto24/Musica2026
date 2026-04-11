@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>CRONOSOUND | INFO & REGOLAMENTO</title>
     
+    <script src="theme-engine.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
@@ -19,7 +21,16 @@
             --card-radius: 28px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* LIGHT MODE VARS */
+        body.light-mode {
+            --bg: #f5f5f7;
+            --text: #1d1d1f;
+            --text-dim: #86868b;
+            --glass: rgba(0, 0, 0, 0.03);
+            --glass-border: rgba(0, 0, 0, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.4s ease, color 0.4s ease; }
         
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -27,8 +38,9 @@
             color: var(--text);
             line-height: 1.6;
             background-image: 
-                radial-gradient(circle at 50% -20%, #1a1a1a 0%, transparent 70%);
+                radial-gradient(circle at 50% -20%, var(--glass-border) 0%, transparent 70%);
             padding: 40px 20px;
+            min-height: 100vh;
         }
 
         .container { max-width: 800px; margin: 0 auto; animation: fadeIn 0.8s ease; }
@@ -38,7 +50,7 @@
         header { text-align: center; margin-bottom: 40px; }
         header h1 { 
             font-size: 2.5rem; font-weight: 800; letter-spacing: -2px;
-            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+            background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
@@ -46,11 +58,12 @@
             background: var(--glass); backdrop-filter: blur(30px);
             border: 1px solid var(--glass-border); border-radius: var(--card-radius);
             padding: 35px; margin-bottom: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         h2 { color: var(--accent); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         
-        .section-content { color: #ccc; font-size: 0.95rem; }
+        .section-content { color: var(--text); opacity: 0.8; font-size: 0.95rem; }
         
         ul { list-style: none; }
         li { margin-bottom: 15px; padding-left: 20px; position: relative; }
@@ -87,6 +100,19 @@
         <p style="color: var(--text-dim); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 10px;">CRONOSOUND Official Documentation</p>
     </header>
 
+    <div class="glass-card" style="border-color: var(--accent);">
+        <h2>🚀 Cosa c'è di nuovo <span class="version-tag">v1.5</span></h2>
+        <div class="section-content">
+            <p style="margin-bottom: 15px; color: var(--accent); font-weight: 800;">ULTIMO AGGIORNAMENTO:</p>
+            <ul>
+                <li><b>Esportazione Avanzata:</b> Introdotto pop-up con filtri dinamici (Posizione, Punti, Serie) per file TXT e CSV.</li>
+                <li><b>Smart Theme Engine:</b> Implementato sistema di persistenza del tema (Light/Dark) tramite file esterno <span class="code-font">theme-engine.js</span>.</li>
+                <li><b>Memoria di Sistema:</b> Il browser ora ricorda l'ultimo tema utilizzato su tutte le pagine del dominio.</li>
+                <li><b>Toggle Universale:</b> Il selettore tema viene ora iniettato automaticamente anche nelle pagine di documentazione.</li>
+            </ul>
+        </div>
+    </div>
+
     <div class="glass-card">
         <h2>🏆 Sistema Punteggi</h2>
         <div class="section-content">
@@ -107,40 +133,24 @@
             <p>Il sistema integra un algoritmo di controllo coerenza per evitare fluttuazioni irreali dei dati:</p>
             <ul>
                 <li>Le canzoni stabilizzate in <b>Top 15</b> non possono retrocedere direttamente in Serie B.</li>
-                <li>Le canzoni in <b>Serie B</b> hanno una protezione contro il crollo immediato in Serie C se mantengono una media alta.</li>
+                <li>Le canzoni in <b>Serie B</b> hanno una protezione contro il crollo immediato in Serie C.</li>
                 <li>Ogni forzatura manuale viene registrata nei log del database Cloud.</li>
             </ul>
         </div>
     </div>
 
     <div class="glass-card">
-        <h2>🚀 Note di Rilascio <span class="version-tag">v1.3</span></h2>
+        <h2>Note di Rilascio Legacy <span class="version-tag">v1.3</span></h2>
         <div class="section-content">
-            <p style="margin-bottom: 10px; color: var(--accent);"><b>Aggiornamento Attuale:</b></p>
             <ul>
-                <li><b>Rebranding</b> Completo Rebrading da <strong>Musica 2026</strong> a <strong>CRONOSOUND</strong>
-                <li><b>UX Mobile:</b> Ottimizzati i tasti di navigazione e introdotto un fullscreen-menu</li>
-            </ul>
-        </div>
-    </div>
-    
-    <div class="glass-card">
-        <h2>Note di Rilascio - Legacy - <span class="version-tag">v1.2</span></h2>
-        <div class="section-content">
-            <p style="margin-bottom: 10px; color: var(--accent);"><b>Aggiornamento Attuale:</b></p>
-            <ul>
-                <li><b>UX Mobile:</b> Ottimizzati i tasti di navigazione per schermi piccoli (Fix spaziatura e font).</li>
-                <li><b>Cloud Core:</b> Sincronizzazione real-time con Supabase DB migliorata.</li>
-                <li><b>Design:</b> Implementato il "Professional Cloud OS" style con animazioni di entrata.</li>
-                <li><b>Nuova Sezione:</b> Rilascio ufficiale della pagina Regolamento.</li>
+                <li><b>Rebranding:</b> Transizione ufficiale da Musica 2026 a <strong>CRONOSOUND</strong>.</li>
+                <li><b>UX Mobile:</b> Ottimizzati i tasti di navigazione e introdotto il fullscreen-menu.</li>
             </ul>
         </div>
     </div>
 
-    <p style="text-align: center; font-size: 0.6rem; color: #222; letter-spacing: 2px;">TONY EXECUTIVE SYSTEMS © 2026</p>
+    <p style="text-align: center; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 2px; margin-top: 50px;">TONY EXECUTIVE SYSTEMS © 2026</p>
 </div>
 
 </body>
 </html>
-<script src="theme-engine.js"></script>
-
