@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>CRONOSOUND | DOCUMENTAZIONE & LOGS</title>
+    <title>CRONOSOUND | DOCUMENTAZIONE & REGOLAMENTO</title>
     
     <script src="theme-engine.js"></script>
     
@@ -21,13 +21,15 @@
             --card-radius: 28px;
         }
 
-        /* SUPPORTO LIGHT MODE INTEGRATO */
+        /* SUPPORTO LIGHT MODE CON NAVY BLUE */
         body.light-mode {
             --bg: #f5f5f7;
             --text: #1d1d1f;
-            --text-dim: #86868b;
+            --text-dim: #55555a;
             --glass: rgba(0, 0, 0, 0.04);
             --glass-border: rgba(0, 0, 0, 0.12);
+            --accent: #000080; /* Navy Blue per massimo contrasto */
+            --accent-glow: transparent;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease; }
@@ -69,13 +71,14 @@
         .log-date { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--accent); }
         
         .version-tag {
-            background: var(--accent); color: #000; padding: 3px 10px;
+            background: var(--accent); color: #fff; padding: 3px 10px;
             border-radius: 6px; font-size: 0.7rem; font-weight: 800;
         }
+        body.light-mode .version-tag { color: #fff; }
 
         ul { list-style: none; margin-top: 10px; }
-        li { margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 0.9rem; color: var(--text); opacity: 0.8; }
-        li::before { content: "•"; position: absolute; left: 0; color: var(--accent); }
+        li { margin-bottom: 12px; padding-left: 20px; position: relative; font-size: 0.9rem; color: var(--text); opacity: 0.8; }
+        li::before { content: "•"; position: absolute; left: 0; color: var(--accent); font-weight: 800; }
 
         .back-link {
             display: inline-block; text-decoration: none; color: var(--text-dim);
@@ -86,16 +89,14 @@
         .back-link:hover { color: var(--accent); border-color: var(--accent); background: var(--glass); }
 
         .code-inline { font-family: 'Fira Code', monospace; background: rgba(0,242,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
+        body.light-mode .code-inline { background: rgba(0, 0, 128, 0.05); color: var(--accent); }
 
-        /* Stile per il toggle iniettato via JS */
-        #theme-toggle-desk {
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        }
-        #theme-toggle-desk:hover { transform: scale(1.1) rotate(15deg); }
+        .regolamento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
         @media (max-width: 600px) {
             header h1 { font-size: 2rem; }
             .glass-card { padding: 20px; }
+            .regolamento-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -106,11 +107,11 @@
 
     <header>
         <h1>SYSTEM LOGS</h1>
-        <p style="color: var(--accent); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; font-weight: 600;">Cronologia Sviluppo & Protocolli</p>
+        <p style="color: var(--accent); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; font-weight: 600;">Documentazione & Regolamento Ufficiale</p>
     </header>
 
     <div class="glass-card">
-        <h2>📜 Changelog Ufficiale</h2>
+        <h2>📜 Changelog Storico</h2>
         
         <div class="log-entry">
             <div class="log-header">
@@ -118,9 +119,9 @@
                 <span class="log-date">11 APRILE 2026</span>
             </div>
             <ul>
-                <li><b>Persistent Theme Engine:</b> Creazione di <span class="code-inline">theme-engine.js</span> per la memorizzazione della scelta Light/Dark.</li>
-                <li><b>Advanced Exporting:</b> Nuovo modulo di esportazione con filtri per posizioni, punti e leghe (TXT/CSV).</li>
-                <li><b>Auto-Injection:</b> Il toggle del tema viene ora iniettato automaticamente in tutte le pagine satelliti.</li>
+                <li><b>Persistent Theme Engine:</b> Implementato <span class="code-inline">theme-engine.js</span> per la gestione universale del tema.</li>
+                <li><b>Navy Blue Contrast:</b> Ottimizzazione leggibilità Light Mode per i dati numerici e i punti.</li>
+                <li><b>Advanced Exporting:</b> Modulo di esportazione potenziato con selettori di colonna dinamici.</li>
             </ul>
         </div>
 
@@ -130,8 +131,8 @@
                 <span class="log-date">05 APRILE 2026</span>
             </div>
             <ul>
-                <li><b>Protocollo Il Notaio:</b> Implementata logica di verifica anti-retrocessione per la Top 15.</li>
-                <li><b>Cloud Synchronization:</b> Ottimizzazione chiamate Supabase per ridurre i tempi di caricamento (Loader System).</li>
+                <li><b>Protocollo Il Notaio:</b> Sistema di controllo coerenza per le oscillazioni drastiche in classifica.</li>
+                <li><b>Performance Update:</b> Ottimizzazione del caricamento dei dati da Supabase Cloud.</li>
             </ul>
         </div>
 
@@ -141,8 +142,8 @@
                 <span class="log-date">28 MARZO 2026</span>
             </div>
             <ul>
-                <li><b>Rebranding:</b> Transizione definitiva a <b>CRONOSOUND</b>.</li>
-                <li><b>Mobile UI Core:</b> Sostituzione della navigazione standard con Hamburger Menu a tutto schermo.</li>
+                <li><b>Rebranding:</b> Transizione ufficiale del brand in <b>CRONOSOUND</b>.</li>
+                <li><b>Mobile First:</b> Integrazione Hamburger Menu fullscreen per dispositivi piccoli.</li>
             </ul>
         </div>
 
@@ -152,8 +153,8 @@
                 <span class="log-date">15 MARZO 2026</span>
             </div>
             <ul>
-                <li><b>Archivio Storico:</b> Aggiunta navigazione settimanale con tasti freccia.</li>
-                <li><b>Visual Identity:</b> Introduzione del font <i>Plus Jakarta Sans</i> e design a schede "Glassmorphism".</li>
+                <li><b>Archivio Storico:</b> Sistema di consultazione delle settimane precedenti.</li>
+                <li><b>Design Refresh:</b> Passaggio allo stile Glassmorphism con Plus Jakarta Sans.</li>
             </ul>
         </div>
 
@@ -163,19 +164,43 @@
                 <span class="log-date">01 MARZO 2026</span>
             </div>
             <ul>
-                <li><b>Genesis:</b> Prima release del sistema di gestione classifiche basato su array locali.</li>
+                <li><b>Genesis:</b> Lancio della prima versione alpha del sistema.</li>
             </ul>
         </div>
     </div>
 
     <div class="glass-card">
-        <h2>⚙️ Parametri Tecnici</h2>
-        <div style="font-size: 0.85rem; opacity: 0.8;">
-            <p>Il sistema gira su un'architettura <b>Serverless</b> con database <b>Supabase (PostgreSQL)</b>. Le preferenze estetiche sono salvate nel <span class="code-inline">localStorage</span> del client per garantire privacy e velocità senza chiamate API aggiuntive.</p>
+        <h2>⚖️ Regolamento & Protocolli</h2>
+        <div class="regolamento-grid">
+            <div>
+                <h3 style="font-size: 0.8rem; margin-bottom: 15px; color: var(--accent);">Attribuzione Punti</h3>
+                <ul>
+                    <li><b class="code-inline">1° Posto:</b> 35 Punti</li>
+                    <li><b class="code-inline">Top 5:</b> 25 Punti</li>
+                    <li><b class="code-inline">Top 20:</b> 20 Punti</li>
+                    <li><b class="code-inline">Serie B:</b> 10 Punti</li>
+                    <li><b class="code-inline">Serie C:</b> 2 Punti</li>
+                </ul>
+            </div>
+            <div>
+                <h3 style="font-size: 0.8rem; margin-bottom: 15px; color: var(--accent);">Restrizioni Notaio</h3>
+                <ul>
+                    <li>Le canzoni in Top 15 non possono scendere in Serie B nella stessa settimana.</li>
+                    <li>Le promozioni in Serie A sono permanenti fino alla fine del ciclo settimanale.</li>
+                    <li>Il database viene aggiornato manualmente per garantire l'integrità dei dati.</li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <p style="text-align: center; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 2px; margin-top: 50px;">TONY EXECUTIVE SYSTEMS — SECURITY CLEARANCE REQUIRED</p>
+    <div class="glass-card">
+        <h2>⚙️ Parametri di Sistema</h2>
+        <div style="font-size: 0.85rem; opacity: 0.8;">
+            <p>Architettura basata su <b>Supabase Cloud</b> con persistenza locale via <b>Theme Engine 1.5</b>. Ogni operazione è protetta da crittografia standard SSL durante il transito dei dati.</p>
+        </div>
+    </div>
+
+    <p style="text-align: center; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 2px; margin-top: 50px;">TONY EXECUTIVE SYSTEMS — DOCUMENT VERSION 1.5.2</p>
 </div>
 
 </body>
