@@ -164,6 +164,18 @@
             .nav { display: none !important; } /* Nasconde i tasti orizzontali */
             .hamburger { display: block; } /* Mostra hamburger */
         }
+
+        /* --- EXPORT MENU STYLES --- */
+        #export-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px); z-index: 3000;
+            display: none; align-items: center; justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .export-modal {
+            background: var(--glass); border: 1px solid var(--accent);
+            padding: 30px; border-radius: 25px; width: 300px; text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -186,6 +198,15 @@
     <button class="nav-btn" onclick="toggleMenu()" style="margin-top: 40px; border-color: var(--danger); color: var(--danger); font-size: 0.7rem;">CHIUDI MENU</button>
 </div>
 
+<div id="export-overlay">
+    <div class="export-modal glass-card">
+        <h3 style="color: var(--accent); margin-bottom: 20px; font-size: 0.9rem; letter-spacing: 2px;">ESPORTA DATABASE</h3>
+        <button class="nav-btn" style="width:100%; margin-bottom:10px; border-color:var(--accent); color:var(--accent)" onclick="exportData('txt')">Formato .TXT</button>
+        <button class="nav-btn" style="width:100%; margin-bottom:25px;" onclick="exportData('csv')">Formato .CSV</button>
+        <p onclick="toggleExportOverlay()" style="color: var(--danger); font-size: 0.6rem; font-weight: 800; cursor: pointer; text-transform: uppercase;">Annulla</p>
+    </div>
+</div>
+
 <div class="container">
     <header>
         <h1>CRONOSOUND</h1>
@@ -200,6 +221,10 @@
     </div>
 
     <div id="tab-live" class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="font-weight: 800;">Ranking</h2>
+            <button class="nav-btn" style="padding: 8px 16px; font-size: 0.6rem; border-color: var(--accent); color: var(--accent);" onclick="toggleExportOverlay()">📊 ESPORTA</button>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -385,7 +410,8 @@
     // --- UI HELPERS ---
     function showTab(t) {
         ['live', 'upd', 'hist'].forEach(id => {
-            document.getElementById('tab-' + id).style.display = (t === id ? 'block' : 'none');
+            const tabEl = document.getElementById('tab-' + id);
+            if(tabEl) tabEl.style.display = (t === id ? 'block' : 'none');
             const navBtn = document.getElementById('nav-' + id);
             if(navBtn) navBtn.classList.toggle('active', t === id);
         });
@@ -422,6 +448,33 @@
         const l = document.getElementById('loader-overlay');
         l.style.opacity = '0';
         setTimeout(() => l.style.display = 'none', 500);
+    }
+
+    // --- FUNZIONI EXPORT ---
+    function toggleExportOverlay() {
+        const overlay = document.getElementById('export-overlay');
+        overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function exportData(format) {
+        const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
+        let content = "";
+        const fileName = `CRONOSOUND_EXPORT_W${state.week-1}.${format}`;
+
+        if (format === 'txt') {
+            content = sorted.map(([name, d], i) => `${i + 1}. ${name}`).join('\n');
+        } else {
+            content = "Pos,Canzone,Punti,Lega\n" + sorted.map(([name, d], i) => `${i + 1},"${name}",${d.pts},${d.l}`).join('\n');
+        }
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(url);
+        toggleExportOverlay();
     }
 
     loadData();
