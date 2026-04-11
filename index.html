@@ -23,8 +23,26 @@
             --card-radius: 28px;
         }
 
-        /* Reset & Base */
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* LIGHT MODE IMPLEMENTATION */
+        body.light-mode {
+            --bg: #f5f5f7;
+            --text: #1d1d1f;
+            --text-dim: #86868b;
+            --glass: rgba(0, 0, 0, 0.03);
+            --glass-border: rgba(0, 0, 0, 0.12);
+            background-image: 
+                radial-gradient(circle at 50% -20%, #ffffff 0%, transparent 70%),
+                radial-gradient(circle at 0% 100%, rgba(0, 242, 255, 0.1) 0%, transparent 40%);
+        }
+
+        /* RESET & BASE */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            transition: background 0.4s ease, color 0.4s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg);
@@ -36,88 +54,185 @@
                 radial-gradient(circle at 0% 100%, rgba(0, 242, 255, 0.05) 0%, transparent 40%);
         }
 
-        /* Custom Scrollbar */
+        /* SCROLLBAR */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        body.light-mode ::-webkit-scrollbar-thumb { background: #ccc; }
 
-        .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .container { 
+            width: 100%; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+        }
 
-        /* Loader */
+        /* LOADER OVERLAY */
         #loader-overlay {
-            position: fixed; inset: 0; background: #000; z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: fixed; 
+            inset: 0; 
+            background: #000; 
+            z-index: 9999;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
         }
         .spinner {
-            width: 50px; height: 50px; border: 2px solid var(--glass);
-            border-top-color: var(--accent); border-radius: 50%;
+            width: 50px; 
+            height: 50px; 
+            border: 2px solid var(--glass);
+            border-top-color: var(--accent); 
+            border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Header Design */
-        header { text-align: center; margin-bottom: 50px; animation: slideDown 0.8s ease; }
+        /* HEADER DESIGN */
+        header { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            animation: slideDown 0.8s ease; 
+            position: relative;
+        }
         header h1 { 
-            font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 800; letter-spacing: -3px;
-            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: clamp(2.5rem, 10vw, 4rem); 
+            font-weight: 800; 
+            letter-spacing: -3px;
+            background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 20px var(--accent-glow));
         }
-        header p { color: var(--accent); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; font-weight: 600; }
+        header p { 
+            color: var(--accent); 
+            font-size: 0.7rem; 
+            letter-spacing: 5px; 
+            text-transform: uppercase; 
+            margin-top: 10px; 
+            font-weight: 600; 
+        }
 
-        /* Navigation Desk */
-        .nav {
-            display: flex; justify-content: center; gap: 12px; margin-bottom: 40px;
-            position: sticky; top: 20px; z-index: 1000;
+        /* NAVIGATION & THEME TOGGLE */
+        .nav-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
         }
+
+        .nav { display: flex; gap: 12px; }
+
         .nav-btn {
-            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); color: var(--text-dim);
-            padding: 14px 24px; border-radius: 100px; cursor: pointer;
-            font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(10, 10, 10, 0.7); 
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); 
+            color: var(--text-dim);
+            padding: 14px 24px; 
+            border-radius: 100px; 
+            cursor: pointer;
+            font-weight: 600; 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
         }
-        .nav-btn:hover { border-color: var(--accent); color: white; }
+        body.light-mode .nav-btn { 
+            background: rgba(255, 255, 255, 0.7); 
+            color: #86868b; 
+        }
+        .nav-btn:hover { border-color: var(--accent); color: var(--text); }
         .nav-btn.active { 
-            background: var(--accent); color: #000; border-color: var(--accent);
+            background: var(--accent); 
+            color: #000; 
+            border-color: var(--accent);
             box-shadow: 0 10px 30px var(--accent-glow);
         }
 
-        /* Hamburger & Mobile Menu UI */
+        #theme-toggle-desk {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        /* HAMBURGER & MOBILE MENU */
         .hamburger {
-            display: none; cursor: pointer; background: var(--glass);
-            border: 1px solid var(--glass-border); padding: 12px;
-            border-radius: 15px; z-index: 2001; position: fixed; top: 20px; right: 20px;
+            display: none; 
+            cursor: pointer; 
+            background: var(--glass);
+            border: 1px solid var(--glass-border); 
+            padding: 12px;
+            border-radius: 15px; 
+            z-index: 2001; 
+            position: fixed; 
+            top: 20px; 
+            right: 20px;
             backdrop-filter: blur(10px);
         }
         .hamburger div { width: 22px; height: 2px; background: var(--accent); margin: 5px 0; border-radius: 5px; }
 
         #mobile-menu {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            backdrop-filter: blur(25px); z-index: 2000;
-            display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+            position: fixed; 
+            inset: 0; 
+            background: var(--bg);
+            backdrop-filter: blur(25px); 
+            z-index: 2000;
+            display: none; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 20px;
             animation: fadeIn 0.3s ease;
         }
         #mobile-menu .nav-btn { width: 80%; font-size: 1rem; padding: 20px; text-align: center; }
 
-        /* Glass Cards */
+        /* GLASS CARDS */
         .glass-card {
-            background: var(--glass); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: var(--card-radius);
-            padding: 35px; margin-bottom: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            background: var(--glass); 
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); 
+            border-radius: var(--card-radius);
+            padding: 35px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             animation: fadeIn 0.8s ease;
         }
         @keyframes fadeIn { from { opacity: 0; scale: 0.98; } to { opacity: 1; scale: 1; } }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Tables */
+        /* TABLES */
         table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        th { padding: 15px; text-align: left; font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 2px; }
+        th { padding: 15px; text-align: left; font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; }
         td { 
-            padding: 20px 15px; background: rgba(255,255,255,0.015); 
-            border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); 
+            padding: 20px 15px; 
+            background: var(--glass); 
+            border-top: 1px solid var(--glass-border); 
+            border-bottom: 1px solid var(--glass-border); 
         }
-        td:first-child { border-radius: 16px 0 0 16px; border-left: 1px solid var(--glass-border); width: 60px; font-family: 'Fira Code', monospace; color: #444; }
-        td:last-child { border-radius: 0 16px 16px 0; border-right: 1px solid var(--glass-border); text-align: right; }
+        td:first-child { 
+            border-radius: 16px 0 0 16px; 
+            border-left: 1px solid var(--glass-border); 
+            width: 60px; 
+            font-family: 'Fira Code', monospace; 
+            color: var(--text-dim); 
+        }
+        td:last-child { 
+            border-radius: 0 16px 16px 0; 
+            border-right: 1px solid var(--glass-border); 
+            text-align: right; 
+        }
 
         .song-name { font-weight: 600; font-size: 1.1rem; display: block; margin-bottom: 5px; }
         .badge { 
@@ -128,9 +243,9 @@
         .badge-b { border: 1px solid var(--warning); color: var(--warning); }
         .badge-c { border: 1px solid #333; color: #666; }
 
-        /* Inputs */
+        /* INPUTS */
         textarea {
-            width: 100%; height: 350px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border);
+            width: 100%; height: 350px; background: var(--glass); border: 1px solid var(--glass-border);
             border-radius: 20px; color: var(--accent); padding: 25px; font-family: 'Fira Code', monospace;
             font-size: 0.9rem; line-height: 1.6; outline: none; margin-bottom: 25px;
         }
@@ -143,9 +258,9 @@
         }
         .btn-publish:hover { transform: translateY(-3px); box-shadow: 0 15px 40px var(--accent-glow); }
 
-        /* Archivio Controls */
+        /* ARCHIVE CONTROLS */
         .archive-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .btn-arrow { background: var(--glass); border: 1px solid var(--glass-border); color: #fff; width: 50px; height: 50px; border-radius: 15px; cursor: pointer; }
+        .btn-arrow { background: var(--glass); border: 1px solid var(--glass-border); color: var(--text); width: 50px; height: 50px; border-radius: 15px; cursor: pointer; }
         .btn-arrow:disabled { opacity: 0.2; cursor: not-allowed; }
 
         .btn-reset { 
@@ -155,44 +270,35 @@
         }
         .btn-reset:hover { opacity: 1; background: var(--danger); color: #fff; }
 
-        /* Mobile Adjustments */
+        /* EXPORT MODAL & TOGGLES */
+        #export-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(25px); z-index: 3000;
+            display: none; align-items: center; justify-content: center;
+        }
+        .export-modal { background: var(--glass); border: 1px solid var(--accent); padding: 30px; border-radius: 25px; width: 340px; text-align: center; }
+        .export-toggle-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; text-align: left; }
+        .export-toggle { 
+            display: flex; align-items: center; justify-content: space-between; 
+            background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 12px; 
+            cursor: pointer; border: 1px solid transparent; 
+        }
+        .export-toggle input { display: none; }
+        .export-toggle .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
+        .export-toggle input:checked + .dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+        /* MOBILE OPTIMIZATION */
         @media (max-width: 600px) {
             .container { padding: 15px 10px; }
             .glass-card { padding: 15px; }
             td { padding: 12px 8px; }
             .song-name { font-size: 0.9rem; }
-            .nav { display: none !important; } /* Nasconde i tasti orizzontali */
-            .hamburger { display: block; } /* Mostra hamburger */
+            .nav-wrapper { display: none !important; }
+            .hamburger { display: block; }
         }
-
-        /* --- EXPORT MENU STYLES --- */
-        #export-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(25px); z-index: 3000;
-            display: none; align-items: center; justify-content: center;
-            animation: fadeIn 0.3s ease;
-        }
-        .export-modal {
-            background: var(--glass); border: 1px solid var(--accent);
-            padding: 30px; border-radius: 25px; width: 340px; text-align: center;
-        }
-        .export-toggle-group {
-            display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; text-align: left;
-        }
-        .export-toggle {
-            display: flex; align-items: center; justify-content: space-between;
-            background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 12px;
-            cursor: pointer; border: 1px solid transparent;
-        }
-        .export-toggle:hover { border-color: var(--glass-border); }
-        .export-toggle input { display: none; }
-        .export-toggle .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
-        .export-toggle input:checked + .dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
     </style>
 </head>
-<body>
-
-<div id="loader-overlay">
+<body class="dark-mode"> <div id="loader-overlay">
     <div class="spinner"></div>
     <p style="margin-top: 20px; color: #444; font-size: 0.7rem; letter-spacing: 3px;">INITIALIZING CLOUD CORE</p>
 </div>
@@ -207,13 +313,13 @@
     <button class="nav-btn" onclick="mobileTab('upd')">Nuova Settimana</button>
     <button class="nav-btn" onclick="mobileTab('hist')">Archivio Storico</button>
     <button class="nav-btn" onclick="window.location.href='info.html'">Info & Regolamento</button>
+    <button class="nav-btn" onclick="toggleTheme()" style="border-color: var(--accent); color: var(--accent);">CAMBIA TEMA (💡/🌙)</button>
     <button class="nav-btn" onclick="toggleMenu()" style="margin-top: 40px; border-color: var(--danger); color: var(--danger); font-size: 0.7rem;">CHIUDI MENU</button>
 </div>
 
 <div id="export-overlay">
     <div class="export-modal glass-card">
         <h3 style="color: var(--accent); margin-bottom: 20px; font-size: 0.9rem; letter-spacing: 2px;">OPZIONI ESPORTAZIONE</h3>
-        
         <div class="export-toggle-group">
             <label class="export-toggle">
                 <span style="font-size: 0.8rem;">Posizione (#1, #2...)</span>
@@ -231,13 +337,11 @@
                 <div class="dot"></div>
             </label>
         </div>
-
         <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <button class="nav-btn" style="flex: 1; border-color:var(--accent); color:var(--accent); font-size: 0.6rem;" onclick="exportData('txt')">ESPORTA TXT</button>
-            <button class="nav-btn" style="flex: 1; font-size: 0.6rem;" onclick="exportData('csv')">ESPORTA CSV</button>
+            <button class="nav-btn" style="flex: 1; border-color:var(--accent); color:var(--accent); font-size: 0.6rem;" onclick="exportData('txt')">TXT</button>
+            <button class="nav-btn" style="flex: 1; font-size: 0.6rem;" onclick="exportData('csv')">CSV</button>
         </div>
-        
-        <p onclick="toggleExportOverlay()" style="color: var(--danger); font-size: 0.6rem; font-weight: 800; cursor: pointer; text-transform: uppercase;">Chiudi</p>
+        <p onclick="toggleExportOverlay()" style="color: var(--danger); font-size: 0.6rem; font-weight: 800; cursor: pointer; text-transform: uppercase;">Annulla</p>
     </div>
 </div>
 
@@ -247,16 +351,19 @@
         <p>Tony Executive Dashboard</p>
     </header>
 
-    <div class="nav">
-        <button id="nav-live" class="nav-btn active" onclick="showTab('live')">Classifica Generale</button>
-        <button id="nav-upd" class="nav-btn" onclick="showTab('upd')">Nuova Settimana</button>
-        <button id="nav-hist" class="nav-btn" onclick="showTab('hist')">Archivio Storico</button>
-        <button class="nav-btn" onclick="window.location.href='info.html'">Info & Regolamento</button>
+    <div class="nav-wrapper">
+        <div class="nav">
+            <button id="nav-live" class="nav-btn active" onclick="showTab('live')">Ranking</button>
+            <button id="nav-upd" class="nav-btn" onclick="showTab('upd')">Aggiorna</button>
+            <button id="nav-hist" class="nav-btn" onclick="showTab('hist')">Archivio</button>
+            <button class="nav-btn" onclick="window.location.href='info.html'">Info</button>
+        </div>
+        <button id="theme-toggle-desk" onclick="toggleTheme()" title="Switch Light/Dark">🌓</button>
     </div>
 
     <div id="tab-live" class="glass-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2 style="font-weight: 800;">Ranking</h2>
+            <h2 style="font-weight: 800;">Classifica Generale</h2>
             <button class="nav-btn" style="padding: 10px 20px; font-size: 0.7rem; border-color: var(--accent); color: var(--accent); font-weight: 800;" onclick="toggleExportOverlay()">📊 ESPORTA</button>
         </div>
         <table>
@@ -273,12 +380,12 @@
 
     <div id="tab-upd" style="display:none;">
         <div class="glass-card">
-            <h2 style="margin-bottom: 25px; font-weight: 800;">Carica Settimana <span id="next-week-id" style="color:var(--accent)">-</span></h2>
-            <p style="color: #666; margin-bottom: 20px; font-size: 0.8rem;">Incolla la classifica (1-20 Serie A, 21-50 Serie B, 51+ Serie C). Il sistema pulirà i nomi automaticamente.</p>
-            <textarea id="input-raw" placeholder="1. Nome Canzone&#10;2. Nome Canzone..."></textarea>
+            <h2 style="margin-bottom: 25px; font-weight: 800;">Settimana <span id="next-week-id" style="color:var(--accent)">-</span></h2>
+            <p style="color: var(--text-dim); margin-bottom: 20px; font-size: 0.8rem;">Incolla i dati. Il "Notaio" verificherà la coerenza delle retrocessioni.</p>
+            <textarea id="input-raw" placeholder="1. Canzone A&#10;2. Canzone B..."></textarea>
             <button class="btn-publish" onclick="processUpdate()">Pubblica nel Cloud</button>
         </div>
-        <button class="btn-reset" onclick="hardReset()">Formatta Database (Reset Totale)</button>
+        <button class="btn-reset" onclick="hardReset()">Formatta Database</button>
     </div>
 
     <div id="tab-hist" style="display:none;" class="glass-card">
@@ -299,7 +406,7 @@
         </table>
     </div>
 
-    <p id="db-status" style="text-align: center; font-size: 0.6rem; color: #222; margin-top: 30px; letter-spacing: 2px;">SECURE CONNECTION: PENDING</p>
+    <p id="db-status" style="text-align: center; font-size: 0.6rem; color: #444; margin-top: 30px; letter-spacing: 2px;">SECURE CONNECTION: PENDING</p>
 </div>
 
 <script>
@@ -308,15 +415,15 @@
     const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    // --- STATE MANAGEMENT ---
+    // --- STATE ---
     let state = {
-        week: 14,
-        songs: {}, // { "Nome": { pts: 0, l: 'A', lastPos: 1 } }
-        history: [], // [{ week: 14, data: [{n: "Nome", p: 20}] }]
+        week: 1,
+        songs: {}, 
+        history: [], 
         hIdx: 0
     };
 
-    // --- CLOUD LOGIC ---
+    // --- INITIALIZATION ---
     async function loadData() {
         const { data, error } = await supabaseClient
             .from('classifiche')
@@ -328,8 +435,6 @@
             state = data[0].data_json;
             if(!state.history) state.history = [];
             document.getElementById('db-status').innerText = "SYSTEM ONLINE: CLOUD SYNCHRONIZED";
-        } else {
-            document.getElementById('db-status').innerText = "SYSTEM ONLINE: LOCAL MODE";
         }
         
         refreshUI();
@@ -341,7 +446,7 @@
         document.getElementById('next-week-id').innerText = state.week;
     }
 
-    // --- RENDERING ---
+    // --- RENDERING LOGIC ---
     function renderLive() {
         const body = document.getElementById('live-body');
         const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
@@ -360,7 +465,7 @@
 
     function renderArchive() {
         if (!state.history || state.history.length === 0) {
-            document.getElementById('archive-body').innerHTML = "<tr><td colspan='3' style='text-align:center'>Nessun dato registrato.</td></tr>";
+            document.getElementById('archive-body').innerHTML = "<tr><td colspan='3' style='text-align:center'>Nessun record trovato.</td></tr>";
             return;
         }
         const entry = state.history[state.hIdx];
@@ -377,55 +482,47 @@
         document.getElementById('next-btn').disabled = (state.hIdx === state.history.length - 1);
     }
 
-    // --- UPDATE LOGIC ---
+    // --- CORE LOGIC: IL NOTAIO ---
     async function processUpdate() {
         const raw = document.getElementById('input-raw').value;
-        if (!raw) return alert("Inserisci i dati, Tony!");
+        if (!raw) return alert("Tony, il campo è vuoto!");
 
         const lines = raw.split('\n').map(l => l.trim()).filter(l => l !== "");
         let infractions = [];
         let weekSnapshot = [];
 
+        // Parsing e pulizia automatica nomi
         const processedList = lines.map((line, index) => {
             let name = line.replace(/^\d+\.\s*/, '').split('(')[0].trim();
             let pos = index + 1;
             return { name, pos };
         });
 
+        // Controllo coerenza (Notaio)
         processedList.forEach(item => {
             const oldData = state.songs[item.name];
             const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
 
-            if (oldData && oldData.l === 'A' && oldData.lastPos <= 15 && item.pos > 20) {
-                infractions.push(`⚠️ "${item.name}" era in Top 15 e non può retrocedere direttamente in Serie ${newLega}!`);
-            }
-            if (oldData && oldData.l === 'B' && oldData.lastPos <= 45 && item.pos > 50) {
-                infractions.push(`⚠️ "${item.name}" era stabile in Serie B e non può crollare in Serie C!`);
+            if (oldData) {
+                if (oldData.l === 'A' && oldData.lastPos <= 15 && item.pos > 20) {
+                    infractions.push(`"${item.name}" crolla dalla Top 15 alla Serie ${newLega}`);
+                }
             }
         });
 
-        if (infractions.length > 0) {
-            if (!confirm("IL NOTAIO SEGNALA ERRORI:\n\n" + infractions.join('\n') + "\n\nVuoi forzare comunque l'aggiornamento?")) return;
-        }
+        if (infractions.length > 0 && !confirm("Il Notaio segnala incongruenze:\n" + infractions.join('\n') + "\n\nProcedere comunque?")) return;
 
+        // Aggiornamento Punteggi
         processedList.forEach(item => {
-            if (!state.songs[item.name]) {
-                state.songs[item.name] = { pts: 0, l: 'C', lastPos: 99 };
-            }
+            if (!state.songs[item.name]) state.songs[item.name] = { pts: 0, l: 'C', lastPos: 99 };
             
             const s = state.songs[item.name];
             const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
             let ptsAdded = 0;
 
-            if (newLega === 'A') {
-                if (item.pos === 1) ptsAdded = 35;
-                else if (item.pos <= 5) ptsAdded = 25;
-                else ptsAdded = 20;
-            } else if (newLega === 'B') {
-                ptsAdded = 10;
-            } else {
-                ptsAdded = 2;
-            }
+            if (newLega === 'A') ptsAdded = item.pos === 1 ? 35 : (item.pos <= 5 ? 25 : 20);
+            else if (newLega === 'B') ptsAdded = 10;
+            else ptsAdded = 2;
 
             s.pts += ptsAdded;
             s.l = newLega;
@@ -437,17 +534,22 @@
         state.week++;
 
         const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
-        if (error) alert("Errore Cloud: " + error.message);
-        else location.reload();
+        if (error) alert(error.message); else location.reload();
     }
 
-    // --- UI HELPERS ---
+    // --- THEME ENGINE ---
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        document.getElementById('theme-toggle-desk').innerText = isLight ? '☀️' : '🌓';
+    }
+
+    // --- UI NAVIGATION ---
     function showTab(t) {
         ['live', 'upd', 'hist'].forEach(id => {
-            const tabEl = document.getElementById('tab-' + id);
-            if(tabEl) tabEl.style.display = (t === id ? 'block' : 'none');
-            const navBtn = document.getElementById('nav-' + id);
-            if(navBtn) navBtn.classList.toggle('active', t === id);
+            document.getElementById('tab-' + id).style.display = (t === id ? 'block' : 'none');
+            const btn = document.getElementById('nav-' + id);
+            if(btn) btn.classList.toggle('active', t === id);
         });
         if (t === 'hist') {
             state.hIdx = state.history.length - 1;
@@ -456,14 +558,11 @@
     }
 
     function toggleMenu() {
-        const menu = document.getElementById('mobile-menu');
-        menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        const m = document.getElementById('mobile-menu');
+        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
     }
 
-    function mobileTab(t) {
-        showTab(t);
-        toggleMenu();
-    }
+    function mobileTab(t) { showTab(t); toggleMenu(); }
 
     function changeArchive(dir) {
         state.hIdx = Math.max(0, Math.min(state.history.length - 1, state.hIdx + dir));
@@ -471,7 +570,7 @@
     }
 
     async function hardReset() {
-        if (!confirm("Tony, questo cancellerà TUTTO l'archivio e resetterà i punti. Sei sicuro?")) return;
+        if (!confirm("Tony, questo cancella il database CLOUD. Sei sicuro?")) return;
         state = { week: 1, songs: {}, history: [] };
         await supabaseClient.from('classifiche').insert([{ data_json: state }]);
         location.reload();
@@ -483,56 +582,48 @@
         setTimeout(() => l.style.display = 'none', 500);
     }
 
-    // --- LOGICA EXPORT AVANZATA ---
+    // --- ADVANCED EXPORT ENGINE ---
     function toggleExportOverlay() {
-        const overlay = document.getElementById('export-overlay');
-        overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        const o = document.getElementById('export-overlay');
+        o.style.display = (o.style.display === 'flex') ? 'none' : 'flex';
     }
 
     function exportData(format) {
         const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
-        const incPos = document.getElementById('chk-pos').checked;
-        const incPts = document.getElementById('chk-pts').checked;
-        const incLega = document.getElementById('chk-lega').checked;
+        const p = document.getElementById('chk-pos').checked;
+        const pts = document.getElementById('chk-pts').checked;
+        const l = document.getElementById('chk-lega').checked;
 
         let content = "";
-        const fileName = `CRONOSOUND_DATA_W${state.week-1}.${format}`;
+        const name = `CRONOSOUND_W${state.week-1}.${format}`;
 
         if (format === 'txt') {
-            content = sorted.map(([name, d], i) => {
+            content = sorted.map(([n, d], i) => {
                 let row = "";
-                if (incPos) row += `${i + 1}. `;
-                row += name;
-                if (incLega) row += ` [Serie ${d.l}]`;
-                if (incPts) row += ` (${d.pts} pts)`;
+                if (p) row += `${i + 1}. `;
+                row += n;
+                if (l) row += ` [Serie ${d.l}]`;
+                if (pts) row += ` (${d.pts} pts)`;
                 return row;
             }).join('\n');
         } else {
-            // CSV Header dinamico
-            let headers = [];
-            if (incPos) headers.push("Posizione");
-            headers.push("Canzone");
-            if (incLega) headers.push("Serie");
-            if (incPts) headers.push("Punti");
-            
-            content = headers.join(",") + "\n";
-            content += sorted.map(([name, d], i) => {
-                let cols = [];
-                if (incPos) cols.push(i + 1);
-                cols.push(`"${name}"`);
-                if (incLega) cols.push(d.l);
-                if (incPts) cols.push(d.pts);
+            let h = ["Canzone"];
+            if (p) h.unshift("Pos");
+            if (l) h.push("Serie");
+            if (pts) h.push("Punti");
+            content = h.join(",") + "\n";
+            content += sorted.map(([n, d], i) => {
+                let cols = [`"${n}"`];
+                if (p) cols.unshift(i + 1);
+                if (l) cols.push(d.l);
+                if (pts) cols.push(d.pts);
                 return cols.join(",");
             }).join('\n');
         }
 
-        const blob = new Blob([content], { type: format === 'txt' ? 'text/plain' : 'text/csv' });
+        const blob = new Blob([content], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        a.click();
-        URL.revokeObjectURL(url);
+        const a = document.createElement('a'); a.href = url; a.download = name; a.click();
         toggleExportOverlay();
     }
 
