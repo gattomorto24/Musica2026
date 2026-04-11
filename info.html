@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>CRONOSOUND | INFO & REGOLAMENTO</title>
+    <title>CRONOSOUND | DOCUMENTAZIONE & LOGS</title>
     
     <script src="theme-engine.js"></script>
     
@@ -21,35 +21,34 @@
             --card-radius: 28px;
         }
 
-        /* LIGHT MODE VARS */
+        /* SUPPORTO LIGHT MODE INTEGRATO */
         body.light-mode {
             --bg: #f5f5f7;
             --text: #1d1d1f;
             --text-dim: #86868b;
-            --glass: rgba(0, 0, 0, 0.03);
+            --glass: rgba(0, 0, 0, 0.04);
             --glass-border: rgba(0, 0, 0, 0.12);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.4s ease, color 0.4s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease; }
         
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            background-image: 
-                radial-gradient(circle at 50% -20%, var(--glass-border) 0%, transparent 70%);
+            background-image: radial-gradient(circle at 50% -20%, var(--accent-glow) 0%, transparent 70%);
             padding: 40px 20px;
             min-height: 100vh;
         }
 
-        .container { max-width: 800px; margin: 0 auto; animation: fadeIn 0.8s ease; }
+        .container { max-width: 900px; margin: 0 auto; animation: fadeIn 0.8s ease; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        header { text-align: center; margin-bottom: 40px; }
+        header { text-align: center; margin-bottom: 50px; }
         header h1 { 
-            font-size: 2.5rem; font-weight: 800; letter-spacing: -2px;
+            font-size: 3rem; font-weight: 800; letter-spacing: -3px;
             background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
@@ -58,98 +57,125 @@
             background: var(--glass); backdrop-filter: blur(30px);
             border: 1px solid var(--glass-border); border-radius: var(--card-radius);
             padding: 35px; margin-bottom: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
-        h2 { color: var(--accent); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        h2 { color: var(--accent); font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
+        h2::after { content: ""; height: 1px; flex: 1; background: var(--glass-border); }
+
+        .log-entry { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
+        .log-entry:last-child { border: none; margin-bottom: 0; }
         
-        .section-content { color: var(--text); opacity: 0.8; font-size: 0.95rem; }
+        .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .log-date { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--accent); }
         
-        ul { list-style: none; }
-        li { margin-bottom: 15px; padding-left: 20px; position: relative; }
-        li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 800; }
+        .version-tag {
+            background: var(--accent); color: #000; padding: 3px 10px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800;
+        }
+
+        ul { list-style: none; margin-top: 10px; }
+        li { margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 0.9rem; color: var(--text); opacity: 0.8; }
+        li::before { content: "•"; position: absolute; left: 0; color: var(--accent); }
 
         .back-link {
             display: inline-block; text-decoration: none; color: var(--text-dim);
-            font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
-            letter-spacing: 1px; margin-bottom: 30px; border: 1px solid var(--glass-border);
-            padding: 10px 20px; border-radius: 100px;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 30px; border: 1px solid var(--glass-border);
+            padding: 12px 25px; border-radius: 100px;
         }
-        .back-link:hover { color: var(--accent); border-color: var(--accent); }
+        .back-link:hover { color: var(--accent); border-color: var(--accent); background: var(--glass); }
 
-        .version-tag {
-            background: var(--accent); color: #000; padding: 2px 8px;
-            border-radius: 4px; font-size: 0.7rem; font-weight: 800; vertical-align: middle;
+        .code-inline { font-family: 'Fira Code', monospace; background: rgba(0,242,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
+
+        /* Stile per il toggle iniettato via JS */
+        #theme-toggle-desk {
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         }
-
-        .code-font { font-family: 'Fira Code', monospace; color: var(--accent); }
+        #theme-toggle-desk:hover { transform: scale(1.1) rotate(15deg); }
 
         @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
             .glass-card { padding: 20px; }
-            header h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <a href="index.html" class="back-link">← Torna alla Dashboard</a>
+    <a href="index.html" class="back-link">← Terminale di Comando</a>
 
     <header>
-        <h1>INFO & REGOLAMENTO</h1>
-        <p style="color: var(--text-dim); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 10px;">CRONOSOUND Official Documentation</p>
+        <h1>SYSTEM LOGS</h1>
+        <p style="color: var(--accent); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; font-weight: 600;">Cronologia Sviluppo & Protocolli</p>
     </header>
 
-    <div class="glass-card" style="border-color: var(--accent);">
-        <h2>🚀 Cosa c'è di nuovo <span class="version-tag">v1.5</span></h2>
-        <div class="section-content">
-            <p style="margin-bottom: 15px; color: var(--accent); font-weight: 800;">ULTIMO AGGIORNAMENTO:</p>
+    <div class="glass-card">
+        <h2>📜 Changelog Ufficiale</h2>
+        
+        <div class="log-entry">
+            <div class="log-header">
+                <span class="version-tag">v1.5 - CURRENT</span>
+                <span class="log-date">11 APRILE 2026</span>
+            </div>
             <ul>
-                <li><b>Esportazione Avanzata:</b> Introdotto pop-up con filtri dinamici (Posizione, Punti, Serie) per file TXT e CSV.</li>
-                <li><b>Smart Theme Engine:</b> Implementato sistema di persistenza del tema (Light/Dark) tramite file esterno <span class="code-font">theme-engine.js</span>.</li>
-                <li><b>Memoria di Sistema:</b> Il browser ora ricorda l'ultimo tema utilizzato su tutte le pagine del dominio.</li>
-                <li><b>Toggle Universale:</b> Il selettore tema viene ora iniettato automaticamente anche nelle pagine di documentazione.</li>
+                <li><b>Persistent Theme Engine:</b> Creazione di <span class="code-inline">theme-engine.js</span> per la memorizzazione della scelta Light/Dark.</li>
+                <li><b>Advanced Exporting:</b> Nuovo modulo di esportazione con filtri per posizioni, punti e leghe (TXT/CSV).</li>
+                <li><b>Auto-Injection:</b> Il toggle del tema viene ora iniettato automaticamente in tutte le pagine satelliti.</li>
+            </ul>
+        </div>
+
+        <div class="log-entry">
+            <div class="log-header">
+                <span class="version-tag">v1.4</span>
+                <span class="log-date">05 APRILE 2026</span>
+            </div>
+            <ul>
+                <li><b>Protocollo Il Notaio:</b> Implementata logica di verifica anti-retrocessione per la Top 15.</li>
+                <li><b>Cloud Synchronization:</b> Ottimizzazione chiamate Supabase per ridurre i tempi di caricamento (Loader System).</li>
+            </ul>
+        </div>
+
+        <div class="log-entry">
+            <div class="log-header">
+                <span class="version-tag">v1.3</span>
+                <span class="log-date">28 MARZO 2026</span>
+            </div>
+            <ul>
+                <li><b>Rebranding:</b> Transizione definitiva a <b>CRONOSOUND</b>.</li>
+                <li><b>Mobile UI Core:</b> Sostituzione della navigazione standard con Hamburger Menu a tutto schermo.</li>
+            </ul>
+        </div>
+
+        <div class="log-entry">
+            <div class="log-header">
+                <span class="version-tag">v1.2</span>
+                <span class="log-date">15 MARZO 2026</span>
+            </div>
+            <ul>
+                <li><b>Archivio Storico:</b> Aggiunta navigazione settimanale con tasti freccia.</li>
+                <li><b>Visual Identity:</b> Introduzione del font <i>Plus Jakarta Sans</i> e design a schede "Glassmorphism".</li>
+            </ul>
+        </div>
+
+        <div class="log-entry">
+            <div class="log-header">
+                <span class="version-tag">v1.0</span>
+                <span class="log-date">01 MARZO 2026</span>
+            </div>
+            <ul>
+                <li><b>Genesis:</b> Prima release del sistema di gestione classifiche basato su array locali.</li>
             </ul>
         </div>
     </div>
 
     <div class="glass-card">
-        <h2>🏆 Sistema Punteggi</h2>
-        <div class="section-content">
-            <p style="margin-bottom: 15px;">I punti vengono assegnati settimanalmente in base alla posizione occupata nella classifica di Tony:</p>
-            <ul>
-                <li><b class="code-font">1° Posto:</b> 35 Punti (Vittoria Assoluta)</li>
-                <li><b class="code-font">Top 5:</b> 25 Punti (Zona Champions)</li>
-                <li><b class="code-font">Top 20:</b> 20 Punti (Serie A Permanente)</li>
-                <li><b class="code-font">Serie B (21-50):</b> 10 Punti (Zona Stabile)</li>
-                <li><b class="code-font">Serie C (51+):</b> 2 Punti (Zona Esordienti)</li>
-            </ul>
+        <h2>⚙️ Parametri Tecnici</h2>
+        <div style="font-size: 0.85rem; opacity: 0.8;">
+            <p>Il sistema gira su un'architettura <b>Serverless</b> con database <b>Supabase (PostgreSQL)</b>. Le preferenze estetiche sono salvate nel <span class="code-inline">localStorage</span> del client per garantire privacy e velocità senza chiamate API aggiuntive.</p>
         </div>
     </div>
 
-    <div class="glass-card">
-        <h2>⚖️ Protocollo "Il Notaio"</h2>
-        <div class="section-content">
-            <p>Il sistema integra un algoritmo di controllo coerenza per evitare fluttuazioni irreali dei dati:</p>
-            <ul>
-                <li>Le canzoni stabilizzate in <b>Top 15</b> non possono retrocedere direttamente in Serie B.</li>
-                <li>Le canzoni in <b>Serie B</b> hanno una protezione contro il crollo immediato in Serie C.</li>
-                <li>Ogni forzatura manuale viene registrata nei log del database Cloud.</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="glass-card">
-        <h2>Note di Rilascio Legacy <span class="version-tag">v1.3</span></h2>
-        <div class="section-content">
-            <ul>
-                <li><b>Rebranding:</b> Transizione ufficiale da Musica 2026 a <strong>CRONOSOUND</strong>.</li>
-                <li><b>UX Mobile:</b> Ottimizzati i tasti di navigazione e introdotto il fullscreen-menu.</li>
-            </ul>
-        </div>
-    </div>
-
-    <p style="text-align: center; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 2px; margin-top: 50px;">TONY EXECUTIVE SYSTEMS © 2026</p>
+    <p style="text-align: center; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 2px; margin-top: 50px;">TONY EXECUTIVE SYSTEMS — SECURITY CLEARANCE REQUIRED</p>
 </div>
 
 </body>
