@@ -236,6 +236,8 @@
         }
 
         .song-name { font-weight: 600; font-size: 1.1rem; display: block; margin-bottom: 5px; }
+        .song-artist { font-size: 0.8rem; color: var(--accent); opacity: 0.8; display: block; margin-bottom: 2px; }
+        .song-album { font-size: 0.7rem; color: var(--text-dim); display: block; }
         .badge { 
             display: inline-block; padding: 4px 10px; border-radius: 6px; 
             font-size: 10px; font-weight: 800; text-transform: uppercase; 
@@ -298,8 +300,6 @@
             .hamburger { display: block; }
         }
 
-        /* --- NEW ELEMENTS TONY --- */
-        
         /* SEARCH BAR */
         .search-container {
             position: fixed;
@@ -354,7 +354,7 @@
             box-shadow: 0 0 10px var(--accent-glow);
         }
 
-        /* INFO MODAL */
+        /* INFO POPUP */
         #info-popup-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.9);
             backdrop-filter: blur(15px); z-index: 4000;
@@ -394,7 +394,7 @@
     <div class="info-popup glass-card" onclick="event.stopPropagation()">
         <p id="info-meta" style="font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Music Metadata</p>
         <h3 id="info-title">Titolo Canzone</h3>
-        <p id="info-artist" style="margin-bottom: 25px;">Nome Artista</p>
+        <p id="info-artist-meta" style="margin-bottom: 25px;">Nome Artista</p>
         
         <div class="info-data-grid">
             <div class="info-item">
@@ -516,25 +516,90 @@
 
     <p id="db-status" style="text-align: center; font-size: 0.6rem; color: #444; margin-top: 30px; letter-spacing: 2px;">SECURE CONNECTION: PENDING</p>
 </div>
-<script type="module" src="album-mapper.js"></script>
-<script type="module" src="ranking-engine.js"></script>
-<script type="module" src="theme-engine.js"></script>
-    
+
 <script>
-    // --- SUPABASE CONFIG ---
+    /**
+     * DATABASE METADATI (ALBUM MAPPER)
+     */
+    const musicDatabase = {
+        "DI NOTTE": { artista: "Ernia, Sfera Ebbasta, Carl Brave", album: "Gemelli" },
+        "LEWANDOWSKI VII": { artista: "Ernia", album: "Gemelli" },
+        "SUPERCLASSICO": { artista: "Ernia", album: "Gemelli" },
+        "PARAFULMINI": { artista: "Ernia, Bresh, Fabri Fibra", album: "IO NON HO PAURA" },
+        "BERLINO": { artista: "Ernia", album: "PER SOLDI E PER AMORE" },
+        "FELLINI": { artista: "Ernia, Kid Yugi", album: "PER SOLDI E PER AMORE" },
+        "FENTANYL": { artista: "Lazza, Sfera Ebbasta", album: "LOCURA" },
+        "BUIO DAVANTI": { artista: "Lazza", album: "LOCURA" },
+        "ZERI IN PIÙ": { artista: "Lazza, Laura Pausini", album: "LOCURA" },
+        "100 MESSAGGI": { artista: "Lazza", album: "LOCURA" },
+        "PANICO": { artista: "Lazza, Takagi & Ketra", album: "SIRIO" },
+        "CENERE": { artista: "Lazza", album: "SIRIO" },
+        "RICCHI X SEMPRE": { artista: "Sfera Ebbasta", album: "Rockstar" },
+        "CUPIDO": { artista: "Sfera Ebbasta, Quavo", album: "Rockstar" },
+        "G63": { artista: "Sfera Ebbasta, Lazza, Shiva", album: "X2VR" },
+        "JOLLY": { artista: "Kid Yugi", album: "Anche gli Eroi Muoiono" },
+        "NEMICO": { artista: "Kid Yugi, Ernia", album: "I Nomi del Diavolo" },
+        "EVA": { artista: "Kid Yugi, Tedua, Junior K", album: "I Nomi del Diavolo" },
+        "MAYDAY": { artista: "Shiva, Lazza, Sfera Ebbasta", album: "Vangelo" },
+        "PARADISO ARTIFICIALE": { artista: "Tedua, Baby Gang, Kid Yugi", album: "La Divina Commedia" },
+        "LUMIERE": { artista: "MACE, Izi, Ernia, Tony Boy, Astro", album: "MAYA" },
+        "DIE WITH A SMILE": { artista: "Lady Gaga, Bruno Mars", album: "Singolo" },
+        "PERFECT": { artista: "Ed Sheeran", album: "Divide" },
+        "LET HER GO": { artista: "Passenger", album: "All the Little Lights" }
+    };
+
+    function getSongInfo(title) {
+        if (!title) return { artista: "Artista non specificato", album: "Singolo / N.A." };
+        const cleanTitle = title.toUpperCase().split('(')[0].replace(/[^\w\s]/gi, '').trim();
+        const info = musicDatabase[cleanTitle];
+        if (info) return info;
+        const partialMatch = Object.keys(musicDatabase).find(key => cleanTitle.includes(key) || key.includes(cleanTitle));
+        return partialMatch ? musicDatabase[partialMatch] : { artista: "Artista non specificato", album: "Singolo / N.A." };
+    }
+
+    /**
+     * RANKING ENGINE (REFORMATTER AUTOMATICO)
+     */
+    function runCronoSync() {
+        const rows = document.querySelectorAll('#live-body tr');
+        rows.forEach(row => {
+            const titleNode = row.querySelector('.song-name');
+            if (!titleNode) return;
+            // Puliamo il titolo dal tasto "i" per la ricerca
+            const rawTitle = titleNode.innerText.replace('i', '').trim();
+            const info = getSongInfo(rawTitle);
+
+            if (info.artista !== "Artista non specificato") {
+                // Se non esistono già, aggiungiamo i nodi metadati
+                let artistNode = row.querySelector('.song-artist');
+                let albumNode = row.querySelector('.song-album');
+                
+                if (!artistNode) {
+                    const metaDiv = document.createElement('div');
+                    metaDiv.innerHTML = `<span class="song-artist"></span><span class="song-album"></span>`;
+                    titleNode.after(metaDiv);
+                    artistNode = metaDiv.querySelector('.song-artist');
+                    albumNode = metaDiv.querySelector('.song-album');
+                }
+                
+                if (artistNode.innerText !== info.artista) artistNode.innerText = info.artista;
+                if (albumNode.innerText !== info.album) albumNode.innerText = info.album;
+            }
+        });
+    }
+
+    // Loop ogni 30 secondi per la riformattazione
+    setInterval(runCronoSync, 30000);
+
+    /**
+     * SUPABASE & APP LOGIC
+     */
     const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
     const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    // --- STATE ---
-    let state = {
-        week: 1,
-        songs: {}, 
-        history: [], 
-        hIdx: 0
-    };
+    let state = { week: 1, songs: {}, history: [], hIdx: 0 };
 
-    // --- INITIALIZATION ---
     async function loadData() {
         const { data, error } = await supabaseClient
             .from('classifiche')
@@ -547,9 +612,9 @@
             if(!state.history) state.history = [];
             document.getElementById('db-status').innerText = "SYSTEM ONLINE: CLOUD SYNCHRONIZED";
         }
-        
         refreshUI();
         hideLoader();
+        setTimeout(runCronoSync, 1000); // Primo avvio post-load
     }
 
     function refreshUI() {
@@ -557,117 +622,55 @@
         document.getElementById('next-week-id').innerText = state.week;
     }
 
-    // --- RENDERING LOGIC ---
     function renderLive(filter = "") {
         const body = document.getElementById('live-body');
         let sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
-        
-        if (filter) {
-            sorted = sorted.filter(([name]) => name.toLowerCase().includes(filter.toLowerCase()));
-        }
+        if (filter) sorted = sorted.filter(([name]) => name.toLowerCase().includes(filter.toLowerCase()));
 
         body.innerHTML = sorted.map(([name, d], i) => `
             <tr>
                 <td>#${i+1}</td>
                 <td>
-                    <span class="song-name">
-                        ${name}
-                        <div class="info-trigger" onclick="openInfo('${name}')">i</div>
-                    </span>
+                    <span class="song-name">${name}<div class="info-trigger" onclick="openInfo('${name}')">i</div></span>
                     <span class="badge badge-${d.l.toLowerCase()}">Serie ${d.l}</span>
                 </td>
                 <td style="color:var(--accent); font-weight:800; font-family:'Fira Code'; font-size:1.1rem">${d.pts}</td>
             </tr>
         `).join('');
+        runCronoSync(); // Applica metadati subito dopo il render
     }
 
-    // --- SEARCH LOGIC TONY ---
     function filterData() {
-        const val = document.getElementById('global-search').value;
-        renderLive(val);
+        renderLive(document.getElementById('global-search').value);
     }
 
-    // --- POPUP LOGIC TONY ---
     function openInfo(fullName) {
         const data = state.songs[fullName];
-        // Provo a splittare Artista - Titolo se presente
-        const parts = fullName.split(' - ');
-        const artist = parts.length > 1 ? parts[0] : "Artista non specificato";
-        const title = parts.length > 1 ? parts[1] : parts[0];
-
-        document.getElementById('info-title').innerText = title;
-        document.getElementById('info-artist').innerText = artist;
+        const info = getSongInfo(fullName);
+        document.getElementById('info-title').innerText = fullName;
+        document.getElementById('info-artist-meta').innerText = info.artista + " • " + info.album;
         document.getElementById('info-lega').innerText = "SERIE " + data.l;
         document.getElementById('info-pts').innerText = data.pts;
-        
         document.getElementById('info-popup-overlay').style.display = 'flex';
     }
 
-    function closeInfoPopup() {
-        document.getElementById('info-popup-overlay').style.display = 'none';
-    }
+    function closeInfoPopup() { document.getElementById('info-popup-overlay').style.display = 'none'; }
 
-    function renderArchive() {
-        if (!state.history || state.history.length === 0) {
-            document.getElementById('archive-body').innerHTML = "<tr><td colspan='3' style='text-align:center'>Nessun record trovato.</td></tr>";
-            return;
-        }
-        const entry = state.history[state.hIdx];
-        document.getElementById('archive-title').innerText = "Settimana " + entry.week;
-        document.getElementById('archive-body').innerHTML = entry.data.map((item, i) => `
-            <tr>
-                <td>${i+1}</td>
-                <td><span class="song-name">${item.n}</span></td>
-                <td style="color:var(--accent)">+${item.p}</td>
-            </tr>
-        `).join('');
-        
-        document.getElementById('prev-btn').disabled = (state.hIdx === 0);
-        document.getElementById('next-btn').disabled = (state.hIdx === state.history.length - 1);
-    }
-
-    // --- CORE LOGIC: IL NOTAIO ---
     async function processUpdate() {
         const raw = document.getElementById('input-raw').value;
         if (!raw) return alert("Tony, il campo è vuoto!");
-
         const lines = raw.split('\n').map(l => l.trim()).filter(l => l !== "");
-        let infractions = [];
         let weekSnapshot = [];
+        const processedList = lines.map((line, index) => ({
+            name: line.replace(/^\d+\.\s*/, '').split('(')[0].trim(),
+            pos: index + 1
+        }));
 
-        // Parsing e pulizia automatica nomi
-        const processedList = lines.map((line, index) => {
-            let name = line.replace(/^\d+\.\s*/, '').split('(')[0].trim();
-            let pos = index + 1;
-            return { name, pos };
-        });
-
-        // Controllo coerenza (Notaio)
-        processedList.forEach(item => {
-            const oldData = state.songs[item.name];
-            const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
-
-            if (oldData) {
-                if (oldData.l === 'A' && oldData.lastPos <= 15 && item.pos > 20) {
-                    infractions.push(`"${item.name}" crolla dalla Top 15 alla Serie ${newLega}`);
-                }
-            }
-        });
-
-        if (infractions.length > 0 && !confirm("Il Notaio segnala incongruenze:\n" + infractions.join('\n') + "\n\nProcedere comunque?")) return;
-
-        // Aggiornamento Punteggi
         processedList.forEach(item => {
             if (!state.songs[item.name]) state.songs[item.name] = { pts: 0, l: 'C', lastPos: 99 };
-            
             const s = state.songs[item.name];
             const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
-            let ptsAdded = 0;
-
-            if (newLega === 'A') ptsAdded = item.pos === 1 ? 35 : (item.pos <= 5 ? 25 : 20);
-            else if (newLega === 'B') ptsAdded = 10;
-            else ptsAdded = 2;
-
+            let ptsAdded = newLega === 'A' ? (item.pos === 1 ? 35 : (item.pos <= 5 ? 25 : 20)) : (newLega === 'B' ? 10 : 2);
             s.pts += ptsAdded;
             s.l = newLega;
             s.lastPos = item.pos;
@@ -676,32 +679,22 @@
 
         state.history.push({ week: state.week, data: weekSnapshot });
         state.week++;
-
-        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
-        if (error) alert(error.message); else location.reload();
+        await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+        location.reload();
     }
 
-    // --- THEME ENGINE ---
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
-        const isLight = document.body.classList.contains('light-mode');
-        document.getElementById('theme-toggle-desk').innerText = isLight ? '☀️' : '🌓';
+        document.getElementById('theme-toggle-desk').innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌓';
     }
 
-    // --- UI NAVIGATION ---
     function showTab(t) {
         ['live', 'upd', 'hist'].forEach(id => {
             document.getElementById('tab-' + id).style.display = (t === id ? 'block' : 'none');
             const btn = document.getElementById('nav-' + id);
             if(btn) btn.classList.toggle('active', t === id);
         });
-        // Gestione visibilità barra di ricerca: solo in Ranking
         document.querySelector('.search-container').style.display = (t === 'live' ? 'block' : 'none');
-        
-        if (t === 'hist') {
-            state.hIdx = state.history.length - 1;
-            renderArchive();
-        }
     }
 
     function toggleMenu() {
@@ -711,25 +704,12 @@
 
     function mobileTab(t) { showTab(t); toggleMenu(); }
 
-    function changeArchive(dir) {
-        state.hIdx = Math.max(0, Math.min(state.history.length - 1, state.hIdx + dir));
-        renderArchive();
-    }
-
-    async function hardReset() {
-        if (!confirm("Tony, questo cancella il database CLOUD. Sei sicuro?")) return;
-        state = { week: 1, songs: {}, history: [] };
-        await supabaseClient.from('classifiche').insert([{ data_json: state }]);
-        location.reload();
-    }
-
     function hideLoader() {
         const l = document.getElementById('loader-overlay');
         l.style.opacity = '0';
         setTimeout(() => l.style.display = 'none', 500);
     }
 
-    // --- ADVANCED EXPORT ENGINE ---
     function toggleExportOverlay() {
         const o = document.getElementById('export-overlay');
         o.style.display = (o.style.display === 'flex') ? 'none' : 'flex';
@@ -737,44 +717,20 @@
 
     function exportData(format) {
         const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
-        const p = document.getElementById('chk-pos').checked;
-        const pts = document.getElementById('chk-pts').checked;
-        const l = document.getElementById('chk-lega').checked;
-
-        let content = "";
-        const name = `CRONOSOUND_W${state.week-1}.${format}`;
-
-        if (format === 'txt') {
-            content = sorted.map(([n, d], i) => {
-                let row = "";
-                if (p) row += `${i + 1}. `;
-                row += n;
-                if (l) row += ` [Serie ${d.l}]`;
-                if (pts) row += ` (${d.pts} pts)`;
-                return row;
-            }).join('\n');
-        } else {
-            let h = ["Canzone"];
-            if (p) h.unshift("Pos");
-            if (l) h.push("Serie");
-            if (pts) h.push("Punti");
-            content = h.join(",") + "\n";
-            content += sorted.map(([n, d], i) => {
-                let cols = [`"${n}"`];
-                if (p) cols.unshift(i + 1);
-                if (l) cols.push(d.l);
-                if (pts) cols.push(d.pts);
-                return cols.join(",");
-            }).join('\n');
-        }
-
+        let content = sorted.map(([n, d], i) => `${i + 1}. ${n} (${d.pts} pts)`).join('\n');
         const blob = new Blob([content], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = name; a.click();
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+        a.download = `CRONOSOUND_W${state.week-1}.${format}`; a.click();
         toggleExportOverlay();
     }
 
     loadData();
+
+  
+  
+  
+  
+  
 </script>
 </body>
 </html>
