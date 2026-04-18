@@ -23,16 +23,41 @@
             --card-radius: 28px;
         }
 
+        /* LIGHT MODE OTTIMIZZATA - DESIGN PROFESSIONALE */
         body.light-mode {
             --bg: #f5f5f7;
             --text: #1d1d1f;
             --text-dim: #86868b;
-            --glass: rgba(0, 0, 0, 0.03);
-            --glass-border: rgba(0, 0, 0, 0.12);
-            --accent: #004080;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --accent: #0071e3; /* Blue Apple Style */
+            --accent-glow: rgba(0, 113, 227, 0.15);
             background-image: 
                 radial-gradient(circle at 50% -20%, #ffffff 0%, transparent 70%),
-                radial-gradient(circle at 0% 100%, rgba(0, 242, 255, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 0% 100%, rgba(0, 113, 227, 0.05) 0%, transparent 40%);
+        }
+
+        body.light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 1);
+        }
+
+        body.light-mode td {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.04);
+        }
+
+        body.light-mode .nav-btn:not(.active) {
+            background: rgba(0, 0, 0, 0.05);
+            color: #1d1d1f;
+        }
+
+        body.light-mode .search-bar {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1d1d1f;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.1);
         }
 
         * { 
@@ -135,17 +160,14 @@
             text-transform: uppercase; 
             letter-spacing: 1px;
         }
-        body.light-mode .nav-btn { 
-            background: rgba(255, 255, 255, 0.7); 
-            color: #86868b; 
-        }
         .nav-btn:hover { border-color: var(--accent); color: var(--text); }
         .nav-btn.active { 
             background: var(--accent); 
-            color: #000; 
+            color: #fff; 
             border-color: var(--accent);
             box-shadow: 0 10px 30px var(--accent-glow);
         }
+        body:not(.light-mode) .nav-btn.active { color: #000; }
 
         #theme-toggle-desk {
             background: var(--glass);
@@ -231,9 +253,11 @@
             display: inline-block; padding: 4px 10px; border-radius: 6px; 
             font-size: 10px; font-weight: 800; text-transform: uppercase; 
         }
-        .badge-a { background: var(--accent); color: #000; }
+        .badge-a { background: var(--accent); color: #fff; }
+        body:not(.light-mode) .badge-a { color: #000; }
         .badge-b { border: 1px solid var(--warning); color: var(--warning); }
         .badge-c { border: 1px solid #333; color: #666; }
+        body.light-mode .badge-c { border-color: #ccc; color: #999; }
 
         textarea {
             width: 100%; height: 350px; background: var(--glass); border: 1px solid var(--glass-border);
@@ -243,10 +267,11 @@
         textarea:focus { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
 
         .btn-publish {
-            background: var(--accent); color: #000; border: none; padding: 22px;
+            background: var(--accent); color: #fff; border: none; padding: 22px;
             border-radius: 18px; font-weight: 800; cursor: pointer; width: 100%;
             font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;
         }
+        body:not(.light-mode) .btn-publish { color: #000; }
         .btn-publish:hover { transform: translateY(-3px); box-shadow: 0 15px 40px var(--accent-glow); }
 
         .archive-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
@@ -272,6 +297,7 @@
             background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 12px; 
             cursor: pointer; border: 1px solid transparent; 
         }
+        body.light-mode .export-toggle { background: rgba(0,0,0,0.03); }
         .export-toggle input { display: none; }
         .export-toggle .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
         .export-toggle input:checked + .dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
@@ -356,6 +382,7 @@
         .info-popup p { color: var(--text-dim); margin-bottom: 20px; font-size: 0.9rem; }
         .info-data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; }
         .info-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; border: 1px solid var(--glass-border); }
+        body.light-mode .info-item { background: rgba(0,0,0,0.03); }
         .info-item label { display: block; font-size: 0.6rem; color: var(--accent); text-transform: uppercase; margin-bottom: 5px; }
         .info-item span { font-weight: 600; font-size: 0.9rem; }
 
@@ -500,7 +527,7 @@
 </div>
 
 <script>
-    // --- TONY'S MUSIC DATABASE (Sincronizzato con album-mapper.js) ---
+    // --- DATABASE & LOGICA RIMASTA INVARIATA COME DA RICHIESTA ---
     const musicDatabase = {
         "DI NOTTE": { artista: "Ernia, Sfera Ebbasta, Carl Brave", album: "Gemelli" },
         "LEWANDOWSKI VII": { artista: "Ernia", album: "Gemelli" },
@@ -530,12 +557,10 @@
     function getMusicInfo(title) {
         if (!title) return { artista: "Sconosciuto", album: "N/A" };
         const clean = title.toUpperCase().split('(')[0].replace(/[^A-Z0-9\s]/gi, '').trim();
-        // Cerca match esatto o parziale
         const key = Object.keys(musicDatabase).find(k => clean.includes(k) || k.includes(clean));
         return musicDatabase[key] || { artista: "Artista non in DB", album: "Album non in DB" };
     }
 
-    // --- SUPABASE CONFIG ---
     const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
     const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
@@ -593,10 +618,8 @@
 
     function openInfo(fullName) {
         const data = state.songs[fullName];
-        // Split intelligente per capire se l'utente ha scritto "Artista - Titolo"
         const parts = fullName.split(' - ');
         const searchTitle = parts.length > 1 ? parts[1] : parts[0];
-        
         const meta = getMusicInfo(searchTitle);
 
         document.getElementById('info-title').innerText = searchTitle;
@@ -604,7 +627,6 @@
         document.getElementById('info-album').innerText = meta.album;
         document.getElementById('info-lega').innerText = "SERIE " + data.l;
         document.getElementById('info-pts').innerText = data.pts;
-        
         document.getElementById('info-popup-overlay').style.display = 'flex';
     }
 
