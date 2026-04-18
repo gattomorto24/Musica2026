@@ -726,7 +726,154 @@
 
     loadData();
 
-  
+  /**
+ * CRONOSOUND ENGINE v4.0 - FIX TOTALE
+ * Se non funziona questo, vendi il PC.
+ */
+
+class CronoSound {
+    constructor() {
+        this.songs = [
+            { id: 1, titolo: "Di Notte", artista: ["Ernia", "Sfera Ebbasta", "Carl Brave"], album: "Gemelli (ascendente Milano)", punti: 915, serie: "A" },
+            { id: 2, titolo: "Lewandowski VII", artista: ["Ernia"], album: "Gemelli (ascendente Milano)", punti: 882, serie: "A" },
+            { id: 3, titolo: "Dissing", artista: ["Ernia", "2Rari", "Night Skinny"], album: "Gemelli (ascendente Milano)", punti: 150, serie: "A" },
+            { id: 4, titolo: "PARAFULMINI", artista: ["Ernia", "Bresh", "Fabri Fibra"], album: "IO NON HO PAURA", punti: 110, serie: "B" },
+            { id: 5, titolo: "ACQUA TONICA", artista: ["Ernia", "Geolier", "Junior K"], album: "IO NON HO PAURA", punti: 130, serie: "A" },
+            { id: 6, titolo: "LEWANDOWSKI X", artista: ["Ernia"], album: "IO NON HO PAURA", punti: 116, serie: "B" },
+            { id: 7, titolo: "BELLA FREGATURA", artista: ["Ernia"], album: "IO NON HO PAURA", punti: 168, serie: "B" },
+            { id: 8, titolo: "BERLINO", artista: ["Ernia"], album: "PER SOLDI E PER AMORE", punti: 100, serie: "B" },
+            { id: 9, titolo: "FELLINI", artista: ["Ernia", "Kid Yugi"], album: "PER SOLDI E PER AMORE", punti: 82, serie: "A" },
+            { id: 10, titolo: "PER TE", artista: ["Ernia"], album: "PER SOLDI E PER AMORE", punti: 152, serie: "B" },
+            { id: 11, titolo: "FIGLIO DI", artista: ["Ernia", "Club Dogo"], album: "PER SOLDI E PER AMORE", punti: 178, serie: "A" },
+            { id: 12, titolo: "DA DENUNCIA", artista: ["Ernia", "Marracash"], album: "PER SOLDI E PER AMORE", punti: 88, serie: "B" },
+            { id: 13, titolo: "PER SOLDI E PER AMORE", artista: ["Ernia"], album: "PER SOLDI E PER AMORE", punti: 87, serie: "A" },
+            { id: 14, titolo: "PERCHÉ", artista: ["Ernia", "Madame"], album: "PER SOLDI E PER AMORE", punti: 96, serie: "A" },
+            { id: 15, titolo: "Superclassico", artista: ["Ernia"], album: "Gemelli", punti: 150, serie: "B" },
+            { id: 16, titolo: "Non Me Ne Frega Un Cazzo", artista: ["Ernia", "Fabri Fibra"], album: "Gemelli", punti: 94, serie: "A" },
+            { id: 17, titolo: "Puro Sinaloa", artista: ["Ernia", "Tedua", "Rkomi", "Lazza"], album: "Gemelli", punti: 89, serie: "A" },
+            { id: 18, titolo: "MeryXSempre", artista: ["Ernia", "Shiva"], album: "Gemelli", punti: 92, serie: "A" },
+            { id: 19, titolo: "Pensavo Di Ucciderti", artista: ["Ernia", "Luchè"], album: "Gemelli", punti: 140, serie: "A" },
+            { id: 20, titolo: "Ferma A Guardare", artista: ["Ernia", "Pinguini Tattici Nucleari"], album: "Gemelli", punti: 162, serie: "A" },
+            { id: 21, titolo: "FIGLIO UNICO", artista: ["Irama", "Rkomi", "Ernia", "Kid Yugi"], album: "NO STRESS", punti: 150, serie: "A" },
+            { id: 22, titolo: "LUMIERE ᯤ", artista: ["MACE", "Izi", "Ernia", "Tony Boy", "Astro"], album: "MĀYĀ", punti: 87, serie: "A" },
+            { id: 23, titolo: "SIRENA མེ", artista: ["MACE", "Ernia", "Samurai Jay", "DARRN"], album: "OBE", punti: 117, serie: "A" },
+            { id: 24, titolo: "DAMME 'NA MANO", artista: ["Tony Effe"], album: "DAMME 'NA MANO", punti: 126, serie: "A" },
+            { id: 25, titolo: "Ricchi x Sempre", artista: ["Sfera Ebbasta"], album: "Rockstar", punti: 212, serie: "A" },
+            { id: 26, titolo: "Tran Tran", artista: ["Sfera Ebbasta"], album: "Rockstar", punti: 126, serie: "A" },
+            { id: 27, titolo: "Cupido", artista: ["Sfera Ebbasta", "Quavo"], album: "Rockstar", punti: 120, serie: "A" },
+            { id: 28, titolo: "Serpenti A Sonagli", artista: ["Sfera Ebbasta"], album: "Rockstar", punti: 150, serie: "A" },
+            { id: 29, titolo: "Rockstar", artista: ["Sfera Ebbasta"], album: "Rockstar", punti: 150, serie: "B" },
+            { id: 30, titolo: "Giovani Re", artista: ["Sfera Ebbasta"], album: "Famoso", punti: 115, serie: "B" },
+            { id: 31, titolo: "UHLALA", artista: ["Sfera Ebbasta"], album: "Famoso", punti: 144, serie: "A" },
+            { id: 32, titolo: "Baby", artista: ["Sfera Ebbasta", "J Balvin"], album: "Famoso", punti: 100, serie: "A" },
+            { id: 33, titolo: "Bottiglie Privè", artista: ["Sfera Ebbasta"], album: "Famoso", punti: 145, serie: "A" },
+            { id: 34, titolo: "15 Piani", artista: ["Sfera Ebbasta", "Marracash"], album: "X2VR", punti: 116, serie: "A" },
+            { id: 35, titolo: "G63", artista: ["Sfera Ebbasta", "Lazza", "Shiva"], album: "X2VR", punti: 134, serie: "A" },
+            { id: 36, titolo: "Anche Stasera", artista: ["Sfera Ebbasta", "Elodie"], album: "X2VR", punti: 140, serie: "A" },
+            { id: 37, titolo: "Yakuza", artista: ["Elodie", "Sfera Ebbasta", "Rvssian"], album: "Yakuza", punti: 196, serie: "A" },
+            { id: 38, titolo: "NEON", artista: ["Sfera Ebbasta", "Shiva"], album: "SANTANA MONEY GANG", punti: 155, serie: "A" },
+            { id: 39, titolo: "Calipso", artista: ["Charlie Charles", "Sfera Ebbasta", "Mahmood", "Fabri Fibra"], album: "Calipso", punti: 112, serie: "A" },
+            { id: 40, titolo: "MI FAI IMPAZZIRE", artista: ["BLANCO", "Sfera Ebbasta"], album: "MI FAI IMPAZZIRE", punti: 170, serie: "B" },
+            { id: 41, titolo: "Push It", artista: ["Kid Yugi", "ANNA"], album: "Push It", punti: 145, serie: "B" },
+            { id: 42, titolo: "Jolly", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 98, serie: "B" },
+            { id: 43, titolo: "Amelie", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 95, serie: "A" },
+            { id: 44, titolo: "Davide e Golia", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 98, serie: "B" },
+            { id: 45, titolo: "La violenza Necessaria", artista: ["Kid Yugi", "Shiva"], album: "Anche gli Eroi Muoiono", punti: 97, serie: "A" },
+            { id: 46, titolo: "Gilgamesh", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 113, serie: "B" },
+            { id: 47, titolo: "L'ultimo a Cadere", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 85, serie: "A" },
+            { id: 48, titolo: "Eroina", artista: ["Kid Yugi", "Tutti Fenomeni"], album: "Anche gli Eroi Muoiono", punti: 120, serie: "A" },
+            { id: 49, titolo: "Nemico", artista: ["Kid Yugi", "Ernia"], album: "I Nomi del Diavolo", punti: 89, serie: "A" },
+            { id: 50, titolo: "Terr1", artista: ["Kid Yugi", "Geolier"], album: "I Nomi del Diavolo", punti: 160, serie: "A" },
+            { id: 51, titolo: "Eva", artista: ["Kid Yugi", "Tedua", "Junior K"], album: "I Nomi del Diavolo", punti: 91, serie: "A" },
+            { id: 52, titolo: "Lilith", artista: ["Kid Yugi"], album: "I Nomi del Diavolo", punti: 127, serie: "B" },
+            { id: 53, titolo: "Ex Angelo", artista: ["Kid Yugi", "Sfera Ebbasta", "Shablo"], album: "I Nomi del Diavolo", punti: 93, serie: "A" },
+            { id: 54, titolo: "BIANCA", artista: ["RRARI DAL TACCO", "Kid Yugi"], album: "BIANCA", punti: 15, serie: "A" },
+            { id: 55, titolo: "FENTANYL", artista: ["Lazza", "Sfera Ebbasta"], album: "LOCURA", punti: 88, serie: "A" },
+            { id: 56, titolo: "BUIO DAVANTI", artista: ["Lazza"], album: "LOCURA", punti: 126, serie: "A" },
+            { id: 57, titolo: "VERDI NEI VIOLA", artista: ["Lazza"], album: "LOCURA", punti: 158, serie: "B" },
+            { id: 58, titolo: "ZERI IN PIÙ (LOCURA)", artista: ["Lazza", "Laura Pausini"], album: "LOCURA", punti: 90, serie: "B" },
+            { id: 59, titolo: "MEZZE VERITÀ", artista: ["Lazza", "Kid Yugi"], album: "LOCURA", punti: 100, serie: "A" },
+            { id: 60, titolo: "OuverFOURe", artista: ["Lazza"], album: "LOCURA", punti: 128, serie: "A" },
+            { id: 61, titolo: "DOLCEVITA", artista: ["Lazza"], album: "LOCURA", punti: 173, serie: "B" },
+            { id: 62, titolo: "CANZONE D'ODIO", artista: ["Lazza", "Lil Baby"], album: "LOCURA", punti: 100, serie: "A" },
+            { id: 63, titolo: "100 MESSAGGI", artista: ["Lazza"], album: "LOCURA", punti: 80, serie: "B" },
+            { id: 64, titolo: "PIOVE", artista: ["Lazza", "Sfera Ebbasta"], album: "SIRIO", punti: 188, serie: "A" },
+            { id: 65, titolo: "MOLOTOV", artista: ["Lazza"], album: "MOLOTOV", punti: 160, serie: "A" },
+            { id: 66, titolo: "OUV3RTURE", artista: ["Lazza"], album: "SIRIO", punti: 140, serie: "A" },
+            { id: 67, titolo: "USCITO DI GALERA", artista: ["Lazza"], album: "SIRIO", punti: 164, serie: "A" },
+            { id: 68, titolo: "SENZA RUMORE", artista: ["Lazza"], album: "SIRIO", punti: 123, serie: "B" },
+            { id: 69, titolo: "TOPBOY", artista: ["Lazza", "Noyz Narcos"], album: "SIRIO", punti: 93, serie: "A" },
+            { id: 70, titolo: "PANICO", artista: ["Lazza", "Takagi & Ketra"], album: "SIRIO", punti: 127, serie: "A" },
+            { id: 71, titolo: "CENERE", artista: ["Lazza"], album: "SIRIO", punti: 119, serie: "A" },
+            { id: 72, titolo: "Gigolò", artista: ["Lazza", "Sfera Ebbasta", "Capo Plaza"], album: "Re Mida (Aurum)", punti: 98, serie: "A" },
+            { id: 73, titolo: "Frio", artista: ["Lazza"], album: "Re Mida (Aurum)", punti: 100, serie: "B" },
+            { id: 74, titolo: "Re Mida (Piano Solo)", artista: ["Lazza"], album: "Re Mida (Aurum)", punti: 91, serie: "A" },
+            { id: 75, titolo: "Morto Mai (Piano Solo)", artista: ["Lazza"], album: "Re Mida (Aurum)", punti: 110, serie: "A" },
+            { id: 76, titolo: "Money Rain", artista: ["Capo Plaza", "Lazza"], album: "FERITE", punti: 100, serie: "B" },
+            { id: 77, titolo: "Take 6", artista: ["Shiva"], album: "Vangelo", punti: 160, serie: "B" },
+            { id: 78, titolo: "Mayday", artista: ["Shiva", "Lazza", "Sfera Ebbasta"], album: "Vangelo", punti: 123, serie: "A" },
+            { id: 79, titolo: "Polvere Rosa", artista: ["Shiva"], album: "Vangelo", punti: 127, serie: "A" },
+            { id: 80, titolo: "Babyface", artista: ["Shiva", "Kid Yugi"], album: "Vangelo", punti: 174, serie: "B" },
+            { id: 81, titolo: "Bad Bad Bad", artista: ["Shiva", "Geolier"], album: "Vangelo", punti: 102, serie: "B" },
+            { id: 82, titolo: "Paradiso Artificiale", artista: ["Tedua", "Baby Gang", "Kid Yugi"], album: "La Divina Commedia", punti: 104, serie: "A" },
+            { id: 83, titolo: "Volgare", artista: ["Tedua", "Lazza"], album: "La Divina Commedia", punti: 136, serie: "A" },
+            { id: 84, titolo: "Hoe", artista: ["Tedua", "Sfera Ebbasta"], album: "La Divina Commedia", punti: 114, serie: "B" },
+            { id: 85, titolo: "Anime Libere", artista: ["Tedua", "Rkomi", "Bresh"], album: "La Divina Commedia", punti: 90, serie: "B" },
+            { id: 86, titolo: "Diluvio A Luglio", artista: ["Tedua", "Marracash"], album: "La Divina Commedia", punti: 98, serie: "B" },
+            { id: 87, titolo: "TU MI PIACI TANTO", artista: ["Sayf"], album: "TU MI PIACI TANTO", punti: 136, serie: "A" },
+            { id: 88, titolo: "Avvoltoi", artista: ["Eddie Brock"], album: "Avvoltoi", punti: 94, serie: "B" },
+            { id: 89, titolo: "Poesie Clandestine", artista: ["LDA", "Aka 7even"], album: "Poesie Clandestine", punti: 108, serie: "A" },
+            { id: 90, titolo: "OSSESSIONE", artista: ["Samurai Jay", "Vito Salamanca"], album: "OSSESSIONE", punti: 122, serie: "B" },
+            { id: 91, titolo: "Stupida sfortuna", artista: ["Fulminacci"], album: "Stupida sfortuna", punti: 94, serie: "A" },
+            { id: 92, titolo: "MALE NECESSARIO", artista: ["Fedez", "Marco Masini"], album: "MALE NECESSARIO", punti: 141, serie: "B" },
+            { id: 93, titolo: "Che Gusto C'è", artista: ["Fabri Fibra", "Tredici Pietro"], album: "Che Gusto C'è", punti: 124, serie: "A" },
+            { id: 94, titolo: "Oliver Twist", artista: ["ArrDee"], album: "Oliver Twist", punti: 140, serie: "B" },
+            { id: 95, titolo: "Die With A Smile", artista: ["Lady Gaga", "Bruno Mars"], album: "Die With A Smile", punti: 158, serie: "A" },
+            { id: 96, titolo: "Nothin' on You", artista: ["B.o.B", "Bruno Mars"], album: "The Adventures of Bobby Ray", punti: 104, serie: "B" },
+            { id: 97, titolo: "Uptown Funk", artista: ["Mark Ronson", "Bruno Mars"], album: "Uptown Special", punti: 115, serie: "B" },
+            { id: 98, titolo: "APT.", artista: ["ROSÉ", "Bruno Mars"], album: "APT.", punti: 149, serie: "A" },
+            { id: 100, titolo: "24K Magic", artista: ["Bruno Mars"], album: "24K Magic", punti: 107, serie: "B" },
+            { id: 101, titolo: "I Just Might", artista: ["Bruno Mars"], album: "I Just Might", punti: 103, serie: "B" },
+            { id: 102, titolo: "Dance With Me", artista: ["Bruno Mars"], album: "The Romantic", punti: 183, serie: "B" },
+            { id: 103, titolo: "The Lazy Song", artista: ["Bruno Mars"], album: "Doo-Wops & Hooligans", punti: 175, serie: "A" },
+            { id: 104, titolo: "Talking to the Moon", artista: ["Bruno Mars"], album: "Doo-Wops & Hooligans", punti: 146, serie: "A" },
+            { id: 105, titolo: "Perfect", artista: ["Ed Sheeran"], album: "÷ (Deluxe)", punti: 95, serie: "B" },
+            { id: 106, titolo: "Let Her Go", artista: ["Passenger"], album: "Let Her Go (EP)", punti: 75, serie: "B" }
+        ];
+    }
+
+    search(query) {
+        if (!query) return console.error("Inserisci qualcosa!");
+        
+        // Trasformo la query in minuscolo per rendere la ricerca INSENSITIVE
+        const q = query.toLowerCase();
+        
+        const res = this.songs.filter(s => {
+            const matchTitolo = s.titolo.toLowerCase().includes(q);
+            const matchAlbum = s.album.toLowerCase().includes(q);
+            const matchArtista = s.artista.some(a => a.toLowerCase().includes(q));
+            return matchTitolo || matchAlbum || matchArtista;
+        });
+
+        if (res.length === 0) {
+            console.warn(`Zero risultati per "${query}".`);
+        } else {
+            console.table(res.map(s => ({
+                Titolo: s.titolo,
+                Artisti: s.artista.join(", "),
+                Album: s.album,
+                Serie: s.serie,
+                Punti: s.punti
+            })));
+        }
+    }
+}
+
+// CREO L'ISTANZA (Usa questa variabile!)
+const Crono = new CronoSound();
+
+// PROVA ORA:
+Crono.search("ernia"); // Funzionerà anche minuscolo.
   
   
   
