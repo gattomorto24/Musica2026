@@ -236,8 +236,6 @@
         }
 
         .song-name { font-weight: 600; font-size: 1.1rem; display: block; margin-bottom: 5px; }
-        .song-artist { font-size: 0.8rem; color: var(--accent); opacity: 0.8; display: block; margin-bottom: 2px; }
-        .song-album { font-size: 0.7rem; color: var(--text-dim); display: block; }
         .badge { 
             display: inline-block; padding: 4px 10px; border-radius: 6px; 
             font-size: 10px; font-weight: 800; text-transform: uppercase; 
@@ -300,6 +298,8 @@
             .hamburger { display: block; }
         }
 
+        /* --- NEW ELEMENTS TONY --- */
+        
         /* SEARCH BAR */
         .search-container {
             position: fixed;
@@ -354,7 +354,7 @@
             box-shadow: 0 0 10px var(--accent-glow);
         }
 
-        /* INFO POPUP */
+        /* INFO MODAL */
         #info-popup-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.9);
             backdrop-filter: blur(15px); z-index: 4000;
@@ -394,7 +394,7 @@
     <div class="info-popup glass-card" onclick="event.stopPropagation()">
         <p id="info-meta" style="font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Music Metadata</p>
         <h3 id="info-title">Titolo Canzone</h3>
-        <p id="info-artist-meta" style="margin-bottom: 25px;">Nome Artista</p>
+        <p id="info-artist" style="margin-bottom: 25px;">Nome Artista</p>
         
         <div class="info-data-grid">
             <div class="info-item">
@@ -516,90 +516,25 @@
 
     <p id="db-status" style="text-align: center; font-size: 0.6rem; color: #444; margin-top: 30px; letter-spacing: 2px;">SECURE CONNECTION: PENDING</p>
 </div>
-
+<script type="module" src="album-mapper.js"></script>
+<script type="module" src="ranking-engine.js"></script>
+<script type="module" src="theme-engine.js"></script>
+    
 <script>
-    /**
-     * DATABASE METADATI (ALBUM MAPPER)
-     */
-    const musicDatabase = {
-        "DI NOTTE": { artista: "Ernia, Sfera Ebbasta, Carl Brave", album: "Gemelli" },
-        "LEWANDOWSKI VII": { artista: "Ernia", album: "Gemelli" },
-        "SUPERCLASSICO": { artista: "Ernia", album: "Gemelli" },
-        "PARAFULMINI": { artista: "Ernia, Bresh, Fabri Fibra", album: "IO NON HO PAURA" },
-        "BERLINO": { artista: "Ernia", album: "PER SOLDI E PER AMORE" },
-        "FELLINI": { artista: "Ernia, Kid Yugi", album: "PER SOLDI E PER AMORE" },
-        "FENTANYL": { artista: "Lazza, Sfera Ebbasta", album: "LOCURA" },
-        "BUIO DAVANTI": { artista: "Lazza", album: "LOCURA" },
-        "ZERI IN PIÙ": { artista: "Lazza, Laura Pausini", album: "LOCURA" },
-        "100 MESSAGGI": { artista: "Lazza", album: "LOCURA" },
-        "PANICO": { artista: "Lazza, Takagi & Ketra", album: "SIRIO" },
-        "CENERE": { artista: "Lazza", album: "SIRIO" },
-        "RICCHI X SEMPRE": { artista: "Sfera Ebbasta", album: "Rockstar" },
-        "CUPIDO": { artista: "Sfera Ebbasta, Quavo", album: "Rockstar" },
-        "G63": { artista: "Sfera Ebbasta, Lazza, Shiva", album: "X2VR" },
-        "JOLLY": { artista: "Kid Yugi", album: "Anche gli Eroi Muoiono" },
-        "NEMICO": { artista: "Kid Yugi, Ernia", album: "I Nomi del Diavolo" },
-        "EVA": { artista: "Kid Yugi, Tedua, Junior K", album: "I Nomi del Diavolo" },
-        "MAYDAY": { artista: "Shiva, Lazza, Sfera Ebbasta", album: "Vangelo" },
-        "PARADISO ARTIFICIALE": { artista: "Tedua, Baby Gang, Kid Yugi", album: "La Divina Commedia" },
-        "LUMIERE": { artista: "MACE, Izi, Ernia, Tony Boy, Astro", album: "MAYA" },
-        "DIE WITH A SMILE": { artista: "Lady Gaga, Bruno Mars", album: "Singolo" },
-        "PERFECT": { artista: "Ed Sheeran", album: "Divide" },
-        "LET HER GO": { artista: "Passenger", album: "All the Little Lights" }
-    };
-
-    function getSongInfo(title) {
-        if (!title) return { artista: "Artista non specificato", album: "Singolo / N.A." };
-        const cleanTitle = title.toUpperCase().split('(')[0].replace(/[^\w\s]/gi, '').trim();
-        const info = musicDatabase[cleanTitle];
-        if (info) return info;
-        const partialMatch = Object.keys(musicDatabase).find(key => cleanTitle.includes(key) || key.includes(cleanTitle));
-        return partialMatch ? musicDatabase[partialMatch] : { artista: "Artista non specificato", album: "Singolo / N.A." };
-    }
-
-    /**
-     * RANKING ENGINE (REFORMATTER AUTOMATICO)
-     */
-    function runCronoSync() {
-        const rows = document.querySelectorAll('#live-body tr');
-        rows.forEach(row => {
-            const titleNode = row.querySelector('.song-name');
-            if (!titleNode) return;
-            // Puliamo il titolo dal tasto "i" per la ricerca
-            const rawTitle = titleNode.innerText.replace('i', '').trim();
-            const info = getSongInfo(rawTitle);
-
-            if (info.artista !== "Artista non specificato") {
-                // Se non esistono già, aggiungiamo i nodi metadati
-                let artistNode = row.querySelector('.song-artist');
-                let albumNode = row.querySelector('.song-album');
-                
-                if (!artistNode) {
-                    const metaDiv = document.createElement('div');
-                    metaDiv.innerHTML = `<span class="song-artist"></span><span class="song-album"></span>`;
-                    titleNode.after(metaDiv);
-                    artistNode = metaDiv.querySelector('.song-artist');
-                    albumNode = metaDiv.querySelector('.song-album');
-                }
-                
-                if (artistNode.innerText !== info.artista) artistNode.innerText = info.artista;
-                if (albumNode.innerText !== info.album) albumNode.innerText = info.album;
-            }
-        });
-    }
-
-    // Loop ogni 30 secondi per la riformattazione
-    setInterval(runCronoSync, 30000);
-
-    /**
-     * SUPABASE & APP LOGIC
-     */
+    // --- SUPABASE CONFIG ---
     const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
     const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    let state = { week: 1, songs: {}, history: [], hIdx: 0 };
+    // --- STATE ---
+    let state = {
+        week: 1,
+        songs: {}, 
+        history: [], 
+        hIdx: 0
+    };
 
+    // --- INITIALIZATION ---
     async function loadData() {
         const { data, error } = await supabaseClient
             .from('classifiche')
@@ -610,11 +545,13 @@
         if (data && data.length > 0) {
             state = data[0].data_json;
             if(!state.history) state.history = [];
+            // Assicura che l'indice dell'archivio sia all'ultimo record
+            state.hIdx = state.history.length > 0 ? state.history.length - 1 : 0;
             document.getElementById('db-status').innerText = "SYSTEM ONLINE: CLOUD SYNCHRONIZED";
         }
+        
         refreshUI();
         hideLoader();
-        setTimeout(runCronoSync, 1000); // Primo avvio post-load
     }
 
     function refreshUI() {
@@ -622,55 +559,114 @@
         document.getElementById('next-week-id').innerText = state.week;
     }
 
+    // --- RENDERING LOGIC ---
     function renderLive(filter = "") {
         const body = document.getElementById('live-body');
         let sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
-        if (filter) sorted = sorted.filter(([name]) => name.toLowerCase().includes(filter.toLowerCase()));
+        
+        if (filter) {
+            // Ricerca migliorata: ora cerca ovunque nel nome (artista - titolo - album se incluso nel nome)
+            sorted = sorted.filter(([name]) => name.toLowerCase().includes(filter.toLowerCase()));
+        }
 
         body.innerHTML = sorted.map(([name, d], i) => `
             <tr>
                 <td>#${i+1}</td>
                 <td>
-                    <span class="song-name">${name}<div class="info-trigger" onclick="openInfo('${name}')">i</div></span>
+                    <span class="song-name">
+                        ${name}
+                        <div class="info-trigger" onclick="openInfo('${name}')">i</div>
+                    </span>
                     <span class="badge badge-${d.l.toLowerCase()}">Serie ${d.l}</span>
                 </td>
                 <td style="color:var(--accent); font-weight:800; font-family:'Fira Code'; font-size:1.1rem">${d.pts}</td>
             </tr>
         `).join('');
-        runCronoSync(); // Applica metadati subito dopo il render
     }
 
+    // --- SEARCH LOGIC TONY ---
     function filterData() {
-        renderLive(document.getElementById('global-search').value);
+        const val = document.getElementById('global-search').value;
+        renderLive(val);
     }
 
+    // --- POPUP LOGIC TONY ---
     function openInfo(fullName) {
         const data = state.songs[fullName];
-        const info = getSongInfo(fullName);
-        document.getElementById('info-title').innerText = fullName;
-        document.getElementById('info-artist-meta').innerText = info.artista + " • " + info.album;
+        const parts = fullName.split(' - ');
+        const artist = parts.length > 1 ? parts[0] : "Artista non specificato";
+        const title = parts.length > 1 ? parts[1] : parts[0];
+
+        document.getElementById('info-title').innerText = title;
+        document.getElementById('info-artist').innerText = artist;
         document.getElementById('info-lega').innerText = "SERIE " + data.l;
         document.getElementById('info-pts').innerText = data.pts;
+        
         document.getElementById('info-popup-overlay').style.display = 'flex';
     }
 
-    function closeInfoPopup() { document.getElementById('info-popup-overlay').style.display = 'none'; }
+    function closeInfoPopup() {
+        document.getElementById('info-popup-overlay').style.display = 'none';
+    }
 
+    function renderArchive() {
+        if (!state.history || state.history.length === 0) {
+            document.getElementById('archive-body').innerHTML = "<tr><td colspan='3' style='text-align:center'>Nessun record trovato.</td></tr>";
+            return;
+        }
+        const entry = state.history[state.hIdx];
+        document.getElementById('archive-title').innerText = "Settimana " + entry.week;
+        document.getElementById('archive-body').innerHTML = entry.data.map((item, i) => `
+            <tr>
+                <td>${i+1}</td>
+                <td><span class="song-name">${item.n}</span></td>
+                <td style="color:var(--accent)">+${item.p}</td>
+            </tr>
+        `).join('');
+        
+        document.getElementById('prev-btn').disabled = (state.hIdx === 0);
+        document.getElementById('next-btn').disabled = (state.hIdx === state.history.length - 1);
+    }
+
+    // --- CORE LOGIC: IL NOTAIO ---
     async function processUpdate() {
         const raw = document.getElementById('input-raw').value;
         if (!raw) return alert("Tony, il campo è vuoto!");
+
         const lines = raw.split('\n').map(l => l.trim()).filter(l => l !== "");
+        let infractions = [];
         let weekSnapshot = [];
-        const processedList = lines.map((line, index) => ({
-            name: line.replace(/^\d+\.\s*/, '').split('(')[0].trim(),
-            pos: index + 1
-        }));
+
+        const processedList = lines.map((line, index) => {
+            let name = line.replace(/^\d+\.\s*/, '').split('(')[0].trim();
+            let pos = index + 1;
+            return { name, pos };
+        });
+
+        processedList.forEach(item => {
+            const oldData = state.songs[item.name];
+            const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
+
+            if (oldData) {
+                if (oldData.l === 'A' && oldData.lastPos <= 15 && item.pos > 20) {
+                    infractions.push(`"${item.name}" crolla dalla Top 15 alla Serie ${newLega}`);
+                }
+            }
+        });
+
+        if (infractions.length > 0 && !confirm("Il Notaio segnala incongruenze:\n" + infractions.join('\n') + "\n\nProcedere comunque?")) return;
 
         processedList.forEach(item => {
             if (!state.songs[item.name]) state.songs[item.name] = { pts: 0, l: 'C', lastPos: 99 };
+            
             const s = state.songs[item.name];
             const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
-            let ptsAdded = newLega === 'A' ? (item.pos === 1 ? 35 : (item.pos <= 5 ? 25 : 20)) : (newLega === 'B' ? 10 : 2);
+            let ptsAdded = 0;
+
+            if (newLega === 'A') ptsAdded = item.pos === 1 ? 35 : (item.pos <= 5 ? 25 : 20);
+            else if (newLega === 'B') ptsAdded = 10;
+            else ptsAdded = 2;
+
             s.pts += ptsAdded;
             s.l = newLega;
             s.lastPos = item.pos;
@@ -679,15 +675,22 @@
 
         state.history.push({ week: state.week, data: weekSnapshot });
         state.week++;
-        await supabaseClient.from('classifiche').insert([{ data_json: state }]);
-        location.reload();
+        
+        // Aggiorna l'indice storico all'ultimo inserimento
+        state.hIdx = state.history.length - 1;
+
+        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+        if (error) alert(error.message); else location.reload();
     }
 
+    // --- THEME ENGINE ---
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
-        document.getElementById('theme-toggle-desk').innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌓';
+        const isLight = document.body.classList.contains('light-mode');
+        document.getElementById('theme-toggle-desk').innerText = isLight ? '☀️' : '🌓';
     }
 
+    // --- UI NAVIGATION ---
     function showTab(t) {
         ['live', 'upd', 'hist'].forEach(id => {
             document.getElementById('tab-' + id).style.display = (t === id ? 'block' : 'none');
@@ -695,6 +698,12 @@
             if(btn) btn.classList.toggle('active', t === id);
         });
         document.querySelector('.search-container').style.display = (t === 'live' ? 'block' : 'none');
+        
+        if (t === 'hist') {
+            // Quando si entra nell'archivio, si parte sempre dall'ultima settimana salvata
+            state.hIdx = state.history.length > 0 ? state.history.length - 1 : 0;
+            renderArchive();
+        }
     }
 
     function toggleMenu() {
@@ -704,12 +713,25 @@
 
     function mobileTab(t) { showTab(t); toggleMenu(); }
 
+    function changeArchive(dir) {
+        state.hIdx = Math.max(0, Math.min(state.history.length - 1, state.hIdx + dir));
+        renderArchive();
+    }
+
+    async function hardReset() {
+        if (!confirm("Tony, questo cancella il database CLOUD. Sei sicuro?")) return;
+        state = { week: 1, songs: {}, history: [], hIdx: 0 };
+        await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+        location.reload();
+    }
+
     function hideLoader() {
         const l = document.getElementById('loader-overlay');
         l.style.opacity = '0';
         setTimeout(() => l.style.display = 'none', 500);
     }
 
+    // --- ADVANCED EXPORT ENGINE ---
     function toggleExportOverlay() {
         const o = document.getElementById('export-overlay');
         o.style.display = (o.style.display === 'flex') ? 'none' : 'flex';
@@ -717,167 +739,49 @@
 
     function exportData(format) {
         const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
-        let content = sorted.map(([n, d], i) => `${i + 1}. ${n} (${d.pts} pts)`).join('\n');
+        const p = document.getElementById('chk-pos').checked;
+        const pts = document.getElementById('chk-pts').checked;
+        const l = document.getElementById('chk-lega').checked;
+
+        let content = "";
+        const name = `CRONOSOUND_W${state.week-1}.${format}`;
+
+        if (format === 'txt') {
+            content = sorted.map(([n, d], i) => {
+                let row = "";
+                if (p) row += `${i + 1}. `;
+                row += n;
+                if (l) row += ` [Serie ${d.l}]`;
+                if (pts) row += ` (${d.pts} pts)`;
+                return row;
+            }).join('\n');
+        } else {
+            let h = ["Canzone"];
+            if (p) h.unshift("Pos");
+            if (l) h.push("Serie");
+            if (pts) h.push("Punti");
+            content = h.join(",") + "\n";
+            content += sorted.map(([n, d], i) => {
+                let cols = [`"${n}"`];
+                if (p) cols.unshift(i + 1);
+                if (l) cols.push(d.l);
+                if (pts) cols.push(d.pts);
+                return cols.join(",");
+            }).join('\n');
+        }
+
         const blob = new Blob([content], { type: 'text/plain' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-        a.download = `CRONOSOUND_W${state.week-1}.${format}`; a.click();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = name; a.click();
         toggleExportOverlay();
     }
 
     loadData();
-
-  /**
- * CRONOSOUND ENGINE v4.0 - FIX TOTALE
- * Se non funziona questo, vendi il PC.
- */
-
-class CronoSound {
-    constructor() {
-        this.songs = [
-            { id: 1, titolo: "Di Notte", artista: ["Ernia", "Sfera Ebbasta", "Carl Brave"], album: "Gemelli (ascendente Milano)", punti: 915, serie: "A" },
-            { id: 2, titolo: "Lewandowski VII", artista: ["Ernia"], album: "Gemelli (ascendente Milano)", punti: 882, serie: "A" },
-            { id: 3, titolo: "Dissing", artista: ["Ernia", "2Rari", "Night Skinny"], album: "Gemelli (ascendente Milano)", punti: 150, serie: "A" },
-            { id: 4, titolo: "PARAFULMINI", artista: ["Ernia", "Bresh", "Fabri Fibra"], album: "IO NON HO PAURA", punti: 110, serie: "B" },
-            { id: 5, titolo: "ACQUA TONICA", artista: ["Ernia", "Geolier", "Junior K"], album: "IO NON HO PAURA", punti: 130, serie: "A" },
-            { id: 6, titolo: "LEWANDOWSKI X", artista: ["Ernia"], album: "IO NON HO PAURA", punti: 116, serie: "B" },
-            { id: 7, titolo: "BELLA FREGATURA", artista: ["Ernia"], album: "IO NON HO PAURA", punti: 168, serie: "B" },
-            { id: 8, titolo: "BERLINO", artista: ["Ernia"], album: "PER SOLDI E PER AMORE", punti: 100, serie: "B" },
-            { id: 9, titolo: "FELLINI", artista: ["Ernia", "Kid Yugi"], album: "PER SOLDI E PER AMORE", punti: 82, serie: "A" },
-            { id: 10, titolo: "PER TE", artista: ["Ernia"], album: "PER SOLDI E PER AMORE", punti: 152, serie: "B" },
-            { id: 11, titolo: "FIGLIO DI", artista: ["Ernia", "Club Dogo"], album: "PER SOLDI E PER AMORE", punti: 178, serie: "A" },
-            { id: 12, titolo: "DA DENUNCIA", artista: ["Ernia", "Marracash"], album: "PER SOLDI E PER AMORE", punti: 88, serie: "B" },
-            { id: 13, titolo: "PER SOLDI E PER AMORE", artista: ["Ernia"], album: "PER SOLDI E PER AMORE", punti: 87, serie: "A" },
-            { id: 14, titolo: "PERCHÉ", artista: ["Ernia", "Madame"], album: "PER SOLDI E PER AMORE", punti: 96, serie: "A" },
-            { id: 15, titolo: "Superclassico", artista: ["Ernia"], album: "Gemelli", punti: 150, serie: "B" },
-            { id: 16, titolo: "Non Me Ne Frega Un Cazzo", artista: ["Ernia", "Fabri Fibra"], album: "Gemelli", punti: 94, serie: "A" },
-            { id: 17, titolo: "Puro Sinaloa", artista: ["Ernia", "Tedua", "Rkomi", "Lazza"], album: "Gemelli", punti: 89, serie: "A" },
-            { id: 18, titolo: "MeryXSempre", artista: ["Ernia", "Shiva"], album: "Gemelli", punti: 92, serie: "A" },
-            { id: 19, titolo: "Pensavo Di Ucciderti", artista: ["Ernia", "Luchè"], album: "Gemelli", punti: 140, serie: "A" },
-            { id: 20, titolo: "Ferma A Guardare", artista: ["Ernia", "Pinguini Tattici Nucleari"], album: "Gemelli", punti: 162, serie: "A" },
-            { id: 21, titolo: "FIGLIO UNICO", artista: ["Irama", "Rkomi", "Ernia", "Kid Yugi"], album: "NO STRESS", punti: 150, serie: "A" },
-            { id: 22, titolo: "LUMIERE ᯤ", artista: ["MACE", "Izi", "Ernia", "Tony Boy", "Astro"], album: "MĀYĀ", punti: 87, serie: "A" },
-            { id: 23, titolo: "SIRENA མེ", artista: ["MACE", "Ernia", "Samurai Jay", "DARRN"], album: "OBE", punti: 117, serie: "A" },
-            { id: 24, titolo: "DAMME 'NA MANO", artista: ["Tony Effe"], album: "DAMME 'NA MANO", punti: 126, serie: "A" },
-            { id: 25, titolo: "Ricchi x Sempre", artista: ["Sfera Ebbasta"], album: "Rockstar", punti: 212, serie: "A" },
-            { id: 26, titolo: "Tran Tran", artista: ["Sfera Ebbasta"], album: "Rockstar", punti: 126, serie: "A" },
-            { id: 27, titolo: "Cupido", artista: ["Sfera Ebbasta", "Quavo"], album: "Rockstar", punti: 120, serie: "A" },
-            { id: 28, titolo: "Serpenti A Sonagli", artista: ["Sfera Ebbasta"], album: "Rockstar", punti: 150, serie: "A" },
-            { id: 29, titolo: "Rockstar", artista: ["Sfera Ebbasta"], album: "Rockstar", punti: 150, serie: "B" },
-            { id: 30, titolo: "Giovani Re", artista: ["Sfera Ebbasta"], album: "Famoso", punti: 115, serie: "B" },
-            { id: 31, titolo: "UHLALA", artista: ["Sfera Ebbasta"], album: "Famoso", punti: 144, serie: "A" },
-            { id: 32, titolo: "Baby", artista: ["Sfera Ebbasta", "J Balvin"], album: "Famoso", punti: 100, serie: "A" },
-            { id: 33, titolo: "Bottiglie Privè", artista: ["Sfera Ebbasta"], album: "Famoso", punti: 145, serie: "A" },
-            { id: 34, titolo: "15 Piani", artista: ["Sfera Ebbasta", "Marracash"], album: "X2VR", punti: 116, serie: "A" },
-            { id: 35, titolo: "G63", artista: ["Sfera Ebbasta", "Lazza", "Shiva"], album: "X2VR", punti: 134, serie: "A" },
-            { id: 36, titolo: "Anche Stasera", artista: ["Sfera Ebbasta", "Elodie"], album: "X2VR", punti: 140, serie: "A" },
-            { id: 37, titolo: "Yakuza", artista: ["Elodie", "Sfera Ebbasta", "Rvssian"], album: "Yakuza", punti: 196, serie: "A" },
-            { id: 38, titolo: "NEON", artista: ["Sfera Ebbasta", "Shiva"], album: "SANTANA MONEY GANG", punti: 155, serie: "A" },
-            { id: 39, titolo: "Calipso", artista: ["Charlie Charles", "Sfera Ebbasta", "Mahmood", "Fabri Fibra"], album: "Calipso", punti: 112, serie: "A" },
-            { id: 40, titolo: "MI FAI IMPAZZIRE", artista: ["BLANCO", "Sfera Ebbasta"], album: "MI FAI IMPAZZIRE", punti: 170, serie: "B" },
-            { id: 41, titolo: "Push It", artista: ["Kid Yugi", "ANNA"], album: "Push It", punti: 145, serie: "B" },
-            { id: 42, titolo: "Jolly", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 98, serie: "B" },
-            { id: 43, titolo: "Amelie", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 95, serie: "A" },
-            { id: 44, titolo: "Davide e Golia", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 98, serie: "B" },
-            { id: 45, titolo: "La violenza Necessaria", artista: ["Kid Yugi", "Shiva"], album: "Anche gli Eroi Muoiono", punti: 97, serie: "A" },
-            { id: 46, titolo: "Gilgamesh", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 113, serie: "B" },
-            { id: 47, titolo: "L'ultimo a Cadere", artista: ["Kid Yugi"], album: "Anche gli Eroi Muoiono", punti: 85, serie: "A" },
-            { id: 48, titolo: "Eroina", artista: ["Kid Yugi", "Tutti Fenomeni"], album: "Anche gli Eroi Muoiono", punti: 120, serie: "A" },
-            { id: 49, titolo: "Nemico", artista: ["Kid Yugi", "Ernia"], album: "I Nomi del Diavolo", punti: 89, serie: "A" },
-            { id: 50, titolo: "Terr1", artista: ["Kid Yugi", "Geolier"], album: "I Nomi del Diavolo", punti: 160, serie: "A" },
-            { id: 51, titolo: "Eva", artista: ["Kid Yugi", "Tedua", "Junior K"], album: "I Nomi del Diavolo", punti: 91, serie: "A" },
-            { id: 52, titolo: "Lilith", artista: ["Kid Yugi"], album: "I Nomi del Diavolo", punti: 127, serie: "B" },
-            { id: 53, titolo: "Ex Angelo", artista: ["Kid Yugi", "Sfera Ebbasta", "Shablo"], album: "I Nomi del Diavolo", punti: 93, serie: "A" },
-            { id: 54, titolo: "BIANCA", artista: ["RRARI DAL TACCO", "Kid Yugi"], album: "BIANCA", punti: 15, serie: "A" },
-            { id: 55, titolo: "FENTANYL", artista: ["Lazza", "Sfera Ebbasta"], album: "LOCURA", punti: 88, serie: "A" },
-            { id: 56, titolo: "BUIO DAVANTI", artista: ["Lazza"], album: "LOCURA", punti: 126, serie: "A" },
-            { id: 57, titolo: "VERDI NEI VIOLA", artista: ["Lazza"], album: "LOCURA", punti: 158, serie: "B" },
-            { id: 58, titolo: "ZERI IN PIÙ (LOCURA)", artista: ["Lazza", "Laura Pausini"], album: "LOCURA", punti: 90, serie: "B" },
-            { id: 59, titolo: "MEZZE VERITÀ", artista: ["Lazza", "Kid Yugi"], album: "LOCURA", punti: 100, serie: "A" },
-            { id: 60, titolo: "OuverFOURe", artista: ["Lazza"], album: "LOCURA", punti: 128, serie: "A" },
-            { id: 61, titolo: "DOLCEVITA", artista: ["Lazza"], album: "LOCURA", punti: 173, serie: "B" },
-            { id: 62, titolo: "CANZONE D'ODIO", artista: ["Lazza", "Lil Baby"], album: "LOCURA", punti: 100, serie: "A" },
-            { id: 63, titolo: "100 MESSAGGI", artista: ["Lazza"], album: "LOCURA", punti: 80, serie: "B" },
-            { id: 64, titolo: "PIOVE", artista: ["Lazza", "Sfera Ebbasta"], album: "SIRIO", punti: 188, serie: "A" },
-            { id: 65, titolo: "MOLOTOV", artista: ["Lazza"], album: "MOLOTOV", punti: 160, serie: "A" },
-            { id: 66, titolo: "OUV3RTURE", artista: ["Lazza"], album: "SIRIO", punti: 140, serie: "A" },
-            { id: 67, titolo: "USCITO DI GALERA", artista: ["Lazza"], album: "SIRIO", punti: 164, serie: "A" },
-            { id: 68, titolo: "SENZA RUMORE", artista: ["Lazza"], album: "SIRIO", punti: 123, serie: "B" },
-            { id: 69, titolo: "TOPBOY", artista: ["Lazza", "Noyz Narcos"], album: "SIRIO", punti: 93, serie: "A" },
-            { id: 70, titolo: "PANICO", artista: ["Lazza", "Takagi & Ketra"], album: "SIRIO", punti: 127, serie: "A" },
-            { id: 71, titolo: "CENERE", artista: ["Lazza"], album: "SIRIO", punti: 119, serie: "A" },
-            { id: 72, titolo: "Gigolò", artista: ["Lazza", "Sfera Ebbasta", "Capo Plaza"], album: "Re Mida (Aurum)", punti: 98, serie: "A" },
-            { id: 73, titolo: "Frio", artista: ["Lazza"], album: "Re Mida (Aurum)", punti: 100, serie: "B" },
-            { id: 74, titolo: "Re Mida (Piano Solo)", artista: ["Lazza"], album: "Re Mida (Aurum)", punti: 91, serie: "A" },
-            { id: 75, titolo: "Morto Mai (Piano Solo)", artista: ["Lazza"], album: "Re Mida (Aurum)", punti: 110, serie: "A" },
-            { id: 76, titolo: "Money Rain", artista: ["Capo Plaza", "Lazza"], album: "FERITE", punti: 100, serie: "B" },
-            { id: 77, titolo: "Take 6", artista: ["Shiva"], album: "Vangelo", punti: 160, serie: "B" },
-            { id: 78, titolo: "Mayday", artista: ["Shiva", "Lazza", "Sfera Ebbasta"], album: "Vangelo", punti: 123, serie: "A" },
-            { id: 79, titolo: "Polvere Rosa", artista: ["Shiva"], album: "Vangelo", punti: 127, serie: "A" },
-            { id: 80, titolo: "Babyface", artista: ["Shiva", "Kid Yugi"], album: "Vangelo", punti: 174, serie: "B" },
-            { id: 81, titolo: "Bad Bad Bad", artista: ["Shiva", "Geolier"], album: "Vangelo", punti: 102, serie: "B" },
-            { id: 82, titolo: "Paradiso Artificiale", artista: ["Tedua", "Baby Gang", "Kid Yugi"], album: "La Divina Commedia", punti: 104, serie: "A" },
-            { id: 83, titolo: "Volgare", artista: ["Tedua", "Lazza"], album: "La Divina Commedia", punti: 136, serie: "A" },
-            { id: 84, titolo: "Hoe", artista: ["Tedua", "Sfera Ebbasta"], album: "La Divina Commedia", punti: 114, serie: "B" },
-            { id: 85, titolo: "Anime Libere", artista: ["Tedua", "Rkomi", "Bresh"], album: "La Divina Commedia", punti: 90, serie: "B" },
-            { id: 86, titolo: "Diluvio A Luglio", artista: ["Tedua", "Marracash"], album: "La Divina Commedia", punti: 98, serie: "B" },
-            { id: 87, titolo: "TU MI PIACI TANTO", artista: ["Sayf"], album: "TU MI PIACI TANTO", punti: 136, serie: "A" },
-            { id: 88, titolo: "Avvoltoi", artista: ["Eddie Brock"], album: "Avvoltoi", punti: 94, serie: "B" },
-            { id: 89, titolo: "Poesie Clandestine", artista: ["LDA", "Aka 7even"], album: "Poesie Clandestine", punti: 108, serie: "A" },
-            { id: 90, titolo: "OSSESSIONE", artista: ["Samurai Jay", "Vito Salamanca"], album: "OSSESSIONE", punti: 122, serie: "B" },
-            { id: 91, titolo: "Stupida sfortuna", artista: ["Fulminacci"], album: "Stupida sfortuna", punti: 94, serie: "A" },
-            { id: 92, titolo: "MALE NECESSARIO", artista: ["Fedez", "Marco Masini"], album: "MALE NECESSARIO", punti: 141, serie: "B" },
-            { id: 93, titolo: "Che Gusto C'è", artista: ["Fabri Fibra", "Tredici Pietro"], album: "Che Gusto C'è", punti: 124, serie: "A" },
-            { id: 94, titolo: "Oliver Twist", artista: ["ArrDee"], album: "Oliver Twist", punti: 140, serie: "B" },
-            { id: 95, titolo: "Die With A Smile", artista: ["Lady Gaga", "Bruno Mars"], album: "Die With A Smile", punti: 158, serie: "A" },
-            { id: 96, titolo: "Nothin' on You", artista: ["B.o.B", "Bruno Mars"], album: "The Adventures of Bobby Ray", punti: 104, serie: "B" },
-            { id: 97, titolo: "Uptown Funk", artista: ["Mark Ronson", "Bruno Mars"], album: "Uptown Special", punti: 115, serie: "B" },
-            { id: 98, titolo: "APT.", artista: ["ROSÉ", "Bruno Mars"], album: "APT.", punti: 149, serie: "A" },
-            { id: 100, titolo: "24K Magic", artista: ["Bruno Mars"], album: "24K Magic", punti: 107, serie: "B" },
-            { id: 101, titolo: "I Just Might", artista: ["Bruno Mars"], album: "I Just Might", punti: 103, serie: "B" },
-            { id: 102, titolo: "Dance With Me", artista: ["Bruno Mars"], album: "The Romantic", punti: 183, serie: "B" },
-            { id: 103, titolo: "The Lazy Song", artista: ["Bruno Mars"], album: "Doo-Wops & Hooligans", punti: 175, serie: "A" },
-            { id: 104, titolo: "Talking to the Moon", artista: ["Bruno Mars"], album: "Doo-Wops & Hooligans", punti: 146, serie: "A" },
-            { id: 105, titolo: "Perfect", artista: ["Ed Sheeran"], album: "÷ (Deluxe)", punti: 95, serie: "B" },
-            { id: 106, titolo: "Let Her Go", artista: ["Passenger"], album: "Let Her Go (EP)", punti: 75, serie: "B" }
-        ];
-    }
-
-    search(query) {
-        if (!query) return console.error("Inserisci qualcosa!");
-        
-        // Trasformo la query in minuscolo per rendere la ricerca INSENSITIVE
-        const q = query.toLowerCase();
-        
-        const res = this.songs.filter(s => {
-            const matchTitolo = s.titolo.toLowerCase().includes(q);
-            const matchAlbum = s.album.toLowerCase().includes(q);
-            const matchArtista = s.artista.some(a => a.toLowerCase().includes(q));
-            return matchTitolo || matchAlbum || matchArtista;
-        });
-
-        if (res.length === 0) {
-            console.warn(`Zero risultati per "${query}".`);
-        } else {
-            console.table(res.map(s => ({
-                Titolo: s.titolo,
-                Artisti: s.artista.join(", "),
-                Album: s.album,
-                Serie: s.serie,
-                Punti: s.punti
-            })));
-        }
-    }
-}
-
-// CREO L'ISTANZA (Usa questa variabile!)
-const Crono = new CronoSound();
-
-// PROVA ORA:
-Crono.search("ernia"); // Funzionerà anche minuscolo.
-  
-  
-  
-  
 </script>
+<script type="module" src="theme-engine.js"></script>
+<script type="module" src="ranking-engine.js"></script>
+<script type="module" src="album-mapper.js"></script>
+
+
 </body>
 </html>
