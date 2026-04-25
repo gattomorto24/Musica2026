@@ -390,6 +390,16 @@
 </head>
 <body class="dark-mode">
 
+<script>
+    async function redirectIfNotAuthenticated() {
+        if (!window.supabaseClient) return;
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (!session) {
+            window.location.href = 'account.html';
+        }
+    }
+</script>
+
 <div id="loader-overlay">
     <div class="spinner"></div>
     <p style="margin-top: 20px; color: #444; font-size: 0.7rem; letter-spacing: 3px;">INITIALIZING CLOUD CORE</p>
@@ -428,10 +438,9 @@
 <div id="mobile-menu">
     <h2 style="color: var(--accent); letter-spacing: 4px; margin-bottom: 20px; font-size: 0.8rem;">MENU SISTEMA</h2>
     <button class="nav-btn" onclick="mobileTab('live')">Classifica Generale</button>
-    <button class="nav-btn" onclick="mobileTab('upd')">Nuova Settimana</button>
-    <button class="nav-btn" onclick="mobileTab('hist')">Archivio Storico</button>
-    <button class="nav-btn" onclick="window.location.href='info.html'">Info & Regolamento</button>
-    <button class="nav-btn" onclick="toggleTheme()" style="border-color: var(--accent); color: var(--accent);">CAMBIA TEMA (💡/🌙)</button>
+    <button id="mobile-upd-btn" class="nav-btn" onclick="mobileTab('upd')">Nuova Settimana</button>
+    <button class="nav-btn" onclick="window.location.href='account.html#profile'">Profilo</button>
+    <button class="nav-btn" onclick="logout()" style="border-color: var(--danger); color: var(--danger);">Logout</button>
     <button class="nav-btn" onclick="toggleMenu()" style="margin-top: 40px; border-color: var(--danger); color: var(--danger); font-size: 0.7rem;">CHIUDI MENU</button>
 </div>
 
@@ -467,6 +476,7 @@
     <header>
         <h1>CRONOSOUND</h1>
         <p>Tony Executive Dashboard</p>
+        <p id="user-name" style="color: var(--accent); font-size: 0.8rem; margin-top: 5px;"></p>
     </header>
 
     <div class="nav-wrapper">
@@ -475,8 +485,12 @@
             <button id="nav-upd" class="nav-btn" onclick="showTab('upd')">Aggiorna</button>
             <button id="nav-hist" class="nav-btn" onclick="showTab('hist')">Archivio</button>
             <button class="nav-btn" onclick="window.location.href='info.html'">Info</button>
+            <button class="nav-btn" onclick="window.location.href='account.html#profile'">Profilo</button>
         </div>
-        <button id="theme-toggle-desk" onclick="toggleTheme()" title="Switch Light/Dark">🌓</button>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button id="theme-toggle-desk" onclick="toggleTheme()" title="Switch Light/Dark">🌓</button>
+            <button class="nav-btn" onclick="logout()" style="border-color: var(--danger); color: var(--danger);">Logout</button>
+        </div>
     </div>
 
     <div id="tab-live" class="glass-card">
@@ -563,9 +577,41 @@
 
     const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
     const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
-    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+    const OWNER_EMAIL = 'stranoanto79@gmail.com';
+    let isOwner = false;
+    const supabaseClient = window.supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
     let state = { week: 1, songs: {}, history: [], hIdx: 0 };
+
+    async function enforceAuthAndOwner() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) {
+            window.location.href = 'account.html';
+            return;
+        }
+
+        isOwner = session.user.email && session.user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
+
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('nome')
+            .eq('user_id', session.user.id)
+            .single();
+
+        if (data) {
+            document.getElementById('user-name').innerText = 'Benvenuto, ' + data.nome;
+        }
+
+        const navUpdate = document.getElementById('nav-upd');
+        const mobileUpdate = document.getElementById('mobile-upd-btn');
+        const resetBtn = document.querySelector('.btn-reset');
+
+        if (!isOwner) {
+            if (navUpdate) navUpdate.style.display = 'none';
+            if (mobileUpdate) mobileUpdate.style.display = 'none';
+            if (resetBtn) resetBtn.style.display = 'none';
+        }
+    }
 
     async function loadData() {
         const { data, error } = await supabaseClient
@@ -666,6 +712,10 @@
     }
 
     function showTab(t) {
+        if (t === 'upd' && !isOwner) {
+            alert('Solo l\'Owner può aggiornare la classifica. Richiedi lo status manager su account.html.');
+            return;
+        }
         ['live', 'upd', 'hist'].forEach(id => {
             document.getElementById('tab-' + id).style.display = (t === id ? 'block' : 'none');
             const btn = document.getElementById('nav-' + id);
@@ -735,7 +785,17 @@
         }
     }
 
-    loadData();
+    async function logout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'account.html';
+    }
+
+    async function init() {
+        await enforceAuthAndOwner();
+        await loadData();
+    }
+
+    init();
 </script>
 </body>
 </html>
