@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>CRONOSOUND | ACCOUNT MANAGEMENT</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #020202;
+            --accent: #00f2ff;
+            --accent-glow: rgba(0, 242, 255, 0.2);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --danger: #ff2d55;
+            --warning: #ffb800;
+            --text: #ffffff;
+            --text-dim: #666;
+            --card-radius: 28px;
+        }
+
+        /* LIGHT MODE OTTIMIZZATA - DESIGN PROFESSIONALE */
+        body.light-mode {
+            --bg: #f5f5f7;
+            --text: #1d1d1f;
+            --text-dim: #86868b;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --accent: #0071e3; /* Blue Apple Style */
+            --accent-glow: rgba(0, 113, 227, 0.15);
+            background-image: 
+                radial-gradient(circle at 50% -20%, #ffffff 0%, transparent 70%),
+                radial-gradient(circle at 0% 100%, rgba(0, 113, 227, 0.05) 0%, transparent 40%);
+        }
+
+        body.light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 1);
+        }
+
+        body.light-mode .input-field {
+            background: rgba(0, 0, 0, 0.02);
+            color: #1d1d1f;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .input-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        body.light-mode .nav-btn:not(.active) {
+            background: rgba(0, 0, 0, 0.05);
+            color: #1d1d1f;
+        }
+
+        body.light-mode .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            transition: background 0.4s ease, color 0.4s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% -20%, #1a1a1a 0%, transparent 70%),
+                radial-gradient(circle at 0% 100%, rgba(0, 242, 255, 0.05) 0%, transparent 40%);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        body.light-mode ::-webkit-scrollbar-thumb { background: #ccc; }
+
+        .container { 
+            width: 100%; 
+            max-width: 500px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+        }
+
+        header { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            animation: slideDown 0.8s ease; 
+            position: relative;
+        }
+        header h1 { 
+            font-size: clamp(2.5rem, 10vw, 4rem); 
+            font-weight: 800; 
+            letter-spacing: -3px;
+            background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px var(--accent-glow));
+        }
+        header p { 
+            color: var(--accent); 
+            font-size: 0.7rem; 
+            letter-spacing: 5px; 
+            text-transform: uppercase; 
+            margin-top: 10px; 
+            font-weight: 600; 
+        }
+
+        .glass-card {
+            background: var(--glass); 
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); 
+            border-radius: var(--card-radius);
+            padding: 35px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            animation: fadeIn 0.8s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; scale: 0.98; } to { opacity: 1; scale: 1; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .input-field {
+            width: 100%;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 18px 20px;
+            color: var(--text);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            outline: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .input-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .nav-btn {
+            background: rgba(10, 10, 10, 0.7); 
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); 
+            color: var(--text-dim);
+            padding: 12px 20px; 
+            border-radius: 100px; 
+            cursor: pointer;
+            font-weight: 600; 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+        .nav-btn:hover { border-color: var(--accent); color: var(--text); }
+        .nav-btn.active { 
+            background: var(--accent); 
+            color: #000; 
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .success-msg {
+            color: var(--accent);
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .link {
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.8rem;
+        }
+
+        .link:hover {
+            color: var(--text);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(25px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+        }
+
+        .popup-card {
+            background: var(--glass);
+            border: 1px solid var(--accent);
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .popup-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .popup-card p {
+            color: var(--text-dim);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px 15px; }
+            .glass-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
+<div class="theme-toggle" onclick="toggleTheme()" title="Switch Light/Dark">🌓</div>
+
+<div class="container">
+    <header>
+        <h1>CRONOSOUND</h1>
+        <p>Account Management System</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button id="tab-login" class="nav-btn active" onclick="showTab('login')">Login</button>
+        <button id="tab-signup" class="nav-btn" onclick="showTab('signup')">Registrazione</button>
+        <button id="tab-reset" class="nav-btn" onclick="showTab('reset')">Recupero</button>
+        <button id="tab-profile" class="nav-btn" onclick="showTab('profile')">Profilo</button>
+    </div>
+
+    <div id="signup-popup" class="modal-overlay" style="display: none;">
+        <div class="popup-card glass-card">
+            <h3>Registrazione Inviata</h3>
+            <p>Il tuo account è stato creato con successo. Controlla la tua casella di posta per confermare l'email prima dell'accesso.</p>
+            <button class="btn-primary" onclick="hideSignupPopup()">Vai al Login</button>
+        </div>
+    </div>
+
+    <!-- LOGIN SECTION -->
+    <div id="section-login" class="glass-card">
+        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;">Accedi al Sistema</h2>
+        <div id="login-error" class="error-msg" style="display: none;"></div>
+        <input type="email" id="login-email" class="input-field" placeholder="Email" required>
+        <input type="password" id="login-password" class="input-field" placeholder="Password" required>
+        <button class="btn-primary" onclick="loginUser()">Accedi</button>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+            Password dimenticata? <span class="link" onclick="showTab('reset')">Recupera</span>
+        </p>
+    </div>
+
+    <!-- SIGNUP SECTION -->
+    <div id="section-signup" class="glass-card" style="display: none;">
+        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;">Crea Nuovo Account</h2>
+        <div id="signup-error" class="error-msg" style="display: none;"></div>
+        <div id="signup-success" class="success-msg" style="display: none;"></div>
+        <input type="text" id="signup-nome" class="input-field" placeholder="Nome Completo" required>
+        <input type="email" id="signup-email" class="input-field" placeholder="Email" required>
+        <input type="password" id="signup-password" class="input-field" placeholder="Password" required>
+        <input type="tel" id="signup-telefono" class="input-field" placeholder="Numero di Telefono" required>
+        <input type="date" id="signup-data" class="input-field" required>
+        <button class="btn-primary" onclick="signupUser()">Registrati</button>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+            Hai già un account? <span class="link" onclick="showTab('login')">Accedi</span>
+        </p>
+    </div>
+
+    <!-- RESET PASSWORD SECTION -->
+    <div id="section-reset" class="glass-card" style="display: none;">
+        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;">Recupero Password</h2>
+        <div id="reset-error" class="error-msg" style="display: none;"></div>
+        <div id="reset-success" class="success-msg" style="display: none;"></div>
+        <div id="reset-step1">
+            <input type="email" id="reset-email" class="input-field" placeholder="Inserisci la tua Email" required>
+            <button class="btn-primary" onclick="verifyEmailForReset()">Verifica Email</button>
+        </div>
+        <div id="reset-step2" style="display: none;">
+            <p style="text-align: center; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 15px;">
+                Per sicurezza, conferma uno dei tuoi dati salvati:
+            </p>
+            <input type="text" id="reset-confirm" class="input-field" placeholder="Nome o Telefono" required>
+            <button class="btn-primary" onclick="confirmAndReset()">Conferma e Invia Reset</button>
+            <button class="btn-secondary" onclick="backToResetStep1()">Indietro</button>
+        </div>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+            Ricordi la password? <span class="link" onclick="showTab('login')">Accedi</span>
+        </p>
+    </div>
+
+    <!-- PROFILE SECTION -->
+    <div id="section-profile" class="glass-card" style="display: none;">
+        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;">Il Tuo Profilo</h2>
+        <div id="profile-error" class="error-msg" style="display: none;"></div>
+        <div id="profile-success" class="success-msg" style="display: none;"></div>
+        <input type="text" id="profile-nome" class="input-field" placeholder="Nome Completo" readonly>
+        <input type="email" id="profile-email" class="input-field" placeholder="Email" readonly>
+        <div id="profile-role" style="margin-bottom: 15px; font-size: 0.85rem; color: var(--accent);"></div>
+        <input type="tel" id="profile-telefono" class="input-field" placeholder="Numero di Telefono">
+        <input type="date" id="profile-data" class="input-field">
+        <button class="btn-primary" onclick="updateProfile()">Aggiorna Profilo</button>
+        <button id="manager-request-btn" class="btn-secondary" style="display: none; margin-bottom: 15px;" onclick="requestManagerStatus()">Richiedi status Manager</button>
+        <button class="btn-secondary" onclick="logoutUser()">Logout</button>
+    </div>
+</div>
+
+<script>
+    // Configurazione Supabase
+    const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
+    const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
+    const OWNER_EMAIL = 'stranoanto79@gmail.com';
+    const OWNER_CONTACT_EMAIL = 'stranoanto79@gmail.com';
+    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+    let currentUser = null;
+    let resetUserData = null; // Per salvare i dati dell'utente durante il reset
+    let isOwner = false;
+
+    // Funzione per mostrare le sezioni
+    function showTab(tab) {
+        let showErrorAfter = null;
+        if (tab === 'profile' && !currentUser) {
+            showErrorAfter = ['login-error', 'Devi accedere prima di vedere il profilo.'];
+            tab = 'login';
+        }
+        const sections = ['login', 'signup', 'reset', 'profile'];
+        sections.forEach(s => {
+            document.getElementById('section-' + s).style.display = (s === tab) ? 'block' : 'none';
+            document.getElementById('tab-' + s).classList.toggle('active', s === tab);
+        });
+        // Nasconde messaggi di errore/successo quando si cambia tab
+        hideMessages();
+        if (showErrorAfter) {
+            showError(showErrorAfter[0], showErrorAfter[1]);
+        }
+    }
+
+    // Funzione per nascondere messaggi
+    function hideMessages() {
+        const msgs = ['login-error', 'signup-error', 'signup-success', 'reset-error', 'reset-success', 'profile-error', 'profile-success'];
+        msgs.forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
+    }
+
+    // Funzione per mostrare errore
+    function showError(id, msg) {
+        const el = document.getElementById(id);
+        el.innerText = msg;
+        el.style.display = 'block';
+    }
+
+    function showErrorHTML(id, html) {
+        const el = document.getElementById(id);
+        el.innerHTML = html;
+        el.style.display = 'block';
+    }
+
+    // Funzione per mostrare successo
+    function showSuccess(id, msg) {
+        const el = document.getElementById(id);
+        el.innerText = msg;
+        el.style.display = 'block';
+    }
+
+    // Toggle tema
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+        localStorage.setItem('cronosound-theme', document.body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode');
+    }
+
+    // Carica tema salvato
+    if (localStorage.getItem('cronosound-theme') === 'light-mode') {
+        document.body.classList.add('light-mode');
+    }
+
+    // Controllo sessione all'avvio
+    async function checkSession() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session) {
+            currentUser = session.user;
+            isOwner = currentUser.email && currentUser.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
+            loadProfile();
+            if (window.location.hash === '#profile') {
+                showTab('profile');
+            } else {
+                showTab('profile');
+            }
+        } else {
+            showTab('login');
+        }
+    }
+
+    // Login utente
+    async function loginUser() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        if (!email || !password) {
+            showError('login-error', 'Inserisci email e password.');
+            return;
+        }
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        if (error) {
+            const lower = error.message.toLowerCase();
+            if (lower.includes('invalid') || lower.includes('not found') || lower.includes('user')) {
+                showErrorHTML('login-error', `${error.message} <span class="link" onclick="showTab('signup')">Vuoi creare un account?</span>`);
+            } else {
+                showError('login-error', error.message);
+            }
+        } else {
+            currentUser = data.user;
+            loadProfile();
+            window.location.href = 'index.html'; // Reindirizza a index.html dopo login
+        }
+    }
+
+    // Registrazione utente
+    async function signupUser() {
+        const nome = document.getElementById('signup-nome').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const telefono = document.getElementById('signup-telefono').value;
+        const dataNascita = document.getElementById('signup-data').value;
+        if (!nome || !email || !password || !telefono || !dataNascita) {
+            showError('signup-error', 'Tutti i campi sono obbligatori.');
+            return;
+        }
+        const { data, error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password
+        });
+        if (error) {
+            showError('signup-error', error.message);
+        } else {
+            const userId = data?.user?.id;
+            if (!userId) {
+                showError('signup-error', 'Registrazione riuscita, ma non è stato possibile salvare il profilo. Riprova più tardi.');
+                return;
+            }
+            // Salva dati extra in profiles
+            const { error: profileError } = await supabaseClient
+                .from('profiles')
+                .insert([{ 
+                    user_id: userId,
+                    nome: nome,
+                    email: email,
+                    telefono: telefono,
+                    data_nascita: dataNascita
+                }]);
+            if (profileError) {
+                showError('signup-error', 'Errore nel salvare il profilo: ' + profileError.message);
+            } else {
+                showSignupPopup();
+                document.getElementById('signup-nome').value = '';
+                document.getElementById('signup-email').value = '';
+                document.getElementById('signup-password').value = '';
+                document.getElementById('signup-telefono').value = '';
+                document.getElementById('signup-data').value = '';
+            }
+        }
+    }
+
+    function showSignupPopup() {
+        document.getElementById('signup-popup').style.display = 'flex';
+        setTimeout(() => {
+            hideSignupPopup();
+            showTab('login');
+        }, 4500);
+    }
+
+    function hideSignupPopup() {
+        document.getElementById('signup-popup').style.display = 'none';
+    }
+
+    // Verifica email per reset (step 1)
+    async function verifyEmailForReset() {
+        const email = document.getElementById('reset-email').value;
+        if (!email) {
+            showError('reset-error', 'Inserisci la tua email.');
+            return;
+        }
+        // Nota: Per trovare il profilo, assumo che la tabella profiles abbia una colonna 'email' aggiunta per query.
+        // In Supabase, profiles è collegata via user_id, ma per client-side, non possiamo query auth.users.
+        // Per questo esempio, aggiungo una colonna email in profiles per permettere la query.
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('email', email); // Assumo colonna email in profiles
+        if (error || !data || data.length === 0) {
+            showError('reset-error', 'Email non trovata nel sistema.');
+            return;
+        }
+        resetUserData = data[0];
+        document.getElementById('reset-step1').style.display = 'none';
+        document.getElementById('reset-step2').style.display = 'block';
+    }
+
+    // Conferma dato e reset (step 2)
+    async function confirmAndReset() {
+        const confirm = document.getElementById('reset-confirm').value;
+        if (!confirm) {
+            showError('reset-error', 'Inserisci il dato di conferma.');
+            return;
+        }
+        // Controlla se corrisponde a nome o telefono
+        if (confirm.toLowerCase() === resetUserData.nome.toLowerCase() || confirm === resetUserData.telefono) {
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(resetUserData.email, {
+                redirectTo: window.location.origin + '/account.html' // Reindirizza qui dopo reset
+            });
+            if (error) {
+                showError('reset-error', error.message);
+            } else {
+                showSuccess('reset-success', 'Email di reset inviata! Controlla la tua casella.');
+                // Reset form
+                document.getElementById('reset-email').value = '';
+                document.getElementById('reset-confirm').value = '';
+                document.getElementById('reset-step2').style.display = 'none';
+                document.getElementById('reset-step1').style.display = 'block';
+            }
+        } else {
+            showError('reset-error', 'Dato di conferma non corretto.');
+        }
+    }
+
+    // Torna a step 1 reset
+    function backToResetStep1() {
+        document.getElementById('reset-step2').style.display = 'none';
+        document.getElementById('reset-step1').style.display = 'block';
+        hideMessages();
+    }
+
+    function requestManagerStatus() {
+        if (!currentUser) {
+            showError('profile-error', 'Devi essere loggato per richiedere lo status.');
+            return;
+        }
+        const subject = encodeURIComponent('Richiesta manager CRONOSOUND');
+        const body = encodeURIComponent(`Ciao,
+
+richiedo lo status manager per il mio account CRONOSOUND.
+
+Nome: ${document.getElementById('profile-nome').value}
+Email: ${document.getElementById('profile-email').value}
+Telefono: ${document.getElementById('profile-telefono').value}
+Data di nascita: ${document.getElementById('profile-data').value}
+
+Grazie.`);
+        window.location.href = `mailto:${OWNER_CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+    }
+
+    // Carica profilo
+    async function loadProfile() {
+        if (!currentUser) return;
+        try {
+            const { data, error } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('user_id', currentUser.id);
+            
+            if (error) {
+                console.error('Errore query profilo:', error);
+                showError('profile-error', 'Errore nel caricamento del profilo: ' + error.message);
+                return;
+            }
+            
+            if (!data || data.length === 0) {
+                showError('profile-error', 'Profilo non trovato. Contatta l\'amministratore.');
+                return;
+            }
+            
+            const profileData = data[0];
+            document.getElementById('profile-nome').value = profileData.nome || '';
+            document.getElementById('profile-email').value = profileData.email || '';
+            document.getElementById('profile-telefono').value = profileData.telefono || '';
+            document.getElementById('profile-data').value = profileData.data_nascita || '';
+            const roleLabel = document.getElementById('profile-role');
+            if (isOwner) {
+                roleLabel.innerText = 'Owner CRONOSOUND • accesso completo';
+                roleLabel.style.color = '#00ffcc';
+                document.getElementById('manager-request-btn').style.display = 'none';
+            } else {
+                roleLabel.innerText = 'Utente standard • Richiedi status manager con il pulsante qui sotto';
+                roleLabel.style.color = 'var(--accent)';
+                document.getElementById('manager-request-btn').style.display = 'block';
+            }
+        } catch (err) {
+            console.error('Errore caricamento profilo:', err);
+            showError('profile-error', 'Errore inaspettato nel caricamento del profilo.');
+        }
+    }
+
+    // Aggiorna profilo
+    async function updateProfile() {
+        const telefono = document.getElementById('profile-telefono').value;
+        const dataNascita = document.getElementById('profile-data').value;
+        if (!telefono || !dataNascita) {
+            showError('profile-error', 'Telefono e data di nascita sono obbligatori.');
+            return;
+        }
+        const { error } = await supabaseClient
+            .from('profiles')
+            .update({
+                telefono: telefono,
+                data_nascita: dataNascita
+            })
+            .eq('user_id', currentUser.id);
+        if (error) {
+            showError('profile-error', error.message);
+        } else {
+            showSuccess('profile-success', 'Profilo aggiornato con successo!');
+        }
+    }
+
+    // Logout
+    async function logoutUser() {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) {
+            alert('Errore nel logout: ' + error.message);
+        } else {
+            currentUser = null;
+            window.location.href = 'account.html';
+        }
+    }
+
+    // Inizializza
+    checkSession();
+</script>
+</body>
+</html>
