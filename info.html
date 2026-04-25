@@ -76,6 +76,11 @@
         }
         body.light-mode .version-tag { color: #fff; }
 
+        .version-tag.latest {
+            background: linear-gradient(135deg, #00f2ff, #00ffcc);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
         ul { list-style: none; margin-top: 10px; }
         li { margin-bottom: 12px; padding-left: 20px; position: relative; font-size: 0.9rem; color: var(--text); opacity: 0.8; }
         li::before { content: "•"; position: absolute; left: 0; color: var(--accent); font-weight: 800; }
@@ -106,7 +111,7 @@
     <a href="index.html" class="back-link">← Terminale di Comando</a>
 
     <header>
-        <h1>SYSTEM LOGS</h1>
+        <h1>CRONOSOUND | DOCUMENTAZIONE & REGOLAMENTO</h1>
         <p style="color: var(--accent); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; font-weight: 600;">Documentazione & Regolamento Ufficiale</p>
     </header>
 
@@ -115,7 +120,25 @@
 
         <div class="log-entry">
             <div class="log-header">
-                <span class="version-tag">v1.6 - LATEST</span>
+                <span class="version-tag latest">v1.6 - LATEST</span>
+                <span class="log-date">25 APRILE 2026</span>
+            </div>
+            <ul>
+                <li><b>Complete Authentication System:</b> Implementato <span class="code-inline">account.html</span> con Supabase Auth integrato.</li>
+                <li><b>User Registration & Profile Management:</b> Nuovo sistema di registrazione con profili utente persistenti su Supabase Cloud.</li>
+                <li><b>Role-Based Access Control:</b> Sistema di ruoli con distinzione Owner (stranoanto79@gmail.com) vs Utenti Standard.</li>
+                <li><b>Password Recovery Protocol:</b> Flusso di recupero password a due step con verifiche di sicurezza (nome/telefono).</li>
+                <li><b>Session Protection:</b> Protezione della pagina index.html con controllo sessione automatico e reindirizzamento a login.</li>
+                <li><b>Profile Editing:</b> Interfaccia completa per la modifica profilo con aggiornamento telefono e data di nascita.</li>
+                <li><b>Manager Request System:</b> Sistema di richiesta status manager con email automatica pre-compilata all'amministratore.</li>
+                <li><b>Theme Persistence:</b> Integrazione con theme-engine.js per sincronizzazione tema tra tutte le pagine.</li>
+                <li><b>RLS Security Policies:</b> Implementate Row Level Security policies in Supabase per proteggere i dati utente.</li>
+            </ul>
+        </div>
+
+        <div class="log-entry">
+            <div class="log-header">
+                <span class="version-tag">v1.6</span>
                 <span class="log-date">18 APRILE 2026</span>
             </div>
             <ul>
@@ -209,11 +232,13 @@
     <div class="glass-card">
         <h2>⚙️ Parametri di Sistema</h2>
         <div style="font-size: 0.85rem; opacity: 0.8;">
-            <p>Architettura basata su <b>Supabase Cloud</b> con persistenza locale via <b>Theme Engine 1.5</b>. Ogni operazione è protetta da crittografia standard SSL durante il transito dei dati.</p>
+            <p><b>Architettura:</b> Supabase Cloud con persistenza locale via Theme Engine 1.5. Autenticazione SSL standard per tutti i transiti dati.</p>
+            <p style="margin-top: 10px;"><b>Database:</b> Tabella <span class="code-inline">profiles</span> con RLS policies per protezione dati utente. Ogni utente accede solo al proprio profilo.</p>
+            <p style="margin-top: 10px;"><b>Autorizzazioni:</b> Owner ha accesso completo a tutte le funzioni (Aggiorna, Reset). Utenti standard hanno accesso in sola lettura con opzione di richiedere status manager.</p>
         </div>
     </div>
 
-    <p style="text-align: center; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 2px; margin-top: 50px;">TONY EXECUTIVE SYSTEMS — DOCUMENT VERSION 1.5.2</p>
+    <p style="text-align: center; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 2px; margin-top: 50px;">TONY EXECUTIVE SYSTEMS — DOCUMENT VERSION 2.0.1</p>
 </div>
 
 </body>
