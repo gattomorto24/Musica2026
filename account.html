@@ -317,6 +317,68 @@
             line-height: 1.6;
         }
 
+        /* TOGGLE SWITCH PERSONALIZZATO */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: var(--text-dim);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        input:checked + .toggle-slider {
+            background: rgba(0, 242, 255, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        body.light-mode .toggle-slider {
+            background: rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-mode input:checked + .toggle-slider {
+            background: rgba(0, 113, 227, 0.15);
+            border-color: var(--accent);
+        }
+
         @media (max-width: 600px) {
             .container { padding: 20px 15px; }
             .glass-card { padding: 20px; }
@@ -342,6 +404,13 @@
         <h1>CRONOSOUND</h1>
         <p>Account Management System</p>
     </header>
+
+    <div class="nav-tabs">
+        <button id="tab-login" class="nav-btn active" onclick="showTab('login')">Login</button>
+        <button id="tab-signup" class="nav-btn" onclick="showTab('signup')">Registrazione</button>
+        <button id="tab-reset" class="nav-btn" onclick="showTab('reset')">Recupero</button>
+        <button id="tab-profile" class="nav-btn" onclick="showTab('profile')">Profilo</button>
+    </div>
 
     <div id="signup-popup" class="modal-overlay" style="display: none;">
         <div class="popup-card glass-card">
@@ -415,6 +484,50 @@
         <button id="manager-request-btn" class="btn-secondary" style="display: none; margin-bottom: 15px;" onclick="requestManagerStatus()">Richiedi status Manager</button>
         <button class="btn-secondary" onclick="logoutUser()">Logout</button>
     </div>
+
+    <!-- OWNER PROFILE SECTION -->
+    <div id="section-profile-owner" class="glass-card" style="display: none;">
+        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;">Pannello Owner</h2>
+        <div id="profile-owner-error" class="error-msg" style="display: none;"></div>
+        <div id="profile-owner-success" class="success-msg" style="display: none;"></div>
+        <div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: rgba(0, 255, 204, 0.1); border: 1px solid var(--accent);">
+            <p style="font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 8px;">Stato</p>
+            <p id="owner-profile-nome" style="font-size: 1rem; font-weight: 800; color: #00ffcc;"></p>
+            <p id="owner-profile-email" style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;"></p>
+        </div>
+        <div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: rgba(255, 180, 0, 0.1); border: 1px solid rgba(255, 180, 0, 0.5);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <p style="font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin: 0;">Modifica Dati Sensibili</p>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="owner-edit-toggle" onchange="toggleOwnerEdit()">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div id="owner-edit-section" style="display: none;">
+                <input type="text" id="owner-edit-nome" class="input-field" placeholder="Nome Completo" style="margin-bottom: 10px;">
+                <input type="email" id="owner-edit-email" class="input-field" placeholder="Email" style="margin-bottom: 10px;">
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-primary" style="flex: 1; margin-bottom: 0; font-size: 0.85rem; padding: 12px;" onclick="saveOwnerSensitiveData()">Salva</button>
+                    <button class="btn-secondary" style="flex: 1; margin-bottom: 0; font-size: 0.85rem; padding: 12px;" onclick="cancelOwnerEdit()">Annulla</button>
+                </div>
+            </div>
+        </div>
+        <div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: rgba(0, 242, 255, 0.1); border: 1px solid var(--accent);">
+            <p style="font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 10px;">Privilegi Owner</p>
+            <ul style="list-style: none; font-size: 0.85rem;">
+                <li style="margin-bottom: 8px;">✓ Accesso completo alla classifica</li>
+                <li style="margin-bottom: 8px;">✓ Aggiornamento settimanale dati</li>
+                <li style="margin-bottom: 8px;">✓ Gestione manager requests</li>
+                <li style="margin-bottom: 8px;">✓ Accesso archivio storico</li>
+                <li>✓ Reset database</li>
+            </ul>
+        </div>
+        <div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: rgba(255, 255, 255, 0.05);">
+            <p style="font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 10px;">Ultimi Accessi</p>
+            <p id="owner-last-login" style="font-size: 0.85rem; color: var(--text-dim);">Sistema inizializzato</p>
+        </div>
+        <button class="btn-secondary" style="margin-bottom: 10px;" onclick="logoutUser()">Logout</button>
+    </div>
 </div>
 
 <script>
@@ -438,9 +551,23 @@
         }
         const sections = ['login', 'signup', 'reset', 'profile'];
         sections.forEach(s => {
-            document.getElementById('section-' + s).style.display = (s === tab) ? 'block' : 'none';
-            document.getElementById('tab-' + s).classList.toggle('active', s === tab);
+            document.getElementById('section-' + s).style.display = 'none';
+            const btn = document.getElementById('tab-' + s);
+            if(btn) btn.classList.toggle('active', s === tab);
         });
+        // Nascondi sezione profilo owner quando non è owner
+        document.getElementById('section-profile-owner').style.display = 'none';
+        
+        // Mostra la sezione appropriata
+        if (tab === 'profile' && isOwner) {
+            document.getElementById('section-profile-owner').style.display = 'block';
+            document.getElementById('tab-profile').classList.add('active');
+        } else if (tab === 'profile') {
+            document.getElementById('section-profile').style.display = 'block';
+            document.getElementById('tab-profile').classList.add('active');
+        } else {
+            document.getElementById('section-' + tab).style.display = 'block';
+        }
         // Nasconde messaggi di errore/successo quando si cambia tab
         hideMessages();
         if (showErrorAfter) {
@@ -448,9 +575,69 @@
         }
     }
 
+    function toggleOwnerEdit() {
+        const isChecked = document.getElementById('owner-edit-toggle').checked;
+        document.getElementById('owner-edit-section').style.display = isChecked ? 'block' : 'none';
+        if (isChecked) {
+            // Popola i campi con i dati attuali
+            document.getElementById('owner-edit-nome').value = document.getElementById('owner-profile-nome').innerText;
+            document.getElementById('owner-edit-email').value = document.getElementById('owner-profile-email').innerText;
+        }
+    }
+
+    function cancelOwnerEdit() {
+        document.getElementById('owner-edit-toggle').checked = false;
+        document.getElementById('owner-edit-section').style.display = 'none';
+    }
+
+    async function saveOwnerSensitiveData() {
+        const newNome = document.getElementById('owner-edit-nome').value.trim();
+        const newEmail = document.getElementById('owner-edit-email').value.trim();
+        
+        if (!newNome || !newEmail) {
+            showError('profile-owner-error', 'Nome ed email sono obbligatori.');
+            return;
+        }
+        
+        if (!newEmail.includes('@')) {
+            showError('profile-owner-error', 'Email non valida.');
+            return;
+        }
+        
+        try {
+            // Aggiorna il profilo nel database
+            const { error } = await supabaseClient
+                .from('profiles')
+                .update({
+                    nome: newNome,
+                    email: newEmail
+                })
+                .eq('user_id', currentUser.id);
+            
+            if (error) {
+                showError('profile-owner-error', 'Errore nell\'aggiornamento: ' + error.message);
+                return;
+            }
+            
+            // Aggiorna i dati visualizzati
+            document.getElementById('owner-profile-nome').innerText = newNome;
+            document.getElementById('owner-profile-email').innerText = newEmail;
+            
+            showSuccess('profile-owner-success', 'Dati aggiornati con successo!');
+            
+            // Chiudi la sezione edit
+            setTimeout(() => {
+                cancelOwnerEdit();
+            }, 1500);
+        } catch (err) {
+            console.error('Errore:', err);
+            showError('profile-owner-error', 'Errore inaspettato nel salvataggio.');
+        }
+    }
+
     // Funzione per nascondere messaggi
     function hideMessages() {
-        const msgs = ['login-error', 'signup-error', 'signup-success', 'reset-error', 'reset-success', 'profile-error', 'profile-success'];
+        const msgs = ['login-error', 'signup-error', 'signup-success', 'reset-error', 'reset-success', 'profile-error', 'profile-success', 'profile-owner-error', 'profile-owner-success'];
         msgs.forEach(id => {
             document.getElementById(id).style.display = 'none';
         });
@@ -690,33 +877,48 @@ Grazie.`);
             
             if (error) {
                 console.error('Errore query profilo:', error);
-                showError('profile-error', 'Errore nel caricamento del profilo: ' + error.message);
+                if (isOwner) {
+                    showError('profile-owner-error', 'Errore nel caricamento del profilo: ' + error.message);
+                } else {
+                    showError('profile-error', 'Errore nel caricamento del profilo: ' + error.message);
+                }
                 return;
             }
             
             if (!data || data.length === 0) {
-                showError('profile-error', 'Profilo non trovato. Contatta l\'amministratore.');
+                const errorMsg = 'Profilo non trovato. Contatta l\'amministratore.';
+                if (isOwner) {
+                    showError('profile-owner-error', errorMsg);
+                } else {
+                    showError('profile-error', errorMsg);
+                }
                 return;
             }
             
             const profileData = data[0];
-            document.getElementById('profile-nome').value = profileData.nome || '';
-            document.getElementById('profile-email').value = profileData.email || '';
-            document.getElementById('profile-telefono').value = profileData.telefono || '';
-            document.getElementById('profile-data').value = profileData.data_nascita || '';
-            const roleLabel = document.getElementById('profile-role');
             if (isOwner) {
-                roleLabel.innerText = 'Owner CRONOSOUND • accesso completo';
-                roleLabel.style.color = '#00ffcc';
-                document.getElementById('manager-request-btn').style.display = 'none';
+                // Profilo Owner
+                document.getElementById('owner-profile-nome').innerText = profileData.nome || 'Owner';
+                document.getElementById('owner-profile-email').innerText = profileData.email || currentUser.email;
+                document.getElementById('owner-last-login').innerText = 'Ultimo accesso: ' + new Date().toLocaleString('it-IT');
             } else {
+                // Profilo Standard
+                document.getElementById('profile-nome').value = profileData.nome || '';
+                document.getElementById('profile-email').value = profileData.email || '';
+                document.getElementById('profile-telefono').value = profileData.telefono || '';
+                document.getElementById('profile-data').value = profileData.data_nascita || '';
+                const roleLabel = document.getElementById('profile-role');
                 roleLabel.innerText = 'Utente standard • Richiedi status manager con il pulsante qui sotto';
                 roleLabel.style.color = 'var(--accent)';
                 document.getElementById('manager-request-btn').style.display = 'block';
             }
         } catch (err) {
             console.error('Errore caricamento profilo:', err);
-            showError('profile-error', 'Errore inaspettato nel caricamento del profilo.');
+            if (isOwner) {
+                showError('profile-owner-error', 'Errore inaspettato nel caricamento del profilo.');
+            } else {
+                showError('profile-error', 'Errore inaspettato nel caricamento del profilo.');
+            }
         }
     }
 
