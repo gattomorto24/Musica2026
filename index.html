@@ -320,20 +320,6 @@
             width: 90%;
             max-width: 500px;
             animation: slideUp 0.5s ease;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-        @media (max-width: 600px) {
-            .search-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        @media (min-width: 601px) {
-            .search-container {
-                grid-template-columns: 1fr 1fr 1fr;
-                max-width: 800px;
-            }
         }
         @keyframes slideUp { from { transform: translate(-50%, 50px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
@@ -342,28 +328,17 @@
             background: rgba(10, 10, 10, 0.6);
             backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid var(--glass-border);
-            padding: 14px 18px;
+            padding: 18px 25px;
             border-radius: 100px;
             color: var(--text);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             outline: none;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             font-family: 'Plus Jakarta Sans', sans-serif;
-            transition: all 0.3s ease;
         }
         .search-bar:focus {
             border-color: var(--accent);
             box-shadow: 0 0 30px var(--accent-glow);
-        }
-        .search-bar::placeholder {
-            color: var(--text-dim);
-        }
-        body.light-mode .search-bar {
-            background: rgba(255, 255, 255, 0.6);
-            color: #1d1d1f;
-        }
-        body.light-mode .search-bar::placeholder {
-            color: #999;
         }
 
         .info-trigger {
@@ -431,9 +406,7 @@
 </div>
 
 <div class="search-container">
-    <input type="text" id="global-search" class="search-bar" placeholder="Titolo Canzone" oninput="filterData()">
-    <input type="text" id="artist-search" class="search-bar" placeholder="Artista" oninput="filterData()">
-    <input type="text" id="album-search" class="search-bar" placeholder="Album" oninput="filterData()">
+    <input type="text" id="global-search" class="search-bar" placeholder="Cerca Canzoni per titolo" oninput="filterData()">
 </div>
 
 <div id="info-popup-overlay" onclick="closeInfoPopup()">
@@ -688,10 +661,7 @@
     }
 
     function filterData() {
-        const titleFilter = document.getElementById('global-search').value;
-        const artistFilter = document.getElementById('artist-search').value;
-        const albumFilter = document.getElementById('album-search').value;
-        renderLive(titleFilter, artistFilter, albumFilter);
+        renderLive(document.getElementById('global-search').value);
     }
 
     function openInfo(fullName) {
