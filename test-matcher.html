@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Multi-Artist Matcher Test</title>
+    <script src="album-mapper.js"></script>
+</head>
+<body>
+    <h1>Smart Multi-Artist Matcher Test</h1>
+    <div id="results"></div>
+
+    <script>
+        // Test cases
+        const tests = [
+            'Di Notte',
+            'di notte ernia',
+            'DI NOTTE SFERA',
+            'cenere',
+            'CENERE LAZZA',
+            'perfetto',
+            'PERFECT ED SHEERAN',
+            'uptown funk',
+            'bruno mars uptown funk',
+            'canzone sconosciuta',
+            'meryxsempre',
+            'PURO SINALOA ERNIA',
+            'ricchi x sempre sfera'
+        ];
+
+        const resultsDiv = document.getElementById('results');
+
+        tests.forEach(test => {
+            const result = smartMultiArtistMatcher(test);
+            const div = document.createElement('div');
+            div.style.margin = '10px 0';
+            div.style.padding = '10px';
+            div.style.border = '1px solid #ccc';
+            div.innerHTML = `
+                <strong>Input:</strong> "${test}"<br>
+                <strong>Output:</strong> ${result.titolo} - ${result.artista}<br>
+                <strong>Album:</strong> ${result.album}
+            `;
+            resultsDiv.appendChild(div);
+        });
+    </script>
+</body>
+</html>

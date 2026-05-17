@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>CRONOSOUND | DOCUMENTAZIONE & REGOLAMENTO</title>
+    
+    <script src="language-engine.js"></script>
+    <script src="theme-engine.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="info">
+
+<div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+<div id="mobile-menu">
+    <h2 style="color: var(--accent); letter-spacing: 4px; margin-bottom: 20px; font-size: 0.8rem;" data-i18n="system_menu">MENU SISTEMA</h2>
+    <button class="nav-btn" onclick="mobileNavigate('index.html')" data-i18n="general_ranking_menu">Classifica Generale</button>
+    <button class="nav-btn" onclick="mobileNavigate('account.html')" data-i18n="profile">Profilo</button>
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;"></div>
+    <button class="nav-btn" onclick="window.cycleLanguage()" style="background: var(--glass); border-color: var(--accent); color: var(--accent);">🌐 <span data-i18n="language">Lingua</span></button>
+    <button class="nav-btn" onclick="window.toggleTheme()" style="background: var(--glass); border-color: var(--accent); color: var(--accent);">🎨 <span data-i18n="theme">Tema</span></button>
+</div>
+
+<div class="container info">
+    <a href="index.html" class="back-link" data-i18n="back_link">← Indietro</a>
+
+    <header>
+        <h1 data-i18n="documentation_title">CRONOSOUND | DOCUMENTAZIONE & REGOLAMENTO</h1>
+        <p style="color: var(--accent); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; font-weight: 600;" data-i18n="official_docs">Documentazione & Regolamento Ufficiale</p>
+    </header>
+
+    <div class="glass-card">
+        <h2 data-i18n="changelog">📜 Changelog Storico</h2>
+        <div id="changelog-container"></div>
+    </div>
+
+    <div class="glass-card">
+        <h2 data-i18n="rules_protocols">⚖️ Regolamento & Protocolli</h2>
+        <div class="regolamento-grid">
+            <div>
+                <h3 style="font-size: 0.8rem; margin-bottom: 15px; color: var(--accent);" data-i18n="point_attribution">Attribuzione Punti</h3>
+                <ul>
+                    <li><b class="code-inline" data-i18n="first_place">1° Posto:</b> 35 Punti</li>
+                    <li><b class="code-inline" data-i18n="top_5">Top 5:</b> 25 Punti</li>
+                    <li><b class="code-inline" data-i18n="top_20">Top 20:</b> 20 Punti</li>
+                    <li><b class="code-inline" data-i18n="series_b_points">Serie B:</b> 10 Punti</li>
+                    <li><b class="code-inline" data-i18n="series_c_points">Serie C:</b> 2 Punti</li>
+                </ul>
+            </div>
+            <div>
+                <h3 style="font-size: 0.8rem; margin-bottom: 15px; color: var(--accent);" data-i18n="notary_restrictions">Restrizioni Notaio</h3>
+                <ul>
+                    <li data-i18n="top_15_restrict">Le canzoni in Top 15 non possono scendere in Serie B nella stessa settimana.</li>
+                    <li data-i18n="series_a_permanent">Le promozioni in Serie A sono permanenti fino alla fine del ciclo settimanale.</li>
+                    <li data-i18n="manual_update">Il database viene aggiornato manualmente per garantire l'integrità dei dati.</li>
+                </ul>
+                <h3 style="font-size: 0.8rem; margin-top: 14px; margin-bottom: 10px; color: var(--accent);">Funzionalità Principali</h3>
+                <ul>
+                    <li><b>Like:</b> Gli utenti autenticati possono mettere "like" alle canzoni; ogni like aggiunge +5 punti alla classifica globale. L'azione è limitata a un like per utente per canzone.</li>
+                    <li><b>Esportazione:</b> È possibile esportare la classifica generale o le singole settimane dell'archivio in TXT o CSV. Modalità: `general`, `archive_current`, `archive_all`.</li>
+                    <li><b>Tema:</b> Il menu di cambio tema è un overlay in stile alert-card; la scelta del tema viene salvata e persiste fra le pagine tramite `theme-engine.js`.</li>
+                    <li><b>Cambio Lingua:</b> La modifica della lingua richiede conferma tramite un dialog; le traduzioni disponibili includono Italiano, English ed Español.</li>
+                    <li><b>Ricerca:</b> La barra di ricerca utilizza uno stile frosted glass con blur consolidato per garantire leggibilità e coerenza visiva; è possibile applicare l'utility `.sfocata` per effetti locali.</li>
+                    <li><b>Privilegi Owner:</b> Azioni sensibili (pubblica settimana, reset DB, gestione manager) sono riservate all'Owner e non sono accessibili agli utenti standard.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h2 data-i18n="scoring_system">🎯 Sistema Punteggi</h2>
+        <div class="regolamento-grid">
+            <div>
+                <ul>
+                    <li data-i18n="scoring_rule_1">Bonus streak per miglioramenti consecutivi: +20% dal terzo ciclo.</li>
+                    <li data-i18n="scoring_rule_2">Malus per cali continui: riduzione progressiva dei punti se la canzone scende più settimane di seguito.</li>
+                    <li data-i18n="scoring_rule_3">Like sulle canzoni: ogni like aggiunge +5 punti alla classifica globale.</li>
+                    <li data-i18n="scoring_rule_4">Archivio esportabile: esporta ogni settimana direttamente dalla sezione Archivio.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h2 data-i18n="system_params">⚙️ Parametri di Sistema</h2>
+        <div style="font-size: 0.85rem; opacity: 0.8;">
+            <p><b data-i18n="architecture">Architettura:</b> <span data-i18n="supabase_desc">Supabase Cloud con persistenza locale via Theme Engine 1.5. Autenticazione SSL standard per tutti i transiti dati.</span></p>
+            <p style="margin-top: 10px;"><b data-i18n="database">Database:</b> <span data-i18n="database_desc">Tabella profiles con RLS policies per protezione dati utente. Ogni utente accede solo al proprio profilo.</span></p>
+            <p style="margin-top: 10px;"><b data-i18n="authorizations">Autorizzazioni:</b> <span data-i18n="auth_desc">Owner ha accesso completo a tutte le funzioni (Aggiorna, Reset). Utenti standard hanno accesso in sola lettura con opzione di richiedere status manager.</span></p>
+        </div>
+    </div>
+
+    <p style="text-align: center; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 2px; margin-top: 50px;" data-i18n="doc_version">TONY EXECUTIVE SYSTEMS — DOCUMENT VERSION 2.0.3</p>
+</div>
+
+<script>
+    function toggleMenu() {
+        const m = document.getElementById('mobile-menu');
+        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function mobileNavigate(url) {
+        window.location.href = url;
+    }
+
+    // Applica traduzioni al caricamento
+    document.addEventListener('DOMContentLoaded', () => {
+        applyTranslations();
+        // Genera changelog dinamico
+        const changelogContainer = document.getElementById('changelog-container');
+        if (changelogContainer && window.generateChangelog) {
+            changelogContainer.innerHTML = window.generateChangelog();
+        }
+    });
+</script>
+
+</body>
+</html>

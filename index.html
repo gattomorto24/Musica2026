@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>CRONOSOUND | PROFESSIONAL CLOUD OS</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="language-engine.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="album-mapper.js"></script>
+    <script src="ranking-engine.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+
+<script>
+    async function redirectIfNotAuthenticated() {
+        if (!window.supabaseClient) return;
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (!session) {
+            window.location.href = 'account.html';
+        }
+    }
+</script>
+
+<div id="loader-overlay">
+    <div class="spinner"></div>
+    <p style="margin-top: 20px; color: #444; font-size: 0.7rem; letter-spacing: 3px;">INITIALIZING CLOUD CORE</p>
+</div>
+
+
+
+<div id="info-popup-overlay" onclick="closeInfoPopup()">
+    <div class="info-popup glass-card" onclick="event.stopPropagation()">
+        <p id="info-meta" style="font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">🎵 Music Metadata</p>
+        <h3 id="info-title">Titolo Canzone</h3>
+        <p id="info-artist" style="margin-bottom: 5px;">Nome Artista</p>
+        <p id="info-album" style="font-size: 0.8rem; color: var(--accent); margin-bottom: 20px; font-style: italic;">Album Name</p>
+        
+        <div class="info-data-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div class="info-item">
+                <label style="font-size: 0.7rem; color: #999; text-transform: uppercase;">Genere</label>
+                <span id="info-genre" style="font-weight: 600; font-size: 0.9rem;">-</span>
+            </div>
+            <div class="info-item">
+                <label style="font-size: 0.7rem; color: #999; text-transform: uppercase;">Anno</label>
+                <span id="info-year" style="font-weight: 600; font-size: 0.9rem;">-</span>
+            </div>
+        </div>
+
+        <div class="info-data-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="info-item">
+                <label style="font-size: 0.7rem; color: #999; text-transform: uppercase;">Lega Attuale</label>
+                <span id="info-lega" style="font-weight: 600; font-size: 0.9rem;">-</span>
+            </div>
+            <div class="info-item">
+                <label style="font-size: 0.7rem; color: #999; text-transform: uppercase;">Punti Totali</label>
+                <span id="info-pts" style="font-weight: 600; font-size: 0.9rem;">-</span>
+            </div>
+        </div>
+        
+        <button class="nav-btn" style="margin-top: 30px; width: 100%; border-color: var(--danger); color: var(--danger);" onclick="closeInfoPopup()">CHIUDI</button>
+    </div>
+</div>
+
+
+
+<div id="export-overlay">
+    <div class="system-alert-card export-card">
+        <button class="theme-close-btn" type="button" onclick="toggleExportOverlay()">✕</button>
+        <h3>Opzioni Esportazione</h3>
+        <p>Seleziona il formato e l’ambito di esportazione per classifica o archivio.</p>
+        <div class="export-toggle-group">
+            <label class="export-toggle">
+                <span style="font-size: 0.8rem;">Classifica generale</span>
+                <input type="radio" name="export-mode" value="general" checked>
+                <div class="dot"></div>
+            </label>
+            <div class="export-toggle" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
+                    <label for="export-mode-archive-current" style="cursor:pointer;">
+                        <span style="font-size: 0.8rem;">Archivio: Settimana <span id="export-week-display" style="font-weight: 600; color: var(--accent);">-</span></span>
+                    </label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button type="button" class="export-week-nav-btn" onclick="changeExportWeek(-1, event)" title="Settimana precedente">▲</button>
+                        <span style="font-size: 0.75rem; color: var(--text); opacity: 0.7;">naviga</span>
+                        <button type="button" class="export-week-nav-btn" onclick="changeExportWeek(1, event)" title="Settimana successiva">▼</button>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <input id="export-mode-archive-current" type="radio" name="export-mode" value="archive_current">
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <label class="export-toggle">
+                <span style="font-size: 0.8rem;">Archivio completo</span>
+                <input type="radio" name="export-mode" value="archive_all">
+                <div class="dot"></div>
+            </label>
+        </div>
+        <div class="export-toggle-group">
+            <label class="export-toggle">
+                <span style="font-size: 0.8rem;">Posizione (#1, #2...)</span>
+                <input type="checkbox" id="chk-pos" checked>
+                <div class="dot"></div>
+            </label>
+            <label class="export-toggle">
+                <span style="font-size: 0.8rem;">Punti Totali</span>
+                <input type="checkbox" id="chk-pts" checked>
+                <div class="dot"></div>
+            </label>
+            <label class="export-toggle">
+                <span style="font-size: 0.8rem;">Serie (A, B, C)</span>
+                <input type="checkbox" id="chk-lega">
+                <div class="dot"></div>
+            </label>
+        </div>
+        <div class="system-alert-actions" style="justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+            <button class="system-alert-btn ok" onclick="exportData('txt')">Esporta TXT</button>
+            <button class="system-alert-btn ok" onclick="exportData('csv')">Esporta CSV</button>
+        </div>
+        <button class="system-alert-btn cancel" onclick="toggleExportOverlay()">Annulla</button>
+    </div>
+</div>
+
+<div class="app-container">
+    <!-- Header Section -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <h1>CRONOSOUND</h1>
+                <p class="subtitle">Professional Cloud OS</p>
+            </div>
+            <div class="user-section">
+                <p id="user-name" class="user-greeting"></p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-content">
+            <div class="nav-tabs">
+                <button id="nav-live" class="nav-tab active" onclick="showTab('live')">
+                    <span class="tab-icon">🏆</span>
+                    <span class="tab-text" data-i18n="ranking">Ranking</span>
+                </button>
+                <button id="nav-upd" class="nav-tab" onclick="showTab('upd')">
+                    <span class="tab-icon">📊</span>
+                    <span class="tab-text" data-i18n="update">Aggiorna</span>
+                </button>
+                <button id="nav-hist" class="nav-tab" onclick="showTab('hist')">
+                    <span class="tab-icon">📚</span>
+                    <span class="tab-text" data-i18n="archive">Archivio</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Live Ranking Tab -->
+        <section id="tab-live" class="content-section active">
+            <div class="section-header">
+                <h2 data-i18n="general_ranking">Classifica Generale</h2>
+                <div class="section-actions">
+                    <button class="action-btn caps-btn" onclick="convertAllToCaps()" data-i18n-title="title_caps" title="Converte tutti i titoli a CAPS">
+                        <span class="btn-icon">🔤</span>
+                        <span class="btn-text" data-i18n="caps">CAPS</span>
+                    </button>
+                    <button class="action-btn export-btn" onclick="toggleExportOverlay()" data-i18n-title="title_export" title="Apri le opzioni di esportazione">
+                        <span class="btn-icon">📊</span>
+                        <span class="btn-text" data-i18n="export">Esporta</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="ranking-container">
+                <div class="ranking-table-wrapper">
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th class="pos-col" data-i18n="position_header">Pos</th>
+                                <th class="song-col" data-i18n="song_series">Canzone / Serie</th>
+                                <th class="pts-col" data-i18n="points_header">Punti Totali</th>
+                            </tr>
+                        </thead>
+                        <tbody id="live-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Update Tab -->
+        <section id="tab-upd" class="content-section">
+            <div class="update-container">
+                <div class="update-card">
+                    <h2><span data-i18n="week_label">Settimana</span> <span id="next-week-id" class="week-number">-1</span></h2>
+                    <div class="input-section">
+                        <textarea id="input-raw" data-i18n="week_placeholder" placeholder="1. Canzone A&#10;2. Canzone B...&#10;&#10;Incolla qui la classifica settimanale"></textarea>
+                        <button class="publish-btn" onclick="processUpdate()">
+                            <span class="btn-icon">☁️</span>
+                            <span class="btn-text" data-i18n="publish">Pubblica nel Cloud</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="reset-section">
+                    <button class="reset-btn" onclick="hardReset()">
+                        <span class="btn-icon">⚠️</span>
+                        <span class="btn-text" data-i18n="format_db">Formatta Database</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Archive Tab -->
+        <section id="tab-hist" class="content-section">
+            <div class="archive-container">
+                <div class="archive-nav">
+                    <button id="prev-btn" class="nav-arrow" onclick="changeArchive(-1)">◀</button>
+                    <h2 id="archive-title" data-i18n="archive_menu">Settimana -</h2>
+                    <button id="next-btn" class="nav-arrow" onclick="changeArchive(1)">▶</button>
+                    <button class="nav-export" onclick="openArchiveExport()" data-i18n="export_week">Esporta Settimana</button>
+                </div>
+                
+                <div class="archive-table-wrapper">
+                    <table class="archive-table">
+                        <thead>
+                            <tr>
+                                <th class="pos-col" data-i18n="position_header">Pos</th>
+                                <th class="song-col" data-i18n="song">Canzone</th>
+                                <th class="pts-col" data-i18n="points_gained">Punti Guadagnati</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archive-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="global-search" class="search-input" data-i18n="search_placeholder" placeholder="Cerca canzoni per titolo..." oninput="filterData()">
+            <div class="search-icon">🔍</div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <h3 data-i18n="system_menu">MENU SISTEMA</h3>
+        </div>
+        <div class="mobile-menu-content">
+            <button class="mobile-menu-item" onclick="mobileTab('live')">
+                <span class="menu-icon">🏆</span>
+                <span class="menu-text" data-i18n="general_ranking_menu">Classifica Generale</span>
+            </button>
+            <button id="mobile-upd-btn" class="mobile-menu-item" onclick="mobileTab('upd')">
+                <span class="menu-icon">📊</span>
+                <span class="menu-text" data-i18n="new_week">Nuova Settimana</span>
+            </button>
+            <button class="mobile-menu-item" onclick="mobileTab('hist')">
+                <span class="menu-icon">📚</span>
+                <span class="menu-text" data-i18n="archive_menu">Archivio</span>
+            </button>
+            <button class="mobile-menu-item" onclick="mobileNavigate('info.html')">
+                <span class="menu-icon">ℹ️</span>
+                <span class="menu-text" data-i18n="info">Info</span>
+            </button>
+            <button class="mobile-menu-item" onclick="mobileNavigate('account.html#profile')">
+                <span class="menu-icon">👤</span>
+                <span class="menu-text" data-i18n="profile">Profilo</span>
+            </button>
+            <button class="mobile-menu-item" onclick="toggleExportOverlay()">
+                <span class="menu-icon">📤</span>
+                <span class="menu-text" data-i18n="export">Esporta</span>
+            </button>
+            <div class="mobile-menu-divider"></div>
+            <button class="mobile-menu-item" onclick="window.cycleLanguage()">
+                <span class="menu-icon">🌐</span>
+                <span class="menu-text" data-i18n="language">Lingua</span>
+            </button>
+            <button class="mobile-menu-item" onclick="window.toggleTheme()">
+                <span class="menu-icon">🎨</span>
+                <span class="menu-text" data-i18n="theme">Tema</span>
+            </button>
+            <button class="mobile-menu-item logout" onclick="logout()">
+                <span class="menu-icon">🚪</span>
+                <span class="menu-text" data-i18n="logout">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+    </button>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <p id="db-status" data-i18n="secure_connection">SECURE CONNECTION: PENDING</p>
+    </div>
+</div>
+
+<script>
+    // Database e funzioni caricate da album-mapper.js
+    // getFullMetadata, smartMultiArtistMatcher, getSongInfo disponibili globalmente
+
+    const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
+    const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
+    const OWNER_EMAIL = 'stranoanto79@gmail.com';
+    let isOwner = false;
+    const supabaseClient = window.supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+    let state = { week: 1, songs: {}, history: [], hIdx: 0 };
+
+    async function enforceAuthAndOwner() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) {
+            window.location.href = 'account.html';
+            return;
+        }
+
+        isOwner = session.user.email && session.user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
+
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('nome')
+            .eq('user_id', session.user.id)
+            .single();
+
+        if (data) {
+            document.getElementById('user-name').innerText = 'Benvenuto, ' + data.nome;
+        }
+        window.currentUserId = session.user.id;
+        window.currentUserEmail = session.user.email;
+
+        const navUpdate = document.getElementById('nav-upd');
+        const mobileUpdate = document.getElementById('mobile-upd-btn');
+        const resetBtn = document.querySelector('.btn-reset');
+
+        if (!isOwner) {
+            if (navUpdate) navUpdate.style.display = 'none';
+            if (mobileUpdate) mobileUpdate.style.display = 'none';
+            if (resetBtn) resetBtn.style.display = 'none';
+        }
+    }
+
+    async function loadData() {
+        const { data, error } = await supabaseClient
+            .from('classifiche')
+            .select('data_json')
+            .order('id', { ascending: false })
+            .limit(1);
+
+        if (data && data.length > 0) {
+            state = data[0].data_json;
+            if(!state.history) state.history = [];
+            state.hIdx = state.history.length > 0 ? state.history.length - 1 : 0;
+            document.getElementById('db-status').innerText = "SYSTEM ONLINE: CLOUD SYNCHRONIZED";
+        }
+        refreshUI();
+        hideLoader();
+    }
+
+    function refreshUI() {
+        renderLive();
+        document.getElementById('next-week-id').innerText = state.week;
+    }
+
+    function renderLive(filter = "") {
+        const body = document.getElementById('live-body');
+        let sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
+        
+        if (filter) {
+            sorted = sorted.filter(([name]) => name.toLowerCase().includes(filter.toLowerCase()));
+        }
+
+        body.innerHTML = sorted.map(([name, d], i) => {
+            const safeName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+            const hasLiked = window.currentUserId && d.likedBy && d.likedBy.includes(window.currentUserId);
+            const likeAction = hasLiked ? '' : `onclick="likeSong('${safeName}')"`;
+            const likeText = `❤️ ${d.likes || 0}`;
+            return `
+            <tr>
+                <td>#${i+1}</td>
+                <td class="song-cell">
+                    <div class="song-label">
+                        <span class="song-name">${name}</span>
+                        <div class="song-actions">
+                            <div class="info-trigger" onclick="openInfo('${safeName}')">i</div>
+                            <button class="like-btn${hasLiked ? ' liked' : ''}" ${likeAction} title="${window.t('like_song_button')}" ${hasLiked ? 'disabled' : ''}>${likeText}</button>
+                        </div>
+                    </div>
+                    <span class="badge badge-${(d.l || 'C').toLowerCase()}">Serie ${d.l}</span>
+                </td>
+                <td class="pts-value">${d.pts}</td>
+            </tr>
+        `;
+        }).join('');
+    }
+
+    function filterData() {
+        renderLive(document.getElementById('global-search').value);
+    }
+
+    function openInfo(fullName) {
+        const data = state.songs[fullName];
+        const parts = fullName.split(' - ');
+        const searchTitle = parts.length > 1 ? parts[1] : parts[0];
+        
+        // Usa getFullMetadata per ottenere TUTTI i dati (anche genere e anno)
+        let fullMeta;
+        if (typeof window.getFullMetadata === 'function') {
+            fullMeta = window.getFullMetadata(searchTitle);
+        } else {
+            fullMeta = { titolo: searchTitle, artista: "N/A", album: "N/A", genere: "N/A", anno: "N/A" };
+        }
+
+        // Popola il modal con tutti i dati
+        document.getElementById('info-title').innerText = fullMeta.titolo;
+        document.getElementById('info-artist').innerText = fullMeta.artista;
+        document.getElementById('info-album').innerText = fullMeta.album;
+        document.getElementById('info-genre').innerText = fullMeta.genere;
+        document.getElementById('info-year').innerText = fullMeta.anno;
+        
+        // Dati dalla classifica (se disponibili)
+        if (data) {
+            document.getElementById('info-lega').innerText = "SERIE " + data.l;
+            document.getElementById('info-pts').innerText = data.pts;
+        } else {
+            document.getElementById('info-lega').innerText = "-";
+            document.getElementById('info-pts').innerText = "-";
+        }
+        
+        document.getElementById('info-popup-overlay').style.display = 'flex';
+    }
+
+    function closeInfoPopup() {
+        document.getElementById('info-popup-overlay').style.display = 'none';
+    }
+
+    async function likeSong(songName) {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) {
+            window.showSystemAlert(window.t('login_required_title'), window.t('login_required_text'), window.t('ok'), window.t('cancel'), () => window.location.href = 'account.html');
+            return;
+        }
+
+        const userId = session.user.id;
+        const song = state.songs[songName];
+        if (!song) return;
+        if (!song.likedBy) song.likedBy = [];
+        if (song.likedBy.includes(userId)) {
+            window.showSystemAlert(window.t('already_liked_title'), window.t('already_liked_text'), window.t('ok'));
+            return;
+        }
+
+        song.likedBy.push(userId);
+        song.likes = (song.likes || 0) + 1;
+        song.pts += 5;
+
+        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+        if (error) {
+            window.showSystemAlert(window.t('error_message'), error.message, window.t('ok'));
+            return;
+        }
+
+        refreshUI();
+    }
+
+    function exportArchiveWeek() {
+        if (!state.history || state.history.length === 0) {
+            alert(window.t('no_archive_export'));
+            return;
+        }
+        const entry = state.history[state.hIdx];
+        const content = [
+            `Settimana ${entry.week}`,
+            'Pos | Canzone | Punti',
+            ...entry.data.map((item, i) => `${i + 1}. ${item.n} (+${item.p})`)
+        ].join('\n');
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `CRONOSOUND_WEEK_${entry.week}.txt`;
+        a.click();
+    }
+
+    async function processUpdate() {
+        const raw = document.getElementById('input-raw').value;
+        if (!raw) return alert(window.t('insert_data'));
+
+        const lines = raw.split('\n').map(l => l.trim()).filter(l => l !== "");
+        let weekSnapshot = [];
+
+        const processedList = lines.map((line, index) => {
+            let name = line.replace(/^\d+\.\s*/, '').split('(')[0].trim();
+            return { name, pos: index + 1 };
+        });
+
+        processedList.forEach(item => {
+            if (!state.songs[item.name]) state.songs[item.name] = { pts: 0, l: 'C', lastPos: 99, likes: 0, likedBy: [], positiveStreak: 0, negativeStreak: 0 };
+            const s = state.songs[item.name];
+            const newLega = item.pos <= 20 ? 'A' : (item.pos <= 50 ? 'B' : 'C');
+            let ptsAdded = (newLega === 'A') ? (item.pos === 1 ? 35 : (item.pos <= 5 ? 25 : 20)) : (newLega === 'B' ? 10 : 2);
+
+            const previousPos = s.lastPos || 99;
+            const improved = item.pos < previousPos;
+            const declined = item.pos > previousPos;
+
+            if (improved) {
+                s.positiveStreak = (s.positiveStreak || 0) + 1;
+                s.negativeStreak = 0;
+            } else if (declined) {
+                s.negativeStreak = (s.negativeStreak || 0) + 1;
+                s.positiveStreak = 0;
+            } else {
+                s.positiveStreak = 0;
+                s.negativeStreak = 0;
+            }
+
+            let multiplier = 1;
+            if (s.positiveStreak >= 3) {
+                multiplier += 0.20 + 0.05 * Math.max(0, s.positiveStreak - 3);
+            }
+            if (s.negativeStreak >= 2) {
+                multiplier -= Math.min(0.35, 0.1 * (s.negativeStreak - 1));
+            }
+
+            ptsAdded = Math.max(1, Math.round(ptsAdded * multiplier));
+            s.pts += ptsAdded;
+            s.l = newLega;
+            s.lastPos = item.pos;
+            weekSnapshot.push({ n: item.name, p: ptsAdded, streak: improved ? `+${Math.round((multiplier - 1) * 100)}%` : (declined && s.negativeStreak >= 2 ? `-${Math.round((1 - multiplier) * 100)}%` : '0%') });
+        });
+
+        state.history.push({ week: state.week, data: weekSnapshot });
+        state.week++;
+        
+        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+        if (error) alert(error.message); else location.reload();
+    }
+
+    function showTab(t) {
+        if (t === 'upd' && !isOwner) {
+            alert('Solo l\'Owner può aggiornare la classifica. Richiedi lo status manager su account.html.');
+            return;
+        }
+        ['live', 'upd', 'hist'].forEach(id => {
+            const section = document.getElementById('tab-' + id);
+            const navBtn = document.getElementById('nav-' + id);
+            if (section) section.classList.toggle('active', t === id);
+            if (navBtn) navBtn.classList.toggle('active', t === id);
+        });
+        document.querySelector('.search-container').style.display = (t === 'live' ? 'block' : 'none');
+        if (t === 'hist') renderArchive();
+    }
+
+    function renderArchive() {
+        if (!state.history || state.history.length === 0) return;
+        const entry = state.history[state.hIdx];
+        document.getElementById('archive-title').innerText = "Settimana " + entry.week;
+        document.getElementById('archive-body').innerHTML = entry.data.map((item, i) => `
+            <tr>
+                <td>${i+1}</td>
+                <td><span class="song-name">${item.n}</span></td>
+                <td style="color:var(--accent)">+${item.p}</td>
+            </tr>
+        `).join('');
+        document.getElementById('prev-btn').disabled = (state.hIdx === 0);
+        document.getElementById('next-btn').disabled = (state.hIdx === state.history.length - 1);
+    }
+
+    function changeArchive(dir) {
+        state.hIdx = Math.max(0, Math.min(state.history.length - 1, state.hIdx + dir));
+        renderArchive();
+    }
+
+    function toggleMenu() {
+        const m = document.getElementById('mobile-menu');
+        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function mobileTab(t) { showTab(t); toggleMenu(); }
+
+    function mobileNavigate(url) {
+        const m = document.getElementById('mobile-menu');
+        if (url.includes('#hist') && window.location.pathname.endsWith('index.html')) {
+            showTab('hist');
+            m.style.display = 'none';
+            window.location.hash = 'hist';
+            return;
+        }
+        if (url.includes('#hist')) {
+            toggleMenu();
+            window.location.href = url;
+            return;
+        }
+        toggleMenu();
+        window.location.href = url;
+    }
+
+    function hideLoader() {
+        const l = document.getElementById('loader-overlay');
+        l.style.opacity = '0';
+        setTimeout(() => l.style.display = 'none', 500);
+    }
+
+    function toggleExportOverlay() {
+        const o = document.getElementById('export-overlay');
+        if (!o) return;
+        o.classList.toggle('active');
+        if (o.classList.contains('active')) {
+            updateExportWeekDisplay();
+        }
+    }
+
+    function openArchiveExport() {
+        const mode = document.querySelector('input[name="export-mode"][value="archive_current"]');
+        if (mode) mode.checked = true;
+        if (!document.getElementById('export-overlay')) return;
+        document.getElementById('export-overlay').classList.add('active');
+        updateExportWeekDisplay();
+    }
+
+    function updateExportWeekDisplay() {
+        if (!state.history || state.history.length === 0) return;
+        const entry = state.history[state.hIdx];
+        document.getElementById('export-week-display').innerText = entry.week;
+        const btns = document.querySelectorAll('.export-week-nav-btn');
+        if (btns && btns.length >= 2) {
+            const upBtn = btns[0];
+            const downBtn = btns[1];
+            upBtn.disabled = (state.hIdx === 0);
+            downBtn.disabled = (state.hIdx === state.history.length - 1);
+        }
+    }
+
+    function changeExportWeek(dir, evt) {
+        if (evt && evt.stopPropagation) evt.stopPropagation();
+        
+        if (!state.history || state.history.length === 0) return;
+        const newIdx = Math.max(0, Math.min(state.history.length - 1, state.hIdx + dir));
+        if (newIdx !== state.hIdx) {
+            state.hIdx = newIdx;
+            updateExportWeekDisplay();
+        }
+        // Ensure the archive_current radio is selected when navigating weeks
+        const radio = document.getElementById('export-mode-archive-current');
+        if (radio) radio.checked = true;
+    }
+
+    function getSelectedExportMode() {
+        const selected = document.querySelector('input[name="export-mode"]:checked');
+        return selected ? selected.value : 'general';
+    }
+
+    function exportData(format) {
+        const mode = getSelectedExportMode();
+        const includePos = document.getElementById('chk-pos').checked;
+        const includePts = document.getElementById('chk-pts').checked;
+        const includeLega = document.getElementById('chk-lega').checked;
+
+        let content = '';
+        let filename = `CRONOSOUND_EXPORT.${format}`;
+
+        if (mode === 'general') {
+            const sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
+            if (format === 'csv') {
+                content = 'Posizione,Canzone,Serie,Punti Totali\n' + sorted.map(([name, data], index) => {
+                    return `${includePos?index+1:''},"${name}",${includeLega?data.l:''},${includePts?data.pts:''}`;
+                }).join('\n');
+            } else {
+                content = sorted.map(([name, data], index) => `${includePos?index+1+'. ':''}${name}${includeLega?` [Serie ${data.l}]`:''}${includePts?` (${data.pts} pts)`:''}`).join('\n');
+            }
+            filename = `CRONOSOUND_CLASSIFICA_GENERALE.${format}`;
+        } else if (mode === 'archive_current') {
+            if (!state.history || state.history.length === 0) {
+                alert(window.t('no_archive_export'));
+                return;
+            }
+            const entry = state.history[state.hIdx] || state.history[state.history.length - 1];
+            const title = `Settimana ${entry.week}`;
+            if (format === 'csv') {
+                content = 'Settimana,Posizione,Canzone,Serie,Punti Totali\n' + entry.data.map((item, index) => {
+                    return `${entry.week},${includePos?index+1:''},"${item.n}",${includeLega?item.l:''},${includePts?item.p:''}`;
+                }).join('\n');
+            } else {
+                content = `${title}\n` + entry.data.map((item, index) => `${includePos?index+1+'. ':''}${item.n}${includeLega?` [Serie ${item.l}]`:''}${includePts?` (${item.p} pts)`:''}`).join('\n');
+            }
+            filename = `CRONOSOUND_ARCHIVIO_SETTIMANA_${entry.week}.${format}`;
+        } else if (mode === 'archive_all') {
+            if (!state.history || state.history.length === 0) {
+                alert(window.t('no_archive_export'));
+                return;
+            }
+            if (format === 'csv') {
+                content = 'Settimana,Posizione,Canzone,Serie,Punti Totali\n' + state.history.map((entry) => {
+                    return entry.data.map((item, index) => `${entry.week},${includePos?index+1:''},"${item.n}",${includeLega?item.l:''},${includePts?item.p:''}`);
+                }).flat().join('\n');
+            } else {
+                content = state.history.map((entry) => {
+                    const lines = entry.data.map((item, index) => `${includePos?index+1+'. ':''}${item.n}${includeLega?` [Serie ${item.l}]`:''}${includePts?` (${item.p} pts)`:''}`);
+                    return `Settimana ${entry.week}\n` + lines.join('\n');
+                }).join('\n\n');
+            }
+            filename = `CRONOSOUND_ARCHIVIO_COMPLETO.${format}`;
+        }
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+        toggleExportOverlay();
+    }
+
+    async function hardReset() {
+        if (confirm(window.t('confirm_reset'))) {
+            state = { week: 1, songs: {}, history: [], hIdx: 0 };
+            await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+            location.reload();
+        }
+    }
+
+    async function convertAllToCaps() {
+        if (!confirm(window.t('confirm_caps'))) return;
+
+        console.log("[CAPS CONVERTER] Inizio conversione...");
+
+        // FASE 1: Converti le canzoni attuali (state.songs)
+        const newSongs = {};
+        for (const [oldName, data] of Object.entries(state.songs)) {
+            const result = smartMultiArtistMatcher(oldName);
+            const newName = result.titolo; // Sempre in CAPS
+            console.log(`[CAPS] ${oldName} → ${newName}`);
+            newSongs[newName] = data;
+        }
+        state.songs = newSongs;
+
+        // FASE 2: Converti i nomi nei dati storici (state.history)
+        if (state.history && state.history.length > 0) {
+            state.history.forEach((entry, idx) => {
+                entry.data.forEach((item) => {
+                    const result = smartMultiArtistMatcher(item.n);
+                    const newName = result.titolo; // Sempre in CAPS
+                    console.log(`[CAPS ARCHIVE] Settimana ${entry.week}: ${item.n} → ${newName}`);
+                    item.n = newName;
+                });
+            });
+        }
+
+        // FASE 3: Salva in Supabase
+        console.log("[CAPS CONVERTER] Salvataggio in Supabase...");
+        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+        
+        if (error) {
+            console.error("[CAPS CONVERTER ERROR]", error);
+            alert("Errore nel salvataggio: " + error.message);
+        } else {
+            console.log("[CAPS CONVERTER] ✅ Conversione completata e salvata!");
+            alert(window.t('conversion_complete'));
+            location.reload();
+        }
+    }
+
+    async function logout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'account.html';
+    }
+
+    async function init() {
+        await enforceAuthAndOwner();
+        await loadData();
+        applyTranslations();
+    }
+
+    init();
+</script>
+</div>
+</body>
+</html>
