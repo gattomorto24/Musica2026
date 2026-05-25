@@ -679,9 +679,29 @@
     const changelogs = {
         it: [
             {
+                version: 'v1.9',
+                date: '25 MAGGIO 2026',
+                latest: true,
+                items: [
+                    { title: 'Gestione Album Owner', desc: 'Introdotto tab album con creazione, modifica, eliminazione e associazione canzoni ad album.' },
+                    { title: 'Artista Album', desc: 'Aggiunto campo artista nella creazione/modifica album per una migliore catalogazione.' },
+                    { title: 'Ricerca per Album/Artista', desc: 'La barra globale ora filtra anche per nome album e artista associato alle canzoni.' },
+                    { title: 'Fallback Copertina Album', desc: 'Le canzoni senza cover usano la cover dell\'album associato per coerenza visiva.' },
+                    { title: 'Alert-style Theme Menu', desc: 'Convertito il menu cambio tema in overlay stile alert-card (`.theme-menu-card`) per coerenza visiva.' },
+                    { title: 'Export: nuove modalità e formati', desc: 'Aggiunte modalità di esportazione `general`, `archive_current`, `archive_all` e formati `TXT` e `CSV` con logica client-side in `exportData(format)`.' },
+                    { title: 'Export Modal restyling', desc: 'Rifatto il modale di esportazione come `system-alert-card export-card` con stile frosted glass e azioni dedicate.' },
+                    { title: 'Archivio: navigazione settimana', desc: 'Visualizzazione settimana attiva con due freccette (▲/▼) e funzione `changeExportWeek(dir, evt)` che usa `evt.stopPropagation()` e seleziona correttamente l\'opzione radio.' },
+                    { title: 'Barra di ricerca: frosted blur consolidato', desc: 'Rimosse regole duplicate e creato un unico blocco `.search-container .search-wrapper` con `backdrop-filter: blur(25px)` e compatibilità `-webkit-backdrop-filter`.' },
+                    { title: 'Search UI refinements', desc: 'Ridotta altezza barra, icona di ricerca posizionata a destra, padding e font ottimizzati per layout compatto.' },
+                    { title: 'Utility .sfocata', desc: 'Aggiunta la classe `.sfocata { filter: blur(5px); }` come utility richiesta per effetti locali.' },
+                    { title: 'Fix CSS parsing & overlays', desc: 'Corrette regole CSS corrotte (`#loader-overlay`, `.language-confirm-overlay`) e rimosse proprietà non avvolte che rompevano il parsing.' },
+                    { title: 'Event & interaction fixes', desc: 'Risolti conflitti di selettori e comportamento eventi (nav settimane non attivano radio per errore).'}
+                ]
+            },
+            {
                 version: 'v1.8',
                 date: '18 MAGGIO 2026',
-                latest: true,
+                latest: false,
                 items: [
                     { title: 'Alert-style Theme Menu', desc: 'Convertito il menu cambio tema in overlay stile alert-card (`.theme-menu-card`) per coerenza visiva.' },
                     { title: 'Export: nuove modalità e formati', desc: 'Aggiunte modalità di esportazione `general`, `archive_current`, `archive_all` e formati `TXT` e `CSV` con logica client-side in `exportData(format)`.' },
@@ -776,9 +796,29 @@
         ],
         en: [
             {
+                version: 'v1.9',
+                date: 'MAY 25, 2026',
+                latest: true,
+                items: [
+                    { title: 'Album Owner Management', desc: 'Added album tab with create/edit/delete album flows and song-to-album assignment.' },
+                    { title: 'Album Artist Field', desc: 'Added artist field to album creation/edit UI for better album metadata.' },
+                    { title: 'Album/Artist search', desc: 'Global search now filters by album name and associated album artist.' },
+                    { title: 'Album cover fallback', desc: 'Songs without their own cover now fallback to the associated album cover.' },
+                    { title: 'Alert-style Theme Menu', desc: 'Converted theme menu to alert-card overlay (`.theme-menu-card`) for visual consistency.' },
+                    { title: 'Export: new modes & formats', desc: 'Added export modes `general`, `archive_current`, `archive_all` and formats `TXT`/`CSV` with client-side `exportData(format)` logic.' },
+                    { title: 'Export Modal restyling', desc: 'Reworked export modal into `system-alert-card export-card` with frosted glass styling and dedicated actions.' },
+                    { title: 'Archive week navigation', desc: 'Added week display with up/down arrows and `changeExportWeek(dir, evt)` using `evt.stopPropagation()` and correct radio selection.' },
+                    { title: 'Search bar: consolidated frosted blur', desc: 'Removed duplicate rules and added single `.search-container .search-wrapper` block with `backdrop-filter: blur(25px)` and `-webkit-backdrop-filter`.' },
+                    { title: 'Search UI refinements', desc: 'Thinner search bar, search icon aligned to the right, adjusted padding and font-size for compact layout.' },
+                    { title: 'Utility .sfocata', desc: 'Added `.sfocata { filter: blur(5px); }` utility class.' },
+                    { title: 'CSS parsing & overlay fixes', desc: 'Fixed broken CSS blocks (`#loader-overlay`, `.language-confirm-overlay`) and removed stray properties that broke parsing.' },
+                    { title: 'Interaction fixes', desc: 'Fixed event handling so week nav buttons don\'t unintentionally toggle radios; improved selector overrides and responsive behavior.' }
+                ]
+            },
+            {
                 version: 'v1.8',
                 date: 'MAY 18, 2026',
-                latest: true,
+                latest: false,
                 items: [
                     { title: 'Alert-style Theme Menu', desc: 'Converted theme menu to alert-card overlay (`.theme-menu-card`) for visual consistency.' },
                     { title: 'Export: new modes & formats', desc: 'Added export modes `general`, `archive_current`, `archive_all` and formats `TXT`/`CSV` with client-side `exportData(format)` logic.' },
@@ -876,19 +916,23 @@
     // Spanish changelog (localized)
     changelogs.es = [
         {
-            version: 'v1.8',
-            date: '18 MAYO 2026',
+            version: 'v1.9',
+            date: '25 MAYO 2026',
             latest: true,
             items: [
-                { title: 'Menú de Tema estilo Alert', desc: 'Convertido el menú de cambio de tema a una superposición tipo alert-card (`.theme-menu-card`) para coherencia visual.' },
-                { title: 'Exportar: nuevos modos y formatos', desc: 'Añadidos modos de exportación `general`, `archive_current`, `archive_all` y formatos `TXT`/`CSV` con lógica cliente en `exportData(format)`.' },
-                { title: 'Rediseño del Modal de Export', desc: 'Rehecho el modal de exportación como `system-alert-card export-card` con estilo frosted glass y acciones dedicadas.' },
-                { title: 'Navegación por semana del archivo', desc: 'Añadida visualización de la semana activa con flechas arriba/abajo y `changeExportWeek(dir, evt)` que usa `evt.stopPropagation()` y selecciona correctamente la radio.' },
-                { title: 'Barra de búsqueda: desenfoque consolidado', desc: 'Eliminadas reglas duplicadas y añadido un único bloque `.search-container .search-wrapper` con `backdrop-filter: blur(25px)` y compatibilidad `-webkit-backdrop-filter`.' },
-                { title: 'Mejoras UI en búsqueda', desc: 'Barra de búsqueda más delgada, icono a la derecha, padding y tamaño de fuente ajustados para un layout compacto.' },
-                { title: 'Utility .sfocata', desc: 'Añadida la clase `.sfocata { filter: blur(5px); }` como utilidad solicitada.' },
-                { title: 'Correcciones CSS y overlays', desc: 'Corregidas reglas CSS rotas (`#loader-overlay`, `.language-confirm-overlay`) y eliminadas propiedades sueltas que rompían el parsing.' },
-                { title: 'Correcciones de interacción', desc: 'Arreglados conflictos de selectores y manejos de eventos para que los botones de navegación de semana no activen radios por error.' }
+                { title: 'Gestión de álbumes Owner', desc: 'Añadido tab de álbumes con crear/editar/eliminar álbum y asignación de canciones a álbumes.' },
+                { title: 'Campo Artista del Álbum', desc: 'Añadido campo artista en la creación/edición de álbum para mejor metadata.' },
+                { title: 'Búsqueda por Álbum/Artista', desc: 'La búsqueda global ahora filtra por nombre de álbum y artista asociado.' },
+                { title: 'Fallback de portada de álbum', desc: 'Las canciones sin portada propia ahora usan la portada del álbum asociado.' },
+                { title: 'Menú de Tema estilo Alert', desc: 'Convertido el menú de tema en overlay tipo alert-card (`.theme-menu-card`) para coherencia visual.' },
+                { title: 'Exportar: nuevos modos y formatos', desc: 'Añadidos modos `general`, `archive_current`, `archive_all` y formatos `TXT`/`CSV` con lógica en `exportData(format)`.' },
+                { title: 'Rediseño del Modal de Export', desc: 'Rehecho el modal de export como `system-alert-card export-card` con estilo frosted glass y acciones dedicadas.' },
+                { title: 'Navegación por semana del archivo', desc: 'Añadida visualización de la semana activa con flechas arriba/abajo y `changeExportWeek(dir, evt)` usando `evt.stopPropagation()`.' },
+                { title: 'Barra de búsqueda: desenfoque consolidado', desc: 'Eliminadas reglas duplicadas y añadido único bloque `.search-container .search-wrapper` con `backdrop-filter: blur(25px)`.' },
+                { title: 'Mejoras UI en búsqueda', desc: 'Barra más delgada, icono a la derecha, padding y fuente optimizados para un layout compacto.' },
+                { title: 'Utility .sfocata', desc: 'Añadida la clase `.sfocata { filter: blur(5px); }` como utilidad.' },
+                { title: 'Correcciones CSS y overlays', desc: 'Corregidas reglas CSS rotas (`#loader-overlay`, `.language-confirm-overlay`) y eliminadas propiedades sueltas del parsing.' },
+                { title: 'Correcciones de interacción', desc: 'Arreglados conflictos de selectores y eventos para que los botones no activen radios por error.' }
             ]
         }
     ].concat(changelogs.en.slice(1));

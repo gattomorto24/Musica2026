@@ -10,6 +10,7 @@
     <script src="theme-engine.js"></script>
     <script src="album-mapper.js"></script>
     <script src="ranking-engine.js"></script>
+    <script src="admin-panel.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     
@@ -157,6 +158,18 @@
                     <span class="tab-icon">📚</span>
                     <span class="tab-text" data-i18n="archive">Archivio</span>
                 </button>
+                <button id="nav-mod" class="nav-tab" style="display:none" onclick="showTab('mod')">
+                    <span class="tab-icon">✏️</span>
+                    <span class="tab-text">Modifica</span>
+                </button>
+                <button id="nav-album" class="nav-tab" style="display:none" onclick="showTab('album')">
+                    <span class="tab-icon">💿</span>
+                    <span class="tab-text">Album</span>
+                </button>
+                <button id="nav-news" class="nav-tab" style="display:none" onclick="showTab('news')">
+                    <span class="tab-icon">📰</span>
+                    <span class="tab-text">Notizie</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -192,6 +205,121 @@
                         <tbody id="live-body"></tbody>
                     </table>
                 </div>
+            </div>
+        </section>
+        <!-- Modifica (Owner) Tab -->
+        <section id="tab-mod" class="content-section">
+            <div class="admin-container">
+                <h2>Modifica Classifica (Owner)</h2>
+                <div class="admin-grid">
+                    <div class="admin-section-card">
+                        <h3>Modifica Canzone</h3>
+                        <label>Seleziona canzone</label>
+                        <select id="admin-song-select" class="admin-select" onchange="populateSongDetails()"></select>
+                        <div class="form-row">
+                            <input id="admin-cover-url" type="text" placeholder="URL Copertina">
+                            <button class="system-alert-btn ok" onclick="updateSongCover()">Aggiorna Copertina</button>
+                        </div>
+                        <div class="form-row">
+                            <input id="admin-pts-amount" type="number" value="0" placeholder="Quantità punti">
+                            <button class="system-alert-btn ok" onclick="applyPointChange(1)">Aggiungi</button>
+                            <button class="system-alert-btn cancel" onclick="applyPointChange(-1)">Rimuovi</button>
+                        </div>
+                        <div class="form-row">
+                            <input id="admin-rename-input" placeholder="Nuovo nome canzone">
+                            <button class="system-alert-btn ok" onclick="renameSelectedSong()">Rinomina</button>
+                        </div>
+                        <div class="form-row">
+                            <button class="system-alert-btn" onclick="moveSelectedSong(-1)">Sposta SU</button>
+                            <button class="system-alert-btn" onclick="moveSelectedSong(1)">Sposta GIÙ</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-section-card">
+                        <h3>Aggiungi Canzoni</h3>
+                        <label>Nuova canzone (Artista - Titolo)</label>
+                        <input id="admin-new-name" placeholder="Titolo Canzone (Artista - Titolo)">
+                        <label>URL Copertina</label>
+                        <input id="admin-new-cover" type="text" placeholder="https://.../cover.jpg">
+                        <div class="form-row">
+                            <input id="admin-new-pts" type="number" value="0" placeholder="Punti iniziali">
+                            <select id="admin-new-league">
+                                <option value="A">Serie A</option>
+                                <option value="B">Serie B</option>
+                                <option value="C" selected>Serie C</option>
+                            </select>
+                            <button class="system-alert-btn ok" onclick="addNewSong()">Aggiungi Canzone</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-section-card">
+                        <h3>Penalità / Premi & Notizie</h3>
+                        <label>Motivo</label>
+                        <input id="admin-penalty-desc" placeholder="Motivo (es. penalità)">
+                        <div class="form-row">
+                            <input id="admin-penalty-amt" type="number" value="0" placeholder="Importo">
+                            <button class="system-alert-btn ok" onclick="applyPenaltyOrReward(true)">Premia</button>
+                            <button class="system-alert-btn cancel" onclick="applyPenaltyOrReward(false)">Penalizza</button>
+                        </div>
+                        <hr>
+                        <label>Notizia / Log</label>
+                        <textarea id="admin-news-input" placeholder="Scrivi una nota..."></textarea>
+                        <button class="system-alert-btn ok" onclick="addManualNews()">Pubblica Notizia</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Album Management Tab -->
+        <section id="tab-album" class="content-section">
+            <div class="admin-container">
+                <h2>Gestione Album</h2>
+                <div class="album-grid">
+                    <div class="admin-section-card">
+                        <h3>Seleziona Album</h3>
+                        <label>Album</label>
+                        <select id="admin-album-select" onchange="populateAlbumDetails()"></select>
+                        <div class="form-row">
+                            <button class="system-alert-btn ok" onclick="createNewAlbum()">Nuovo Album</button>
+                            <button class="system-alert-btn cancel" onclick="deleteCurrentAlbum()">Elimina Album</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-section-card">
+                        <h3>Dettagli Album</h3>
+                        <label>Nome Album</label>
+                        <input id="admin-album-name" placeholder="Nome album">
+                        <label>Artista Album</label>
+                        <input id="admin-album-artist" placeholder="Nome artista o band">
+                        <label>Cover Album</label>
+                        <input id="admin-album-cover" placeholder="URL copertina album">
+                        <div class="form-row">
+                            <button class="system-alert-btn ok" onclick="saveAlbumDetails()">Salva Album</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-section-card">
+                        <h3>Canzoni Album</h3>
+                        <label>Seleziona canzone da aggiungere</label>
+                        <select id="admin-album-song-select"></select>
+                        <div class="form-row">
+                            <button class="system-alert-btn ok" onclick="addSongToAlbum()">Aggiungi</button>
+                        </div>
+                        <div id="admin-album-song-list" class="album-song-list"></div>
+                        <div class="album-summary">
+                            <span>Totale punti album:</span>
+                            <strong id="admin-album-points">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notizie Tab -->
+        <section id="tab-news" class="content-section">
+            <div class="news-container">
+                <h2>Notizie e Log</h2>
+                <div id="news-list" style="display:flex; flex-direction:column; gap:8px; max-height:420px; overflow:auto; border-top:1px solid rgba(255,255,255,0.04); padding-top:12px;"></div>
             </div>
         </section>
 
@@ -247,7 +375,7 @@
     <!-- Search Bar -->
     <div class="search-container">
         <div class="search-wrapper">
-            <input type="text" id="global-search" class="search-input" data-i18n="search_placeholder" placeholder="Cerca canzoni per titolo..." oninput="filterData()">
+            <input type="text" id="global-search" class="search-input" data-i18n="search_placeholder" placeholder="Cerca canzoni o album..." oninput="filterData()">
             <div class="search-icon">🔍</div>
         </div>
     </div>
@@ -269,6 +397,18 @@
             <button class="mobile-menu-item" onclick="mobileTab('hist')">
                 <span class="menu-icon">📚</span>
                 <span class="menu-text" data-i18n="archive_menu">Archivio</span>
+            </button>
+            <button id="mobile-mod-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('mod')">
+                <span class="menu-icon">✏️</span>
+                <span class="menu-text">Modifica (Owner)</span>
+            </button>
+            <button id="mobile-album-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('album')">
+                <span class="menu-icon">💿</span>
+                <span class="menu-text">Album</span>
+            </button>
+            <button id="mobile-news-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('news')">
+                <span class="menu-icon">📰</span>
+                <span class="menu-text">Notizie</span>
             </button>
             <button class="mobile-menu-item" onclick="mobileNavigate('info.html')">
                 <span class="menu-icon">ℹ️</span>
@@ -321,7 +461,7 @@
     let isOwner = false;
     const supabaseClient = window.supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    let state = { week: 1, songs: {}, history: [], hIdx: 0 };
+    let state = { week: 1, songs: {}, history: [], hIdx: 0, news: [], albums: {} };
 
     async function enforceAuthAndOwner() {
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -347,12 +487,30 @@
         const navUpdate = document.getElementById('nav-upd');
         const mobileUpdate = document.getElementById('mobile-upd-btn');
         const resetBtn = document.querySelector('.btn-reset');
+        const navMod = document.getElementById('nav-mod');
+        const navAlbum = document.getElementById('nav-album');
+        const navNews = document.getElementById('nav-news');
+        const mobileMod = document.getElementById('mobile-mod-btn');
+        const mobileAlbum = document.getElementById('mobile-album-btn');
+        const mobileNews = document.getElementById('mobile-news-btn');
 
         if (!isOwner) {
             if (navUpdate) navUpdate.style.display = 'none';
             if (mobileUpdate) mobileUpdate.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
+            if (navMod) navMod.style.display = 'none';
+            if (mobileMod) mobileMod.style.display = 'none';
+            if (navAlbum) navAlbum.style.display = 'none';
+            if (mobileAlbum) mobileAlbum.style.display = 'none';
+        } else {
+            if (navMod) navMod.style.display = '';
+            if (mobileMod) mobileMod.style.display = '';
+            if (navAlbum) navAlbum.style.display = '';
+            if (mobileAlbum) mobileAlbum.style.display = '';
         }
+        // Notizie tab: visibile a tutti per lettura; mobile as well
+        if (navNews) navNews.style.display = '';
+        if (mobileNews) mobileNews.style.display = '';
     }
 
     async function loadData() {
@@ -365,6 +523,8 @@
         if (data && data.length > 0) {
             state = data[0].data_json;
             if(!state.history) state.history = [];
+            if(!state.news) state.news = [];
+            if(!state.albums) state.albums = {};
             state.hIdx = state.history.length > 0 ? state.history.length - 1 : 0;
             document.getElementById('db-status').innerText = "SYSTEM ONLINE: CLOUD SYNCHRONIZED";
         }
@@ -382,7 +542,13 @@
         let sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
         
         if (filter) {
-            sorted = sorted.filter(([name]) => name.toLowerCase().includes(filter.toLowerCase()));
+            const query = filter.toLowerCase();
+            sorted = sorted.filter(([name, d]) => {
+                const album = d.albumId ? state.albums?.[d.albumId] : null;
+                return name.toLowerCase().includes(query)
+                    || (album?.name || '').toLowerCase().includes(query)
+                    || (album?.artist || '').toLowerCase().includes(query);
+            });
         }
 
         body.innerHTML = sorted.map(([name, d], i) => {
@@ -394,6 +560,9 @@
             <tr>
                 <td>#${i+1}</td>
                 <td class="song-cell">
+                    <div class="song-cover-wrapper">
+                        <img class="song-cover" src="${d.cover || (d.albumId && state.albums?.[d.albumId]?.cover) || 'https://via.placeholder.com/80?text=?'}" alt="Copertina ${name}" onerror="this.src='https://via.placeholder.com/80?text=?'">
+                    </div>
                     <div class="song-label">
                         <span class="song-name">${name}</span>
                         <div class="song-actions">
@@ -553,11 +722,11 @@
     }
 
     function showTab(t) {
-        if (t === 'upd' && !isOwner) {
-            alert('Solo l\'Owner può aggiornare la classifica. Richiedi lo status manager su account.html.');
+        if ((t === 'upd' || t === 'mod' || t === 'album') && !isOwner) {
+            alert('Solo l\'Owner può accedere a questa sezione. Richiedi lo status manager su account.html.');
             return;
         }
-        ['live', 'upd', 'hist'].forEach(id => {
+        ['live', 'upd', 'hist', 'mod', 'album', 'news'].forEach(id => {
             const section = document.getElementById('tab-' + id);
             const navBtn = document.getElementById('nav-' + id);
             if (section) section.classList.toggle('active', t === id);
@@ -784,6 +953,7 @@
         await enforceAuthAndOwner();
         await loadData();
         applyTranslations();
+        if (window.initAdmin) window.initAdmin();
     }
 
     init();

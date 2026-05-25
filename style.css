@@ -820,6 +820,299 @@ body:not(.light-mode) .nav-btn.active { color: #000; }
     transform: translateY(-2px);
 }
 
+/* ===== ADMIN / MODIFICA SECTION ===== */
+.admin-container {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(18px) saturate(140%);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+}
+.admin-container h2 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    color: var(--accent);
+    letter-spacing: 1px;
+}
+.admin-container label {
+    display:block;
+    font-size:0.8rem;
+    color:var(--text-dim);
+    margin-bottom:6px;
+}
+.admin-container select,
+.admin-container input[type="number"],
+.admin-container input[type="text"],
+.admin-container textarea {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 0.95rem;
+}
+.admin-container select:focus,
+.admin-container input:focus,
+.admin-container textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 6px 30px var(--accent-glow);
+}
+.admin-container .system-alert-btn {
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    font-weight: 700;
+}
+.admin-container .system-alert-btn.ok {
+    background: linear-gradient(90deg, var(--accent), #6ef3ff);
+    color: #000;
+    border-color: transparent;
+}
+.admin-container .system-alert-btn.cancel {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.admin-container .system-alert-btn:hover { transform: translateY(-3px); }
+
+.news-container {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+.news-item { 
+    padding: 10px; 
+    border-radius: 8px; 
+    background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.02);
+}
+.news-item div:first-child { font-size:0.75rem; color:var(--accent); }
+.news-item div:last-child { margin-top:6px; color:var(--text-dim); }
+
+@media (max-width: 820px) {
+    .admin-container { padding: 1rem; }
+    .admin-container > div { flex-direction: column; }
+}
+
+/* Admin grid and section cards */
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+.admin-section-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+.admin-section-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 0.8px;
+}
+.admin-section-card label { font-size:0.85rem; color:var(--text-dim); margin-bottom:6px; display:block; }
+.form-row { display:flex; gap:10px; align-items:center; margin-top:8px; }
+.admin-section-card input, .admin-section-card select, .admin-section-card textarea { width:100%; }
+.admin-section-card textarea { min-height:90px; }
+.album-song-list {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:12px;
+    max-height:240px;
+    overflow:auto;
+}
+.album-song-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:14px;
+    background: rgba(255,255,255,0.02);
+    border:1px solid rgba(255,255,255,0.05);
+}
+.album-summary {
+    margin-top:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding-top:10px;
+    border-top:1px solid rgba(255,255,255,0.06);
+    font-weight:600;
+    color: var(--text);
+}
+
+/* Layout responsiveness */
+@media (max-width: 1100px) {
+    .admin-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+    .admin-grid { grid-template-columns: 1fr; }
+}
+
+/* Buttons specific to admin */
+.admin-section-card .system-alert-btn { padding: 10px 14px; border-radius: 10px; font-size: 0.95rem; }
+.admin-section-card .system-alert-btn.ok { background: linear-gradient(90deg, var(--accent), #6ef3ff); color:#000; }
+.admin-section-card .system-alert-btn.cancel { background: transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); }
+
+/* --- Full redesign for admin UI following provided visual style --- */
+.admin-container { padding: 22px; }
+.admin-section-card { padding: 22px; border-radius: 18px; }
+.admin-section-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+
+/* Inputs: iOS-like rounded fields */
+.admin-section-card input[type="text"],
+.admin-section-card input[type="number"],
+.admin-section-card select,
+.admin-section-card textarea {
+    background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 14px 16px;
+    border-radius: 14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 12px 28px rgba(0,0,0,0.18);
+    font-size: 1rem;
+    color: var(--text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.admin-section-card input[type="text"] {
+    min-height: 46px;
+}
+.admin-section-card select {
+    min-height: 46px;
+    padding-right: 36px;
+}
+.admin-section-card input::placeholder,
+.admin-section-card textarea::placeholder {
+    color: rgba(255,255,255,0.68);
+}
+.admin-section-card input:focus,
+.admin-section-card textarea:focus,
+.admin-section-card select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(110,243,255,0.12);
+    transform: translateY(-1px);
+}
+#tab-album .admin-section-card input,
+#tab-album .admin-section-card select {
+    background: rgba(255,255,255,0.08);
+}
+#tab-album .admin-section-card input:focus,
+#tab-album .admin-section-card select:focus {
+    background: rgba(255,255,255,0.12);
+}
+
+/* Ensure inputs without explicit type also receive the new style */
+#admin-new-name,
+#admin-rename-input,
+#admin-penalty-desc,
+#admin-pts-amount,
+#admin-new-pts,
+#admin-penalty-amt {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 14px 16px;
+    border-radius: 14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 6px 20px rgba(0,0,0,0.18);
+    font-size: 1rem;
+    color: var(--text);
+    height: 44px;
+}
+#admin-new-name::placeholder,
+#admin-rename-input::placeholder,
+#admin-penalty-desc::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+#admin-new-name:focus,
+#admin-rename-input:focus,
+#admin-penalty-desc:focus,
+#admin-pts-amount:focus,
+#admin-new-pts:focus,
+#admin-penalty-amt:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+/* Big pill buttons */
+.pill-btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:14px 22px; border-radius:36px; font-weight:800; font-size:1rem; cursor:pointer; border: none; }
+.pill-btn.primary { background: linear-gradient(90deg, var(--accent), #6ef3ff); color:#000; box-shadow: 0 12px 30px var(--accent-glow); }
+.pill-btn.ghost { background: rgba(255,255,255,0.03); color:var(--text); border:1px solid rgba(255,255,255,0.06); }
+.pill-btn.danger { background: linear-gradient(90deg, #ff6b6b, #ff2d55); color:#fff; }
+.admin-section-card .system-alert-btn { padding:10px 16px; border-radius:28px; }
+
+/* Small icon circle buttons (add/remove) */
+.icon-circle { width:44px; height:44px; border-radius:50%; display:inline-grid; place-items:center; font-weight:800; cursor:pointer; }
+.icon-circle.add { background: #2ecc71; color:#fff; }
+.icon-circle.remove { background: #ff3b30; color:#fff; }
+
+/* Toggle switch */
+.switch {
+  width:52px; height:30px; background: rgba(255,255,255,0.06); border-radius:30px; position:relative; cursor:pointer; border:1px solid rgba(255,255,255,0.04);
+}
+.switch .knob { position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:#fff; transition:left 0.18s ease; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+.switch.on { background: linear-gradient(90deg, #34d399, #10b981); }
+.switch.on .knob { left:25px; }
+
+/* News item larger and clearer */
+.news-container { padding: 16px; }
+.news-item { padding: 14px; border-radius: 12px; }
+.news-item div:first-child { font-size:0.78rem; color:var(--accent); }
+.news-item div:last-child { margin-top:8px; color:var(--text); font-size:0.95rem; }
+
+/* Make admin controls roomy on mobile too */
+@media (max-width: 720px) {
+    .pill-btn { width:100%; }
+    .form-row { flex-direction: column; align-items: stretch; }
+}
+
+
+/* Target specific admin inputs for consistent appearance */
+#admin-rename-input,
+#admin-penalty-desc,
+#admin-pts-amount,
+#admin-penalty-amt,
+#admin-song-select,
+#admin-rename-input::placeholder,
+#admin-penalty-desc::placeholder {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,0.02) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text) !important;
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+    outline: none !important;
+    font-size: 0.95rem !important;
+    height: 40px !important;
+    box-shadow: none !important;
+}
+
+#admin-news-input {
+    min-height: 100px;
+    resize: vertical;
+    padding: 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    border-radius: 10px;
+}
+
+#admin-rename-input::placeholder,
+#admin-penalty-desc::placeholder {
+    color: rgba(255,255,255,0.45);
+}
+
 .nav-arrow:disabled {
     opacity: 0.3;
     cursor: not-allowed;
@@ -1086,6 +1379,45 @@ body:not(.light-mode) .nav-btn.active { color: #000; }
         padding: 0.875rem 1rem;
         font-size: 0.9rem;
     }
+
+    .song-cell {
+        gap: 0.75rem;
+    }
+
+    .song-cover-wrapper {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+    }
+
+    .song-label {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .song-label .song-name {
+        font-size: 0.95rem;
+        font-weight: 700;
+    }
+
+    .like-btn {
+        display: none;
+    }
+
+    .song-cell .badge {
+        display: none;
+    }
+
+    .info-trigger {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+    }
 }
 
 .song-cell {
@@ -1093,6 +1425,23 @@ body:not(.light-mode) .nav-btn.active { color: #000; }
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+}
+
+.song-cover-wrapper {
+    width: 72px;
+    min-width: 72px;
+    height: 72px;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+}
+
+.song-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .song-label {
