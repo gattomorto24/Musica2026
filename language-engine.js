@@ -679,9 +679,22 @@
     const changelogs = {
         it: [
             {
+                version: 'v1.9.5',
+                date: '26 MAGGIO 2026',
+                latest: true,
+                items: [
+                    { title: 'Accesso tab Update', desc: 'Aggiunto il collegamento al tab Update anche dal menu mobile hamburger per i proprietari.' },
+                    { title: 'Header compatto appiccicoso', desc: 'Introdotto header sticky ridotto con titolo centrale e transizioni di scroll per la navigazione mobile/desktop.' },
+                    { title: 'Tema chiaro iOS-style', desc: 'Rifinito il look light mode con superfici glassy, blur, e contrasto morbido per un aspetto più moderno.' },
+                    { title: 'Menu mobile migliorato', desc: 'Sottomenù mobile riorganizzato con nav hamburger più chiara e accesso rapido alle utility.' },
+                    { title: 'Backup e reset amministratore', desc: 'Aggiunte utility di backup settimanali/manuali e reset database protetto da password per maggiore sicurezza.' },
+                    { title: 'Log changelog e versioning', desc: 'Log delle modifiche aggiornato con la voce v1.9.5 per documentare le modifiche più recenti.' }
+                ]
+            },
+            {
                 version: 'v1.9',
                 date: '25 MAGGIO 2026',
-                latest: true,
+                latest: false,
                 items: [
                     { title: 'Gestione Album Owner', desc: 'Introdotto tab album con creazione, modifica, eliminazione e associazione canzoni ad album.' },
                     { title: 'Artista Album', desc: 'Aggiunto campo artista nella creazione/modifica album per una migliore catalogazione.' },
@@ -796,9 +809,22 @@
         ],
         en: [
             {
+                version: 'v1.9.5',
+                date: 'MAY 26, 2026',
+                latest: true,
+                items: [
+                    { title: 'Update Tab Access', desc: 'Added Update tab access from the mobile hamburger menu for owners.' },
+                    { title: 'Sticky Compact Header', desc: 'Introduced a reduced sticky header with centered title and scroll-aware transitions for mobile and desktop.' },
+                    { title: 'iOS-style Light Theme', desc: 'Refined the light-mode interface with glassy blur surfaces and soft contrast for a modern look.' },
+                    { title: 'Improved Mobile Submenu', desc: 'Reorganized the mobile submenu for clearer navigation and faster access to utilities.' },
+                    { title: 'Admin Backup & Reset', desc: 'Added weekly/manual backup utilities and password-protected database reset for safer admin workflows.' },
+                    { title: 'Changelog Version Logging', desc: 'Updated the changelog with a new v1.9.5 entry to document the latest releases clearly.' }
+                ]
+            },
+            {
                 version: 'v1.9',
                 date: 'MAY 25, 2026',
-                latest: true,
+                latest: false,
                 items: [
                     { title: 'Album Owner Management', desc: 'Added album tab with create/edit/delete album flows and song-to-album assignment.' },
                     { title: 'Album Artist Field', desc: 'Added artist field to album creation/edit UI for better album metadata.' },
@@ -916,23 +942,16 @@
     // Spanish changelog (localized)
     changelogs.es = [
         {
-            version: 'v1.9',
-            date: '25 MAYO 2026',
+            version: 'v1.9.5',
+            date: '26 MAYO 2026',
             latest: true,
             items: [
-                { title: 'Gestión de álbumes Owner', desc: 'Añadido tab de álbumes con crear/editar/eliminar álbum y asignación de canciones a álbumes.' },
-                { title: 'Campo Artista del Álbum', desc: 'Añadido campo artista en la creación/edición de álbum para mejor metadata.' },
-                { title: 'Búsqueda por Álbum/Artista', desc: 'La búsqueda global ahora filtra por nombre de álbum y artista asociado.' },
-                { title: 'Fallback de portada de álbum', desc: 'Las canciones sin portada propia ahora usan la portada del álbum asociado.' },
-                { title: 'Menú de Tema estilo Alert', desc: 'Convertido el menú de tema en overlay tipo alert-card (`.theme-menu-card`) para coherencia visual.' },
-                { title: 'Exportar: nuevos modos y formatos', desc: 'Añadidos modos `general`, `archive_current`, `archive_all` y formatos `TXT`/`CSV` con lógica en `exportData(format)`.' },
-                { title: 'Rediseño del Modal de Export', desc: 'Rehecho el modal de export como `system-alert-card export-card` con estilo frosted glass y acciones dedicadas.' },
-                { title: 'Navegación por semana del archivo', desc: 'Añadida visualización de la semana activa con flechas arriba/abajo y `changeExportWeek(dir, evt)` usando `evt.stopPropagation()`.' },
-                { title: 'Barra de búsqueda: desenfoque consolidado', desc: 'Eliminadas reglas duplicadas y añadido único bloque `.search-container .search-wrapper` con `backdrop-filter: blur(25px)`.' },
-                { title: 'Mejoras UI en búsqueda', desc: 'Barra más delgada, icono a la derecha, padding y fuente optimizados para un layout compacto.' },
-                { title: 'Utility .sfocata', desc: 'Añadida la clase `.sfocata { filter: blur(5px); }` como utilidad.' },
-                { title: 'Correcciones CSS y overlays', desc: 'Corregidas reglas CSS rotas (`#loader-overlay`, `.language-confirm-overlay`) y eliminadas propiedades sueltas del parsing.' },
-                { title: 'Correcciones de interacción', desc: 'Arreglados conflictos de selectores y eventos para que los botones no activen radios por error.' }
+                { title: 'Acceso al tab Update', desc: 'Añadido el enlace al tab Update desde el menú móvil hamburger para los dueños.' },
+                { title: 'Header sticky compacto', desc: 'Introducido header sticky reducido con título centrado y transiciones de scroll para móvil y escritorio.' },
+                { title: 'Tema claro estilo iOS', desc: 'Refinado el aspecto light mode con superficies glassy, blur y contraste suave para un look moderno.' },
+                { title: 'Submenú móvil mejorado', desc: 'Reorganizado el submenú móvil para una navegación más clara y acceso rápido a las utilidades.' },
+                { title: 'Backup y reset admin', desc: 'Añadidas utilidades de backup semanal/manual y reset de base de datos protegido por contraseña.' },
+                { title: 'Registro de changelog y versiones', desc: 'Actualizado el changelog con la nueva entrada v1.9.5 para documentar los cambios más recientes.' }
             ]
         }
     ].concat(changelogs.en.slice(1));

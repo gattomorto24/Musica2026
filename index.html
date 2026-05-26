@@ -64,6 +64,7 @@
             </div>
         </div>
         
+        <button id="info-like-button" class="nav-btn info-like-btn mobile-only" onclick="likeSongFromModal()">❤️ Mi piace</button>
         <button class="nav-btn" style="margin-top: 30px; width: 100%; border-color: var(--danger); color: var(--danger);" onclick="closeInfoPopup()">CHIUDI</button>
     </div>
 </div>
@@ -133,13 +134,14 @@
     <header class="main-header">
         <div class="header-content">
             <div class="logo-section">
-                <h1>CRONOSOUND</h1>
+                <h1 onclick="showTab('live')" title="Torna a Classifica Generale">CRONOSOUND</h1>
                 <p class="subtitle">Professional Cloud OS</p>
             </div>
             <div class="user-section">
                 <p id="user-name" class="user-greeting"></p>
             </div>
         </div>
+        <div class="header-compact-title">CRONOSOUND</div>
     </header>
 
     <!-- Navigation -->
@@ -181,9 +183,9 @@
             <div class="section-header">
                 <h2 data-i18n="general_ranking">Classifica Generale</h2>
                 <div class="section-actions">
-                    <button class="action-btn caps-btn" onclick="convertAllToCaps()" data-i18n-title="title_caps" title="Converte tutti i titoli a CAPS">
-                        <span class="btn-icon">🔤</span>
-                        <span class="btn-text" data-i18n="caps">CAPS</span>
+                    <button class="action-btn caps-btn" onclick="toggleCoverVisibility()" title="Mostra o nascondi le copertine delle canzoni">
+                        <span class="btn-icon">🖼️</span>
+                        <span class="btn-text">Disattiva Copertine</span>
                     </button>
                     <button class="action-btn export-btn" onclick="toggleExportOverlay()" data-i18n-title="title_export" title="Apri le opzioni di esportazione">
                         <span class="btn-icon">📊</span>
@@ -338,10 +340,24 @@
                 </div>
                 
                 <div class="reset-section">
-                    <button class="reset-btn" onclick="hardReset()">
-                        <span class="btn-icon">⚠️</span>
-                        <span class="btn-text" data-i18n="format_db">Formatta Database</span>
-                    </button>
+                    <div class="utility-actions">
+                        <button type="button" class="backup-btn" onclick="createBackup(true)">
+                            <span class="btn-icon">💾</span>
+                            <span class="btn-text">Backup</span>
+                        </button>
+                        <button type="button" class="reset-btn" onclick="hardReset()">
+                            <span class="btn-icon">⚠️</span>
+                            <span class="btn-text" data-i18n="format_db">Formatta Database</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="backup-info-card">
+                    <div class="backup-info-header">
+                        <h3>Backup di emergenza</h3>
+                        <span class="backup-location">Archiviati su Supabase nella proprietà <code>state.backups</code> della tabella <strong>classifiche</strong>.</span>
+                    </div>
+                    <p id="backup-summary">Controlla qui quanti backup sono già salvati e da quale settimana coprono.</p>
+                    <div id="backup-list" class="backup-list"></div>
                 </div>
             </div>
         </section>
@@ -384,53 +400,90 @@
     <div id="mobile-menu" class="mobile-menu">
         <div class="mobile-menu-header">
             <h3 data-i18n="system_menu">MENU SISTEMA</h3>
+            <button class="mobile-menu-close" type="button" onclick="toggleMenu()">✕</button>
         </div>
         <div class="mobile-menu-content">
-            <button class="mobile-menu-item" onclick="mobileTab('live')">
-                <span class="menu-icon">🏆</span>
-                <span class="menu-text" data-i18n="general_ranking_menu">Classifica Generale</span>
-            </button>
-            <button id="mobile-upd-btn" class="mobile-menu-item" onclick="mobileTab('upd')">
-                <span class="menu-icon">📊</span>
-                <span class="menu-text" data-i18n="new_week">Nuova Settimana</span>
-            </button>
-            <button class="mobile-menu-item" onclick="mobileTab('hist')">
-                <span class="menu-icon">📚</span>
-                <span class="menu-text" data-i18n="archive_menu">Archivio</span>
-            </button>
-            <button id="mobile-mod-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('mod')">
-                <span class="menu-icon">✏️</span>
-                <span class="menu-text">Modifica (Owner)</span>
-            </button>
-            <button id="mobile-album-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('album')">
-                <span class="menu-icon">💿</span>
-                <span class="menu-text">Album</span>
-            </button>
-            <button id="mobile-news-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('news')">
-                <span class="menu-icon">📰</span>
-                <span class="menu-text">Notizie</span>
-            </button>
-            <button class="mobile-menu-item" onclick="mobileNavigate('info.html')">
-                <span class="menu-icon">ℹ️</span>
-                <span class="menu-text" data-i18n="info">Info</span>
-            </button>
-            <button class="mobile-menu-item" onclick="mobileNavigate('account.html#profile')">
-                <span class="menu-icon">👤</span>
-                <span class="menu-text" data-i18n="profile">Profilo</span>
-            </button>
-            <button class="mobile-menu-item" onclick="toggleExportOverlay()">
-                <span class="menu-icon">📤</span>
-                <span class="menu-text" data-i18n="export">Esporta</span>
-            </button>
+            <div class="mobile-menu-group accordion-group">
+                <button class="mobile-menu-group-toggle" type="button" onclick="toggleMenuGroup(this)">
+                    <span>Navigazione</span>
+                    <span class="group-arrow">▶</span>
+                </button>
+                <div class="mobile-menu-group-body">
+                    <button class="mobile-menu-item" onclick="mobileTab('live')">
+                        <span class="menu-icon">🏆</span>
+                        <span class="menu-text" data-i18n="general_ranking_menu">Classifica Generale</span>
+                    </button>
+                    <button id="mobile-upd-btn" class="mobile-menu-item" onclick="mobileTab('upd')">
+                        <span class="menu-icon">📊</span>
+                        <span class="menu-text" data-i18n="new_week">Nuova Settimana</span>
+                    </button>
+                    <button class="mobile-menu-item" onclick="mobileTab('hist')">
+                        <span class="menu-icon">📚</span>
+                        <span class="menu-text" data-i18n="archive_menu">Archivio</span>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-menu-group accordion-group">
+                <button class="mobile-menu-group-toggle" type="button" onclick="toggleMenuGroup(this)">
+                    <span>Owner</span>
+                    <span class="group-arrow">▶</span>
+                </button>
+                <div class="mobile-menu-group-body">
+                    <button id="mobile-upd-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('upd')">
+                        <span class="menu-icon">🛠️</span>
+                        <span class="menu-text">Update (Owner)</span>
+                    </button>
+                    <button id="mobile-mod-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('mod')">
+                        <span class="menu-icon">✏️</span>
+                        <span class="menu-text">Modifica (Owner)</span>
+                    </button>
+                    <button id="mobile-album-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('album')">
+                        <span class="menu-icon">💿</span>
+                        <span class="menu-text">Album</span>
+                    </button>
+                    <button id="mobile-news-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('news')">
+                        <span class="menu-icon">📰</span>
+                        <span class="menu-text">Notizie</span>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-menu-group accordion-group">
+                <button class="mobile-menu-group-toggle" type="button" onclick="toggleMenuGroup(this)">
+                    <span>Azioni rapide</span>
+                    <span class="group-arrow">▶</span>
+                </button>
+                <div class="mobile-menu-group-body">
+                    <button class="mobile-menu-item" onclick="mobileNavigate('info.html')">
+                        <span class="menu-icon">ℹ️</span>
+                        <span class="menu-text" data-i18n="info">Info</span>
+                    </button>
+                    <button class="mobile-menu-item" onclick="mobileNavigate('account.html#profile')">
+                        <span class="menu-icon">👤</span>
+                        <span class="menu-text" data-i18n="profile">Profilo</span>
+                    </button>
+                    <button class="mobile-menu-item" onclick="toggleExportOverlay()">
+                        <span class="menu-icon">📤</span>
+                        <span class="menu-text" data-i18n="export">Esporta</span>
+                    </button>
+                </div>
+            </div>
             <div class="mobile-menu-divider"></div>
-            <button class="mobile-menu-item" onclick="window.cycleLanguage()">
-                <span class="menu-icon">🌐</span>
-                <span class="menu-text" data-i18n="language">Lingua</span>
-            </button>
-            <button class="mobile-menu-item" onclick="window.toggleTheme()">
-                <span class="menu-icon">🎨</span>
-                <span class="menu-text" data-i18n="theme">Tema</span>
-            </button>
+            <div class="mobile-menu-group accordion-group">
+                <button class="mobile-menu-group-toggle" type="button" onclick="toggleMenuGroup(this)">
+                    <span>Impostazioni</span>
+                    <span class="group-arrow">▶</span>
+                </button>
+                <div class="mobile-menu-group-body">
+                    <button class="mobile-menu-item" onclick="window.cycleLanguage()">
+                        <span class="menu-icon">🌐</span>
+                        <span class="menu-text" data-i18n="language">Lingua</span>
+                    </button>
+                    <button class="mobile-menu-item" onclick="window.toggleTheme()">
+                        <span class="menu-icon">🎨</span>
+                        <span class="menu-text" data-i18n="theme">Tema</span>
+                    </button>
+                </div>
+            </div>
             <button class="mobile-menu-item logout" onclick="logout()">
                 <span class="menu-icon">🚪</span>
                 <span class="menu-text" data-i18n="logout">Logout</span>
@@ -439,6 +492,9 @@
     </div>
 
     <!-- Mobile Menu Toggle -->
+    <button class="mobile-account-toggle" onclick="mobileNavigate('account.html#profile')" title="Profilo">
+        <span class="menu-icon">👤</span>
+    </button>
     <button class="mobile-menu-toggle" onclick="toggleMenu()">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
@@ -461,7 +517,7 @@
     let isOwner = false;
     const supabaseClient = window.supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    let state = { week: 1, songs: {}, history: [], hIdx: 0, news: [], albums: {} };
+    let state = { week: 1, songs: {}, history: [], hIdx: 0, news: [], albums: {}, backups: [], showCovers: true };
 
     async function enforceAuthAndOwner() {
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -486,7 +542,8 @@
 
         const navUpdate = document.getElementById('nav-upd');
         const mobileUpdate = document.getElementById('mobile-upd-btn');
-        const resetBtn = document.querySelector('.btn-reset');
+        const resetBtn = document.querySelector('.reset-btn');
+        const backupBtn = document.querySelector('.backup-btn');
         const navMod = document.getElementById('nav-mod');
         const navAlbum = document.getElementById('nav-album');
         const navNews = document.getElementById('nav-news');
@@ -498,6 +555,7 @@
             if (navUpdate) navUpdate.style.display = 'none';
             if (mobileUpdate) mobileUpdate.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
+            if (backupBtn) backupBtn.style.display = 'none';
             if (navMod) navMod.style.display = 'none';
             if (mobileMod) mobileMod.style.display = 'none';
             if (navAlbum) navAlbum.style.display = 'none';
@@ -525,6 +583,8 @@
             if(!state.history) state.history = [];
             if(!state.news) state.news = [];
             if(!state.albums) state.albums = {};
+            if(!state.backups) state.backups = [];
+            if (typeof state.showCovers === 'undefined') state.showCovers = true;
             state.hIdx = state.history.length > 0 ? state.history.length - 1 : 0;
             document.getElementById('db-status').innerText = "SYSTEM ONLINE: CLOUD SYNCHRONIZED";
         }
@@ -535,6 +595,7 @@
     function refreshUI() {
         renderLive();
         document.getElementById('next-week-id').innerText = state.week;
+        updateBackupPanel();
     }
 
     function renderLive(filter = "") {
@@ -560,7 +621,7 @@
             <tr>
                 <td>#${i+1}</td>
                 <td class="song-cell">
-                    <div class="song-cover-wrapper">
+                    <div class="song-cover-wrapper" style="display: ${state.showCovers ? 'grid' : 'none'};">
                         <img class="song-cover" src="${d.cover || (d.albumId && state.albums?.[d.albumId]?.cover) || 'https://via.placeholder.com/80?text=?'}" alt="Copertina ${name}" onerror="this.src='https://via.placeholder.com/80?text=?'">
                     </div>
                     <div class="song-label">
@@ -603,6 +664,7 @@
         document.getElementById('info-year').innerText = fullMeta.anno;
         
         // Dati dalla classifica (se disponibili)
+        const hasLiked = window.currentUserId && data && data.likedBy && data.likedBy.includes(window.currentUserId);
         if (data) {
             document.getElementById('info-lega').innerText = "SERIE " + data.l;
             document.getElementById('info-pts').innerText = data.pts;
@@ -610,12 +672,28 @@
             document.getElementById('info-lega').innerText = "-";
             document.getElementById('info-pts').innerText = "-";
         }
-        
+
+        const infoOverlay = document.getElementById('info-popup-overlay');
+        infoOverlay.dataset.song = fullName;
+        const infoLikeButton = document.getElementById('info-like-button');
+        if (infoLikeButton) {
+            infoLikeButton.disabled = hasLiked;
+            infoLikeButton.innerText = hasLiked ? '❤️ Già apprezzata' : '❤️ Mi piace';
+            infoLikeButton.style.opacity = hasLiked ? '0.65' : '1';
+        }
         document.getElementById('info-popup-overlay').style.display = 'flex';
     }
 
     function closeInfoPopup() {
         document.getElementById('info-popup-overlay').style.display = 'none';
+    }
+
+    function likeSongFromModal() {
+        const infoOverlay = document.getElementById('info-popup-overlay');
+        const songName = infoOverlay.dataset.song;
+        if (songName) {
+            likeSong(songName);
+        }
     }
 
     async function likeSong(songName) {
@@ -715,10 +793,74 @@
         });
 
         state.history.push({ week: state.week, data: weekSnapshot });
+        await createBackup(false);
         state.week++;
         
         const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
         if (error) alert(error.message); else location.reload();
+    }
+
+    async function createBackup(download = false) {
+        if (!state.backups) state.backups = [];
+        const backupSnapshot = {
+            createdAt: new Date().toISOString(),
+            week: state.week,
+            songs: JSON.parse(JSON.stringify(state.songs)),
+            history: JSON.parse(JSON.stringify(state.history)),
+            albums: JSON.parse(JSON.stringify(state.albums)),
+            news: JSON.parse(JSON.stringify(state.news)),
+            showCovers: state.showCovers
+        };
+        state.backups.push(backupSnapshot);
+
+        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
+        if (error) {
+            alert('Errore durante il backup: ' + error.message);
+            return;
+        }
+
+        if (download) {
+            const blob = new Blob([JSON.stringify(backupSnapshot, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `CRONOSOUND_BACKUP_WEEK_${state.week}.json`;
+            a.click();
+            alert('Backup di emergenza creato e scaricato.');
+        }
+        refreshUI();
+    }
+
+    function formatBackupDate(isoString) {
+        try {
+            return new Intl.DateTimeFormat('it-IT', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(isoString));
+        } catch (e) {
+            return isoString;
+        }
+    }
+
+    function updateBackupPanel() {
+        const summary = document.getElementById('backup-summary');
+        const list = document.getElementById('backup-list');
+        if (!summary || !list) return;
+
+        const backups = state.backups || [];
+        const count = backups.length;
+        summary.innerHTML = count > 0
+            ? `Backup salvati: <strong>${count}</strong>. Ultimo backup copre fino alla settimana <strong>${backups[count - 1].week}</strong>.`
+            : 'Nessun backup ancora salvato. Usa il pulsante Backup per creare un salvataggio di emergenza.';
+
+        if (count === 0) {
+            list.innerHTML = '<div class="backup-empty">Nessun salvataggio di emergenza creato.</div>';
+            return;
+        }
+
+        list.innerHTML = backups.slice().reverse().map((backup, idx) => {
+            return `<div class="backup-item">
+                <div class="backup-title">Backup ${count - idx}</div>
+                <div class="backup-meta"><span>Creato:</span> ${formatBackupDate(backup.createdAt)}</div>
+                <div class="backup-meta"><span>Fino a settimana:</span> ${backup.week}</div>
+            </div>`;
+        }).join('');
     }
 
     function showTab(t) {
@@ -758,10 +900,63 @@
 
     function toggleMenu() {
         const m = document.getElementById('mobile-menu');
-        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+        const isOpen = !m.classList.contains('active');
+        m.classList.toggle('active', isOpen);
+        document.body.classList.toggle('mobile-menu-open', isOpen);
+        m.style.display = isOpen ? 'flex' : 'none';
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    function toggleMenuGroup(button) {
+        const group = button.closest('.mobile-menu-group');
+        if (!group) return;
+        const isOpen = group.classList.toggle('open');
+        const body = group.querySelector('.mobile-menu-group-body');
+        if (isOpen) {
+            body.style.maxHeight = body.scrollHeight + 'px';
+        } else {
+            body.style.maxHeight = '0';
+        }
     }
 
     function mobileTab(t) { showTab(t); toggleMenu(); }
+
+    function setupStickyHeader() {
+        const header = document.querySelector('.main-header');
+        const searchWrapper = document.querySelector('.search-wrapper');
+        if (!header) return;
+        let ticking = false;
+        let lastScrollY = window.scrollY || 0;
+        const updateHeader = () => {
+            const scrolled = window.scrollY > 16;
+            header.classList.toggle('compact', scrolled);
+            document.body.classList.toggle('header-compact', scrolled);
+        };
+        const updateSearchVisibility = () => {
+            if (!searchWrapper) return;
+            const currentScroll = window.scrollY;
+            const scrollingDown = currentScroll > lastScrollY + 1;
+            const scrollingUp = currentScroll < lastScrollY - 1;
+            if (scrollingDown && currentScroll > 32) {
+                searchWrapper.classList.add('hide-on-scroll');
+            } else if (scrollingUp || currentScroll <= 8) {
+                searchWrapper.classList.remove('hide-on-scroll');
+            }
+            lastScrollY = currentScroll;
+        };
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                ticking = true;
+                window.requestAnimationFrame(() => {
+                    updateHeader();
+                    updateSearchVisibility();
+                    ticking = false;
+                });
+            }
+        }, { passive: true });
+        updateHeader();
+        updateSearchVisibility();
+    }
 
     function mobileNavigate(url) {
         const m = document.getElementById('mobile-menu');
@@ -896,6 +1091,11 @@
     }
 
     async function hardReset() {
+        const password = prompt('Inserisci la password per formattare il database:');
+        if (password !== 'coccott44') {
+            alert('Password errata. Formattazione annullata.');
+            return;
+        }
         if (confirm(window.t('confirm_reset'))) {
             state = { week: 1, songs: {}, history: [], hIdx: 0 };
             await supabaseClient.from('classifiche').insert([{ data_json: state }]);
@@ -903,45 +1103,13 @@
         }
     }
 
-    async function convertAllToCaps() {
-        if (!confirm(window.t('confirm_caps'))) return;
-
-        console.log("[CAPS CONVERTER] Inizio conversione...");
-
-        // FASE 1: Converti le canzoni attuali (state.songs)
-        const newSongs = {};
-        for (const [oldName, data] of Object.entries(state.songs)) {
-            const result = smartMultiArtistMatcher(oldName);
-            const newName = result.titolo; // Sempre in CAPS
-            console.log(`[CAPS] ${oldName} → ${newName}`);
-            newSongs[newName] = data;
+    function toggleCoverVisibility() {
+        state.showCovers = !state.showCovers;
+        const coverButton = document.querySelector('.caps-btn .btn-text');
+        if (coverButton) {
+            coverButton.innerText = state.showCovers ? 'Disattiva Copertine' : 'Attiva Copertine';
         }
-        state.songs = newSongs;
-
-        // FASE 2: Converti i nomi nei dati storici (state.history)
-        if (state.history && state.history.length > 0) {
-            state.history.forEach((entry, idx) => {
-                entry.data.forEach((item) => {
-                    const result = smartMultiArtistMatcher(item.n);
-                    const newName = result.titolo; // Sempre in CAPS
-                    console.log(`[CAPS ARCHIVE] Settimana ${entry.week}: ${item.n} → ${newName}`);
-                    item.n = newName;
-                });
-            });
-        }
-
-        // FASE 3: Salva in Supabase
-        console.log("[CAPS CONVERTER] Salvataggio in Supabase...");
-        const { error } = await supabaseClient.from('classifiche').insert([{ data_json: state }]);
-        
-        if (error) {
-            console.error("[CAPS CONVERTER ERROR]", error);
-            alert("Errore nel salvataggio: " + error.message);
-        } else {
-            console.log("[CAPS CONVERTER] ✅ Conversione completata e salvata!");
-            alert(window.t('conversion_complete'));
-            location.reload();
-        }
+        refreshUI();
     }
 
     async function logout() {
@@ -957,6 +1125,15 @@
     }
 
     init();
+    setupStickyHeader();
+
+    const resetButton = document.querySelector('.reset-btn');
+    if (resetButton) {
+        resetButton.addEventListener('click', async (event) => {
+            event.preventDefault();
+            await hardReset();
+        });
+    }
 </script>
 </div>
 </body>
