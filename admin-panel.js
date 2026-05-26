@@ -174,12 +174,18 @@ function renderAlbumSelect() {
 
 function renderAlbumSongSelect() {
     const sel = document.getElementById('admin-album-song-select');
+    const multiSel = document.getElementById('admin-album-multi-select');
     if (!sel || !state) return;
     const currentAlbumId = document.getElementById('admin-album-select')?.value;
     const album = state.albums?.[currentAlbumId] || { songs: [] };
     const assigned = new Set(album.songs || []);
     const available = Object.keys(state.songs || {}).filter(name => !assigned.has(name));
     sel.innerHTML = '<option value="" disabled selected>Seleziona una canzone...</option>' + available.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+    
+    // Render multi-select
+    if (multiSel) {
+        multiSel.innerHTML = available.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+    }
 }
 
 function renderAlbumSongList(albumId) {
@@ -193,7 +199,7 @@ function renderAlbumSongList(albumId) {
     }
     const rows = (album.songs || []).map(name => {
         const pts = state.songs?.[name]?.pts || 0;
-        return `<div class="album-song-row"><span>${escapeHtml(name)} (${pts} pts)</span><button class="system-alert-btn cancel" onclick="removeSongFromAlbum(${JSON.stringify(name)})">Rimuovi</button></div>`;
+        return `<div class="album-song-row"><span>${escapeHtml(name)} (${pts} pts)</span><button class="system-alert-btn cancel" data-song="${escapeHtml(name)}" onclick="removeSongFromAlbum(this.getAttribute('data-song'))">Rimuovi</button></div>`;
     });
     container.innerHTML = rows.length ? rows.join('') : '<p>Nessuna canzone nell\'album.</p>';
     document.getElementById('admin-album-points').innerText = getAlbumPoints(albumId);
@@ -289,6 +295,42 @@ async function addSongToAlbum() {
     populateAlbumDetails();
 }
 
+async function addMultipleSongsToAlbum() {
+    const albumSelect = document.getElementById('admin-album-select');
+    const multiSelect = document.getElementById('admin-album-multi-select');
+    if (!albumSelect || !multiSelect) return;
+    const albumId = albumSelect.value;
+    if (!albumId) return alert('Seleziona un album prima di aggiungere le canzoni');
+    
+    const album = state.albums?.[albumId];
+    if (!album) return alert('Album non trovato');
+    if (!Array.isArray(album.songs)) album.songs = [];
+    
+    const selectedOptions = Array.from(multiSelect.selectedOptions);
+    if (selectedOptions.length === 0) return alert('Seleziona almeno una canzone da aggiungere');
+    
+    let addedCount = 0;
+    const songsToAdd = [];
+    
+    selectedOptions.forEach(option => {
+        const songName = option.value;
+        if (songName && !album.songs.includes(songName)) {
+            album.songs.push(songName);
+            if (state.songs?.[songName]) state.songs[songName].albumId = albumId;
+            songsToAdd.push(songName);
+            addedCount++;
+        }
+    });
+    
+    if (addedCount > 0) {
+        pushNews({ type: 'album', by: window.currentUserEmail || 'owner', msg: `Aggiunte ${addedCount} canzione/i all'album ${album.name}: ${songsToAdd.join(', ')}` });
+        await saveState();
+        populateAlbumDetails();
+    } else {
+        alert('Nessuna canzone nuova è stata aggiunta (potrebbero essere già presenti nell\'album)');
+    }
+}
+
 async function removeSongFromAlbum(songName) {
     const albumSelect = document.getElementById('admin-album-select');
     if (!albumSelect) return;
@@ -367,5 +409,6 @@ window.createNewAlbum = createNewAlbum;
 window.deleteCurrentAlbum = deleteCurrentAlbum;
 window.saveAlbumDetails = saveAlbumDetails;
 window.addSongToAlbum = addSongToAlbum;
+window.addMultipleSongsToAlbum = addMultipleSongsToAlbum;
 window.removeSongFromAlbum = removeSongFromAlbum;
 window.populateAlbumDetails = populateAlbumDetails;

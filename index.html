@@ -307,6 +307,13 @@
                         <div class="form-row">
                             <button class="system-alert-btn ok" onclick="addSongToAlbum()">Aggiungi</button>
                         </div>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08);">
+                            <label style="font-size: 0.85rem; margin-bottom: 10px; display: block;">Aggiungi Multiple Canzoni (Cmd/Ctrl per selezionare)</label>
+                            <select id="admin-album-multi-select" multiple style="width: 100%; min-height: 150px; padding: 8px; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; background: rgba(255,255,255,0.02); color: var(--text); font-family: inherit; font-size: 0.85rem;"></select>
+                            <div class="form-row">
+                                <button class="system-alert-btn ok" onclick="addMultipleSongsToAlbum()">Aggiungi Selezionate</button>
+                            </div>
+                        </div>
                         <div id="admin-album-song-list" class="album-song-list"></div>
                         <div class="album-summary">
                             <span>Totale punti album:</span>

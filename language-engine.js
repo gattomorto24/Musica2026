@@ -679,7 +679,7 @@
     const changelogs = {
         it: [
             {
-                version: 'v1.9.5',
+                version: 'v1.9.1',
                 date: '26 MAGGIO 2026',
                 latest: true,
                 items: [
@@ -809,7 +809,7 @@
         ],
         en: [
             {
-                version: 'v1.9.5',
+                version: 'v1.9.1',
                 date: 'MAY 26, 2026',
                 latest: true,
                 items: [
@@ -942,7 +942,7 @@
     // Spanish changelog (localized)
     changelogs.es = [
         {
-            version: 'v1.9.5',
+            version: 'v1.9.1',
             date: '26 MAYO 2026',
             latest: true,
             items: [
