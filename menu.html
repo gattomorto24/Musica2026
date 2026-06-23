@@ -1,0 +1,147 @@
+<!-- Shared site menu: nav + hero actions -->
+<!-- Header moved to header.html to avoid duplication -->
+<!-- Navigation -->
+<nav class="main-nav">
+    <div class="nav-content">
+        <div class="nav-tabs">
+            <button id="nav-live" class="nav-tab active" onclick="navigateToSection('live')">
+                <span class="tab-icon">🏆</span>
+                <span class="tab-text" data-i18n="ranking">Ranking</span>
+            </button>
+            <button id="nav-upd" class="nav-tab" onclick="navigateToSection('upd')">
+                <span class="tab-icon">📊</span>
+                <span class="tab-text" data-i18n="update">Aggiorna</span>
+            </button>
+            <button id="nav-hist" class="nav-tab" onclick="showTab('hist')">
+            <button id="nav-hist" class="nav-tab" onclick="navigateToSection('hist')">
+                <span class="tab-icon">📚</span>
+                <span class="tab-text" data-i18n="archive">Archivio</span>
+            </button>
+            <button id="nav-mod" class="nav-tab" onclick="navigateToSection('mod')">
+                <span class="tab-icon">✏️</span>
+                <span class="tab-text">Modifica</span>
+            </button>
+            <button id="nav-album" class="nav-tab" onclick="navigateToSection('album')">
+                <span class="tab-icon">💿</span>
+                <span class="tab-text">Album</span>
+            </button>
+            <button id="nav-news" class="nav-tab" onclick="navigateToSection('news')">
+                <span class="tab-icon">📰</span>
+                <span class="tab-text">Notizie</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+
+
+<script>
+// Provide minimal menu functions if not defined by the page
+window.toggleMenu = window.toggleMenu || function() {
+    const m = document.getElementById('mobile-menu');
+    if (!m) return;
+    const isOpen = m.style.display === 'flex';
+    m.style.display = isOpen ? 'none' : 'flex';
+    document.body.classList.toggle('mobile-menu-open', !isOpen);
+    document.body.style.overflow = !isOpen ? 'hidden' : '';
+};
+
+window.mobileTab = window.mobileTab || function(t) {
+    if (typeof showTab === 'function') {
+        showTab(t);
+        if (typeof toggleMenu === 'function') toggleMenu();
+        return;
+    }
+    if (typeof toggleMenu === 'function') toggleMenu();
+    // fallback: navigate to index with hash
+    window.location.href = 'index.html#' + t;
+};
+
+window.navigateToSection = window.navigateToSection || function(t) {
+    if (typeof showTab === 'function') {
+        showTab(t);
+        return;
+    }
+    // If we're not on index, go there with the hash so index will open the section
+    window.location.href = 'index.html#' + t;
+};
+
+window.mobileNavigate = window.mobileNavigate || function(url) {
+    if (typeof toggleMenu === 'function') toggleMenu();
+    window.location.href = url;
+};
+</script>
+
+<!-- Mobile Menu Overlay (shared) -->
+<div id="mobile-menu" class="mobile-menu" style="display:none;">
+    <div class="mobile-menu-header">
+        <div>
+            <p class="mobile-menu-subtitle">Menu</p>
+            <h3 data-i18n="system_menu">CRONOSOUND</h3>
+        </div>
+        <button class="mobile-menu-close" type="button" onclick="toggleMenu()">✕</button>
+    </div>
+    <div class="mobile-menu-body">
+        <div class="mobile-menu-section">
+            <p class="mobile-menu-section-title">Navigazione</p>
+            <button class="mobile-menu-item" onclick="mobileTab('live')">
+                <span class="menu-icon material-symbols-outlined">leaderboard</span>
+                <span class="menu-text" data-i18n="general_ranking_menu">Classifica Generale</span>
+            </button>
+            <button id="mobile-upd-btn" class="mobile-menu-item" onclick="mobileTab('upd')">
+                <span class="menu-icon material-symbols-outlined">calendar_month</span>
+                <span class="menu-text" data-i18n="new_week">Nuova Settimana</span>
+            </button>
+            <button class="mobile-menu-item" onclick="mobileTab('hist')">
+                <span class="menu-icon material-symbols-outlined">library_books</span>
+                <span class="menu-text" data-i18n="archive_menu">Archivio</span>
+            </button>
+        </div>
+
+        <div class="mobile-menu-section">
+            <p class="mobile-menu-section-title">Azioni rapide</p>
+            <button class="mobile-menu-item" onclick="mobileNavigate('info.html')">
+                <span class="menu-icon material-symbols-outlined">info</span>
+                <span class="menu-text" data-i18n="info">Info</span>
+            </button>
+            
+                <button id="mobile-mod-btn" class="mobile-menu-item" onclick="mobileTab('mod')">
+                    <span class="menu-icon material-symbols-outlined">edit</span>
+                    <span class="menu-text">Modifica</span>
+                </button>
+                <button id="mobile-album-btn" class="mobile-menu-item" onclick="mobileTab('album')">
+                    <span class="menu-icon material-symbols-outlined">album</span>
+                    <span class="menu-text">Album</span>
+                </button>
+                <button id="mobile-news-btn" class="mobile-menu-item" onclick="mobileTab('news')">
+                    <span class="menu-icon material-symbols-outlined">newspaper</span>
+                    <span class="menu-text">Notizie</span>
+                </button>
+            <button class="mobile-menu-item" onclick="mobileNavigate('account.html#profile')">
+                <span class="menu-icon material-symbols-outlined">person</span>
+                <span class="menu-text" data-i18n="profile">Profilo</span>
+            </button>
+            <button class="mobile-menu-item" onclick="toggleExportOverlay()">
+                <span class="menu-icon material-symbols-outlined">upload</span>
+                <span class="menu-text" data-i18n="export">Esporta</span>
+            </button>
+        </div>
+
+        <div class="mobile-menu-section">
+            <p class="mobile-menu-section-title">Impostazioni</p>
+            <button class="mobile-menu-item" onclick="window.cycleLanguage()">
+                <span class="menu-icon material-symbols-outlined">language</span>
+                <span class="menu-text" data-i18n="language">Lingua</span>
+            </button>
+            <button class="mobile-menu-item" onclick="window.toggleTheme()">
+                <span class="menu-icon material-symbols-outlined">palette</span>
+                <span class="menu-text" data-i18n="theme">Tema</span>
+            </button>
+        </div>
+
+        <button class="mobile-menu-item logout" onclick="logout()">
+            <span class="menu-icon material-symbols-outlined">logout</span>
+            <span class="menu-text" data-i18n="logout">Logout</span>
+        </button>
+    </div>
+</div>

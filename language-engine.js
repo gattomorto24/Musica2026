@@ -679,16 +679,20 @@
     const changelogs = {
         it: [
             {
-                version: 'v1.9.1',
-                date: '26 MAGGIO 2026',
+                version: 'v2.0',
+                date: '23 GIUGNO 2026',
                 latest: true,
                 items: [
-                    { title: 'Accesso tab Update', desc: 'Aggiunto il collegamento al tab Update anche dal menu mobile hamburger per i proprietari.' },
-                    { title: 'Header compatto appiccicoso', desc: 'Introdotto header sticky ridotto con titolo centrale e transizioni di scroll per la navigazione mobile/desktop.' },
-                    { title: 'Tema chiaro iOS-style', desc: 'Rifinito il look light mode con superfici glassy, blur, e contrasto morbido per un aspetto più moderno.' },
-                    { title: 'Menu mobile migliorato', desc: 'Sottomenù mobile riorganizzato con nav hamburger più chiara e accesso rapido alle utility.' },
-                    { title: 'Backup e reset amministratore', desc: 'Aggiunte utility di backup settimanali/manuali e reset database protetto da password per maggiore sicurezza.' },
-                    { title: 'Log changelog e versioning', desc: 'Log delle modifiche aggiornato con la voce v1.9.5 per documentare le modifiche più recenti.' }
+                    { title: 'CronoFrost UI 1.0', desc: 'Nuova interfaccia con tab bar centrale arrotondata, pulsanti blur e bordo contrastato per un look moderno e coerente.' },
+                    { title: 'Crono Account System 2.0', desc: 'Reingegnerizzato il sistema account con login personalizzato, gestione profilo completa e ruolo proprietario persistente.' },
+                    { title: 'Ranking Engine 5', desc: 'Aggiornato il motore di classifica per elaborazioni più veloci e formato dati migliorato per mobile e desktop.' },
+                    { title: 'Material You icons', desc: 'Introdotte icone Material You e pill buttons arrotondati per una navigazione più immediata.' },
+                    { title: 'Mobile optimization', desc: 'Ottimizzazione mobile con larghezze dinamiche responsive, menu ridotti e caricamento fluido dei tab.' },
+                    { title: 'Blur e superfici glassy', desc: 'Aggiunti effetti blur su header, menu e modali per un design più premium e spazioso.' },
+                    { title: 'Responsive dynamic width', desc: 'Aggiornata la logica responsive per adattare il layout alle larghezze dei dispositivi in tempo reale.' },
+                    { title: 'Contrast borders', desc: 'Rifinite le cornici del menu e dei pulsanti per migliorare leggibilità e accessibilità.' },
+                    { title: 'Future theme support 2.1', desc: 'Preparato il codice per il prossimo rilascio di temi avanzati con nuove palette e modalità fluidhe.' },
+                    { title: 'Crono API roadmapped', desc: 'Pianificata nuova API Crono per integrazione esterna e automazione dei dati della classifica.' }
                 ]
             },
             {
@@ -809,16 +813,20 @@
         ],
         en: [
             {
-                version: 'v1.9.1',
-                date: 'MAY 26, 2026',
+                version: 'v2.0',
+                date: 'JUNE 23, 2026',
                 latest: true,
                 items: [
-                    { title: 'Update Tab Access', desc: 'Added Update tab access from the mobile hamburger menu for owners.' },
-                    { title: 'Sticky Compact Header', desc: 'Introduced a reduced sticky header with centered title and scroll-aware transitions for mobile and desktop.' },
-                    { title: 'iOS-style Light Theme', desc: 'Refined the light-mode interface with glassy blur surfaces and soft contrast for a modern look.' },
-                    { title: 'Improved Mobile Submenu', desc: 'Reorganized the mobile submenu for clearer navigation and faster access to utilities.' },
-                    { title: 'Admin Backup & Reset', desc: 'Added weekly/manual backup utilities and password-protected database reset for safer admin workflows.' },
-                    { title: 'Changelog Version Logging', desc: 'Updated the changelog with a new v1.9.5 entry to document the latest releases clearly.' }
+                    { title: 'CronoFrost UI 1.0', desc: 'New interface with rounded center tab bar, blur buttons, and contrast borders for a modern cohesive look.' },
+                    { title: 'Crono Account System 2.0', desc: 'Rebuilt account system with custom login, full profile editing, and persistent owner roles.' },
+                    { title: 'Ranking Engine 5', desc: 'Updated ranking engine for faster processing and improved data formatting on mobile and desktop.' },
+                    { title: 'Material You icons', desc: 'Added Material You iconography and rounded pill buttons for faster in-app navigation.' },
+                    { title: 'Mobile optimization', desc: 'Optimized mobile flow with responsive dynamic width behavior, compact menus, and smooth tab transitions.' },
+                    { title: 'Blurs & glassy surfaces', desc: 'Added blur effects on headers, menus, and overlays for a more premium visual feel.' },
+                    { title: 'Responsive dynamic width', desc: 'Enhanced responsive layout logic to adapt in real time across device widths.' },
+                    { title: 'Contrast borders', desc: 'Refined menu and button borders for better readability and visual separation.' },
+                    { title: 'Future theme support 2.1', desc: 'Prepared code for the next theme release with advanced palettes and fluid mode switching.' },
+                    { title: 'Crono API roadmap', desc: 'Planned the new Crono API for external integration and automated ranking data flows.' }
                 ]
             },
             {
@@ -942,16 +950,20 @@
     // Spanish changelog (localized)
     changelogs.es = [
         {
-            version: 'v1.9.1',
-            date: '26 MAYO 2026',
+            version: 'v2.0',
+            date: '23 JUNIO 2026',
             latest: true,
             items: [
-                { title: 'Acceso al tab Update', desc: 'Añadido el enlace al tab Update desde el menú móvil hamburger para los dueños.' },
-                { title: 'Header sticky compacto', desc: 'Introducido header sticky reducido con título centrado y transiciones de scroll para móvil y escritorio.' },
-                { title: 'Tema claro estilo iOS', desc: 'Refinado el aspecto light mode con superficies glassy, blur y contraste suave para un look moderno.' },
-                { title: 'Submenú móvil mejorado', desc: 'Reorganizado el submenú móvil para una navegación más clara y acceso rápido a las utilidades.' },
-                { title: 'Backup y reset admin', desc: 'Añadidas utilidades de backup semanal/manual y reset de base de datos protegido por contraseña.' },
-                { title: 'Registro de changelog y versiones', desc: 'Actualizado el changelog con la nueva entrada v1.9.5 para documentar los cambios más recientes.' }
+                { title: 'CronoFrost UI 1.0', desc: 'Nueva interfaz con barra de tabs redondeada centrada, botones blur y bordes de contraste para un look más moderno.' },
+                { title: 'Crono Account System 2.0', desc: 'Reestructurado el sistema de cuentas con login personalizado, edición completa de perfil y rol propietario persistente.' },
+                { title: 'Ranking Engine 5', desc: 'Actualizado el motor de rankings para un procesamiento más rápido y mejor formato de datos en móvil y escritorio.' },
+                { title: 'Material You icons', desc: 'Añadidas iconografías Material You y botones tipo píldora para una navegación más directa.' },
+                { title: 'Optimización móvil', desc: 'Flujo móvil optimizado con anchos dinámicos responsive, menús compactos y transiciones suaves entre tabs.' },
+                { title: 'Blur y superficies glassy', desc: 'Añadidos efectos blur en headers, menús y overlays para una estética más premium.' },
+                { title: 'Ancho dinámico responsive', desc: 'Mejorada la lógica responsive para adaptarse en tiempo real a las variaciones de ancho de dispositivo.' },
+                { title: 'Bordes de contraste', desc: 'Refinados los bordes de menús y botones para mejorar la legibilidad y separación visual.' },
+                { title: 'Soporte de temas 2.1', desc: 'Preparado el código para el próximo lanzamiento de temas avanzados con nuevas paletas.' },
+                { title: 'Hoja de ruta Crono API', desc: 'Planificada la nueva API Crono para integración externa y automatización de datos de ranking.' }
             ]
         }
     ].concat(changelogs.en.slice(1));

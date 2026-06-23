@@ -10,36 +10,35 @@
     <script src="theme-engine.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-mode">
 
-<div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
-<div id="mobile-menu">
-    <h2 style="color: var(--accent); letter-spacing: 4px; margin-bottom: 20px; font-size: 0.8rem;" data-i18n="account_menu">MENU ACCOUNT</h2>
-    <button class="nav-btn" onclick="mobileNavigate('index.html')" data-i18n="home">Home</button>
-    <button class="nav-btn" onclick="mobileTab('login')" data-i18n="login">Login</button>
-    <button class="nav-btn" onclick="mobileTab('signup')" data-i18n="registration">Registrazione</button>
-    <button class="nav-btn" onclick="mobileTab('reset')" data-i18n="recovery">Recupero</button>
-    <button class="nav-btn" onclick="mobileTab('profile')" data-i18n="profile">Profilo</button>
-    <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;"></div>
-    <button class="nav-btn" onclick="window.cycleLanguage()" style="background: var(--glass); border-color: var(--accent); color: var(--accent);">🌐 <span data-i18n="language">Lingua</span></button>
-    <button class="nav-btn" onclick="window.toggleTheme()" style="background: var(--glass); border-color: var(--accent); color: var(--accent);">🎨 <span data-i18n="theme">Tema</span></button>
-    <button class="nav-btn" onclick="logoutUser()" style="border-color: var(--danger); color: var(--danger);" data-i18n="logout">Logout</button>
-</div>
+<!-- Shared header and menu will be loaded here -->
+<div id="site-header"></div>
+<div id="site-menu"></div>
 
 <div class="container account">
-    <header>
-        <h1>CRONOSOUND</h1>
-        <p data-i18n="account_management">Account Management System</p>
-    </header>
 
-    <div class="nav-tabs">
-        <button id="tab-login" class="nav-btn active" onclick="showTab('login')" data-i18n="login">Login</button>
-        <button id="tab-signup" class="nav-btn" onclick="showTab('signup')" data-i18n="registration">Registrazione</button>
-        <button id="tab-reset" class="nav-btn" onclick="showTab('reset')" data-i18n="recovery">Recupero</button>
-        <button id="tab-profile" class="nav-btn" onclick="showTab('profile')" data-i18n="profile">Profilo</button>
+    <!-- ACCOUNT SECTION NAVIGATION PILLS -->
+    <div class="account-nav-pills">
+        <button class="account-pill active" data-section="login" onclick="switchAccountTab('login')">
+            <span class="material-symbols-outlined">login</span>
+            <span data-i18n="login">Accedi</span>
+        </button>
+        <button class="account-pill" data-section="signup" onclick="switchAccountTab('signup')">
+            <span class="material-symbols-outlined">person_add</span>
+            <span data-i18n="register">Registrati</span>
+        </button>
+        <button class="account-pill" data-section="reset" onclick="switchAccountTab('reset')">
+            <span class="material-symbols-outlined">vpn_key</span>
+            <span data-i18n="recovery">Recupera</span>
+        </button>
+        <button class="account-pill" data-section="profile" onclick="switchAccountTab('profile')">
+            <span class="material-symbols-outlined">person</span>
+            <span data-i18n="your_profile">Profilo</span>
+        </button>
     </div>
 
     <div id="signup-popup" class="modal-overlay" style="display: none;">
@@ -51,20 +50,29 @@
     </div>
 
     <!-- LOGIN SECTION -->
-    <div id="section-login" class="glass-card">
-        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;" data-i18n="login_to_system">Accedi al Sistema</h2>
+    <div id="section-login" class="glass-card section-card">
+        <div class="section-card-header">
+            <p class="section-card-eyebrow" data-i18n="login_to_system">Accesso</p>
+            <h2 data-i18n="login_to_system">Accedi al Sistema</h2>
+        </div>
         <div id="login-error" class="error-msg" style="display: none;"></div>
         <input type="email" id="login-email" class="input-field" data-i18n="email" placeholder="Email" required>
         <input type="password" id="login-password" class="input-field" data-i18n="password" placeholder="Password" required>
-        <button class="btn-primary" onclick="loginUser()" data-i18n="login">Accedi</button>
-        <p style="text-align: center; font-size: 0.8rem; color: var(--text-dim);">
-            <span data-i18n="forgot_password">Password dimenticata?</span> <span class="link" onclick="showTab('reset')" data-i18n="recovery">Recupera</span>
-        </p>
+        <div class="section-actions">
+            <button class="btn-primary" onclick="loginUser()" data-i18n="login">Accedi</button>
+            <button class="btn-secondary" onclick="loginAsGuest()" title="Accedi come utente temporaneo">Accedi come Guest</button>
+            <p class="section-note">
+                <span data-i18n="forgot_password">Password dimenticata?</span> <span class="link" onclick="showTab('reset')" data-i18n="recovery">Recupera</span>
+            </p>
+        </div>
     </div>
 
     <!-- SIGNUP SECTION -->
-    <div id="section-signup" class="glass-card" style="display: none;">
-        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;" data-i18n="create_account">Crea Nuovo Account</h2>
+    <div id="section-signup" class="glass-card section-card" style="display: none;">
+        <div class="section-card-header">
+            <p class="section-card-eyebrow" data-i18n="create_account">Registrazione</p>
+            <h2 data-i18n="create_account">Crea Nuovo Account</h2>
+        </div>
         <div id="signup-error" class="error-msg" style="display: none;"></div>
         <div id="signup-success" class="success-msg" style="display: none;"></div>
         <input type="text" id="signup-nome" class="input-field" data-i18n="full_name" placeholder="Nome Completo" required>
@@ -72,96 +80,127 @@
         <input type="password" id="signup-password" class="input-field" data-i18n="password" placeholder="Password" required>
         <input type="tel" id="signup-telefono" class="input-field" data-i18n="phone_number" placeholder="Numero di Telefono" required>
         <input type="date" id="signup-data" class="input-field" data-i18n="birthdate_label" required>
-        <button class="btn-primary" onclick="signupUser()" data-i18n="register">Registrati</button>
-        <p style="text-align: center; font-size: 0.8rem; color: var(--text-dim);">
-            <span data-i18n="already_account">Hai già un account?</span> <span class="link" onclick="showTab('login')" data-i18n="login">Accedi</span>
-        </p>
+        <div class="section-actions">
+            <button class="btn-primary" onclick="signupUser()" data-i18n="register">Registrati</button>
+            <p class="section-note">
+                <span data-i18n="already_account">Hai già un account?</span> <span class="link" onclick="showTab('login')" data-i18n="login">Accedi</span>
+            </p>
+        </div>
     </div>
 
     <!-- RESET PASSWORD SECTION -->
-    <div id="section-reset" class="glass-card" style="display: none;">
-        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;" data-i18n="password_recovery_title">Recupero Password</h2>
+    <div id="section-reset" class="glass-card section-card" style="display: none;">
+        <div class="section-card-header">
+            <p class="section-card-eyebrow" data-i18n="password_recovery_title">Recupero</p>
+            <h2 data-i18n="password_recovery_title">Recupero Password</h2>
+        </div>
         <div id="reset-error" class="error-msg" style="display: none;"></div>
         <div id="reset-success" class="success-msg" style="display: none;"></div>
-        <div id="reset-step1">
+        <div id="reset-step1" class="section-row">
             <input type="email" id="reset-email" class="input-field" data-i18n="enter_email" placeholder="Inserisci la tua Email" required>
             <button class="btn-primary" onclick="verifyEmailForReset()" data-i18n="verify_email">Verifica Email</button>
         </div>
-        <div id="reset-step2" style="display: none;">
-            <p style="text-align: center; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 15px;" data-i18n="confirm_data">Per sicurezza, conferma uno dei tuoi dati salvati:</p>
+        <div id="reset-step2" class="section-row" style="display: none;">
+            <p class="section-note" data-i18n="confirm_data">Per sicurezza, conferma uno dei tuoi dati salvati:</p>
             <input type="text" id="reset-confirm" class="input-field" data-i18n="name_or_phone" placeholder="Nome o Telefono" required>
-            <button class="btn-primary" onclick="confirmAndReset()" data-i18n="confirm_and_send">Conferma e Invia Reset</button>
-            <button class="btn-secondary" onclick="backToResetStep1()" data-i18n="back">Indietro</button>
+            <div class="section-actions">
+                <button class="btn-primary" onclick="confirmAndReset()" data-i18n="confirm_and_send">Conferma e Invia Reset</button>
+                <button class="btn-secondary" onclick="backToResetStep1()" data-i18n="back">Indietro</button>
+            </div>
         </div>
-        <p style="text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+        <p class="section-note">
             <span data-i18n="remember_password">Ricordi la password?</span> <span class="link" onclick="showTab('login')" data-i18n="login">Accedi</span>
         </p>
     </div>
 
     <!-- PROFILE SECTION -->
-    <div id="section-profile" class="glass-card" style="display: none;">
-        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;" data-i18n="your_profile">Il Tuo Profilo</h2>
+    <div id="section-profile" class="glass-card section-card" style="display: none;">
+        <div class="section-card-header">
+            <div>
+                <p class="section-card-eyebrow" data-i18n="your_profile">Profilo</p>
+                <h2 data-i18n="your_profile">Il Tuo Profilo</h2>
+            </div>
+        </div>
         <div id="profile-error" class="error-msg" style="display: none;"></div>
         <div id="profile-success" class="success-msg" style="display: none;"></div>
-        <input type="text" id="profile-nome" class="input-field" data-i18n="full_name" placeholder="Nome Completo" readonly>
-        <input type="email" id="profile-email" class="input-field" data-i18n="email" placeholder="Email" readonly>
-        <div id="profile-role" style="margin-bottom: 15px; font-size: 0.85rem; color: var(--accent);"></div>
-        <input type="tel" id="profile-telefono" class="input-field" data-i18n="phone_number" placeholder="Numero di Telefono">
-        <input type="date" id="profile-data" class="input-field" data-i18n="birthdate_label">
-        <button class="btn-primary" onclick="updateProfile()" data-i18n="update_profile">Aggiorna Profilo</button>
-        <button id="manager-request-btn" class="btn-secondary" style="display: none; margin-bottom: 15px;" onclick="requestManagerStatus()" data-i18n="request_manager_status">Richiedi status Manager</button>
-        <button class="btn-secondary" onclick="logoutUser()" data-i18n="logout">Logout</button>
+        <div class="section-row">
+            <input type="text" id="profile-nome" class="input-field" data-i18n="full_name" placeholder="Nome Completo">
+            <input type="email" id="profile-email" class="input-field" data-i18n="email" placeholder="Email">
+            <input id="profile-role" class="profile-status" type="text" readonly hidden>
+            <input type="tel" id="profile-telefono" class="input-field" data-i18n="phone_number" placeholder="Numero di Telefono">
+            <input type="date" id="profile-data" class="input-field" data-i18n="birthdate_label">
+            <input type="password" id="profile-password" class="input-field" data-i18n="password" placeholder="Nuova Password">
+        </div>
+        <div class="section-actions">
+            <button class="btn-primary" onclick="updateProfile()" data-i18n="update_profile">Aggiorna Profilo</button>
+            <button id="manager-request-btn" class="btn-secondary" style="display: none;" onclick="requestManagerStatus()" data-i18n="request_manager_status">Richiedi status Manager</button>
+            
+            <button class="btn-secondary logout-btn" onclick="logoutUser()" data-i18n="logout">Logout</button>
+        </div>
     </div>
 
     <!-- OWNER PROFILE SECTION -->
-    <div id="section-profile-owner" class="glass-card" style="display: none;">
-        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;" data-i18n="owner_panel">Pannello Owner</h2>
+    <div id="section-profile-owner" class="glass-card section-card" style="display: none;">
+        <div class="section-card-header">
+            <div>
+                <p class="section-card-eyebrow" data-i18n="owner_panel">Owner</p>
+                <h2 data-i18n="owner_panel">Pannello Owner</h2>
+            </div>
+        </div>
         <div id="profile-owner-error" class="error-msg" style="display: none;"></div>
         <div id="profile-owner-success" class="success-msg" style="display: none;"></div>
-        <div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: rgba(0, 255, 204, 0.1); border: 1px solid var(--accent);">
-            <p style="font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 8px;" data-i18n="status">Stato</p>
-            <p id="owner-profile-nome" style="font-size: 1rem; font-weight: 800; color: #00ffcc;"></p>
-            <p id="owner-profile-email" style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;"></p>
+        <div class="owner-status-card">
+            <p class="section-card-eyebrow" data-i18n="status">Stato</p>
+            <p id="owner-profile-nome" class="owner-name"></p>
+            <p id="owner-profile-email" class="owner-email"></p>
         </div>
-        <div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: rgba(255, 180, 0, 0.1); border: 1px solid rgba(255, 180, 0, 0.5);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <p style="font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin: 0;" data-i18n="edit_sensitive">Modifica Dati Sensibili</p>
+        <div class="owner-edit-card">
+            <div class="owner-edit-header">
+                <p class="section-card-eyebrow" data-i18n="edit_sensitive">Modifica Dati Sensibili</p>
                 <label class="toggle-switch">
                     <input type="checkbox" id="owner-edit-toggle" onchange="toggleOwnerEdit()">
-                    <span class="toggle-slider"></span>
+                    
                 </label>
             </div>
             <div id="owner-edit-section" style="display: none;">
-                <input type="text" id="owner-edit-nome" class="input-field" data-i18n="full_name" placeholder="Nome Completo" style="margin-bottom: 10px;">
-                <input type="email" id="owner-edit-email" class="input-field" data-i18n="email" placeholder="Email" style="margin-bottom: 10px;">
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-primary" style="flex: 1; margin-bottom: 0; font-size: 0.85rem; padding: 12px;" onclick="saveOwnerSensitiveData()" data-i18n="save">Salva</button>
-                    <button class="btn-secondary" style="flex: 1; margin-bottom: 0; font-size: 0.85rem; padding: 12px;" onclick="cancelOwnerEdit()" data-i18n="cancel">Annulla</button>
+                <input type="text" id="owner-edit-nome" class="input-field" data-i18n="full_name" placeholder="Nome Completo">
+                <input type="email" id="owner-edit-email" class="input-field" data-i18n="email" placeholder="Email">
+                <div class="section-actions">
+                    <button class="btn-primary" onclick="saveOwnerSensitiveData()" data-i18n="save">Salva</button>
+                    <button class="btn-secondary" onclick="cancelOwnerEdit()" data-i18n="cancel">Annulla</button>
                 </div>
             </div>
         </div>
-        <div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: rgba(0, 242, 255, 0.1); border: 1px solid var(--accent);">
-            <p style="font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 10px;" data-i18n="owner_privileges">Privilegi Owner</p>
-            <ul style="list-style: none; font-size: 0.85rem;">
-                <li style="margin-bottom: 8px;" data-i18n="full_ranking_access">✓ Accesso completo alla classifica</li>
-                <li style="margin-bottom: 8px;" data-i18n="weekly_update">✓ Aggiornamento settimanale dati</li>
-                <li style="margin-bottom: 8px;" data-i18n="manager_requests">✓ Gestione manager requests</li>
-                <li style="margin-bottom: 8px;" data-i18n="archive_access">✓ Accesso archivio storico</li>
-                <li data-i18n="db_reset">✓ Reset database</li>
+        <div class="owner-privileges-card">
+            <p class="section-card-eyebrow" data-i18n="owner_privileges">Privilegi Owner</p>
+            <ul>
+                <li data-i18n="full_ranking_access">Accesso completo alla classifica</li>
+                <li data-i18n="weekly_update">Aggiornamento settimanale dati</li>
+                <li data-i18n="manager_requests">Gestione manager requests</li>
+                <li data-i18n="archive_access">Accesso archivio storico</li>
+                <li data-i18n="db_reset">Reset database</li>
             </ul>
         </div>
-        <div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: rgba(255, 255, 255, 0.05);">
-            <p style="font-size: 0.75rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 10px;" data-i18n="last_logins">Ultimi Accessi</p>
-            <p id="owner-last-login" style="font-size: 0.85rem; color: var(--text-dim);" data-i18n="system_initialized">Sistema inizializzato</p>
+        <div class="owner-logins-card">
+            <p class="section-card-eyebrow" data-i18n="last_logins">Ultimi Accessi</p>
+            <p id="owner-last-login" class="section-note" data-i18n="system_initialized">Sistema inizializzato</p>
         </div>
-        <button class="btn-secondary" style="margin-bottom: 10px;" onclick="logoutUser()" data-i18n="logout">Logout</button>
+        <div class="owner-danger-card" style="background: rgba(255, 80, 100, 0.1); border: 1px solid rgba(255, 80, 100, 0.3); border-radius: 20px; padding: 22px; margin-bottom: 20px;">
+            <p class="section-card-eyebrow" style="color: rgba(255, 80, 100, 0.9);">Azioni Pericolo</p>
+            <p class="section-note" style="color: rgba(255, 80, 100, 0.8);">Elimina tutti gli account dal database (azione irreversibile)</p>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button class="btn-secondary" style="border-color: rgba(255, 80, 100, 0.5); color: rgba(255, 80, 100, 0.95); margin-top: 12px;" onclick="if(confirm('Sei sicuro? Questo eliminerà TUTTI gli account dal database.')) deleteAllAccounts()">Elimina Tutti Account</button>
+                
+            </div>
+        </div>
+        <button class="btn-secondary logout-btn" onclick="logoutUser()" data-i18n="logout">Logout</button>
     </div>
 </div>
 
 <script>
     // Configurazione Supabase
-    const SB_URL = 'https://pncoijuwnpjotuhaadnm.supabase.co'; 
-    const SB_KEY = 'sb_publishable_N18u9kZBONU3rohS7XoYOQ_UJPaTSUe';
+    const SB_URL = 'https://hsizmfcdgisfxoeqptyb.supabase.co'; 
+    const SB_KEY = 'sb_publishable_B54wNo9XyP6k5lDZIdarvA_NiHQ5Wk4';
     const OWNER_EMAIL = 'stranoanto79@gmail.com';
     const OWNER_CONTACT_EMAIL = 'stranoanto79@gmail.com';
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
@@ -169,6 +208,25 @@
     let currentUser = null;
     let resetUserData = null; // Per salvare i dati dell'utente durante il reset
     let isOwner = false;
+
+    // Load shared header and menu dynamically
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const [hResp, mResp] = await Promise.all([fetch('header.html'), fetch('menu.html')]);
+            if (hResp.ok) {
+                document.getElementById('site-header').innerHTML = await hResp.text();
+            } else {
+                console.error('Failed to load header.html', hResp.status);
+            }
+            if (mResp.ok) {
+                document.getElementById('site-menu').innerHTML = await mResp.text();
+            } else {
+                console.error('Failed to load menu.html', mResp.status);
+            }
+        } catch (err) {
+            console.error('Error loading shared fragments', err);
+        }
+    });
 
     // Funzione per mostrare le sezioni
     function showTab(tab) {
@@ -201,6 +259,16 @@
         if (showErrorAfter) {
             showError(showErrorAfter[0], showErrorAfter[1]);
         }
+    }
+
+    // Handle navigation pills: update active state and show section
+    function switchAccountTab(section) {
+        // Update pill active states
+        document.querySelectorAll('.account-pill').forEach(pill => {
+            pill.classList.toggle('active', pill.dataset.section === section);
+        });
+        // Show the section
+        showTab(section);
     }
 
     function toggleOwnerEdit() {
@@ -313,6 +381,23 @@
 
     // Controllo sessione all'avvio
     async function checkSession() {
+        // Controlla prima sessionStorage (da login custom)
+        const savedUser = sessionStorage.getItem('currentUser');
+        const savedIsOwner = sessionStorage.getItem('isOwner');
+        
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            isOwner = savedIsOwner === 'true';
+            loadProfile();
+            if (window.location.hash === '#profile') {
+                showTab('profile');
+            } else {
+                showTab('profile');
+            }
+            return;
+        }
+        
+        // Fallback a Supabase Auth
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session) {
             currentUser = session.user;
@@ -328,7 +413,7 @@
         }
     }
 
-    // Login utente
+    // Login utente - Custom login from accounts table (bypasses Supabase Auth rate limit)
     async function loginUser() {
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
@@ -336,6 +421,46 @@
             showError('login-error', 'Inserisci email e password.');
             return;
         }
+        
+        try {
+            // Try custom login from accounts table first
+            const { data: accountData, error: accountError } = await supabaseClient
+                .from('accounts')
+                .select('*')
+                .eq('email', email)
+                .single();
+            
+            if (!accountError && accountData) {
+                // If the accounts table contains a password column, verify it (plaintext comparison)
+                if (typeof accountData.password !== 'undefined') {
+                    if (accountData.password !== password) {
+                        showError('login-error', 'Credenziali non valide.');
+                        return;
+                    }
+                }
+                // Account found in database - simulate login
+                currentUser = {
+                    id: accountData.id,
+                    email: accountData.email,
+                    user_metadata: {
+                        nome: accountData.nome
+                    }
+                };
+                // Carica is_owner dal database
+                isOwner = accountData.is_owner === true;
+                // Salva in sessionStorage prima del redirect
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                sessionStorage.setItem('isOwner', isOwner ? 'true' : 'false');
+                loadProfile();
+                showSuccess('login-error', 'Login effettuato con successo!');
+                setTimeout(() => window.location.href = 'index.html', 1500);
+                return;
+            }
+        } catch (e) {
+            console.log('Custom login attempt failed, trying Supabase Auth');
+        }
+        
+        // Fallback to Supabase Auth if account not found in custom database
         const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: email,
             password: password
@@ -349,9 +474,30 @@
             }
         } else {
             currentUser = data.user;
+            isOwner = data.user.email === OWNER_EMAIL;
+            // Salva in sessionStorage prima del redirect
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+            sessionStorage.setItem('isOwner', isOwner ? 'true' : 'false');
             loadProfile();
             window.location.href = 'index.html'; // Reindirizza a index.html dopo login
         }
+    }
+
+    // Login as temporary guest (client-side only)
+    function loginAsGuest() {
+        currentUser = {
+            id: 'guest',
+            email: 'guest@local',
+            user_metadata: { nome: 'Guest' }
+        };
+        isOwner = false;
+        // Save to sessionStorage so other pages pick up the temporary session
+        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        sessionStorage.setItem('isOwner', 'false');
+        showSuccess('login-error', 'Accesso come Guest effettuato.');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 800);
     }
 
     // Registrazione utente
@@ -377,18 +523,44 @@
                 showError('signup-error', 'Registrazione riuscita, ma non è stato possibile salvare il profilo. Riprova più tardi.');
                 return;
             }
-            // Salva dati extra in profiles
-            const { error: profileError } = await supabaseClient
-                .from('profiles')
-                .insert([{ 
-                    user_id: userId,
-                    nome: nome,
-                    email: email,
-                    telefono: telefono,
-                    data_nascita: dataNascita
-                }]);
+            
+            // Attendi e poi prova a fare login
+            await new Promise(r => setTimeout(r, 500));
+            const { error: loginError } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+            
+            if (loginError) {
+                console.warn('Auto-login dopo signup:', loginError);
+            }
+            
+            // Attendi un altro momento per assicurare sessione attiva
+            await new Promise(r => setTimeout(r, 1000));
+            
+            // Salva dati extra in accounts con retry
+            let profileError = null;
+            for (let attempt = 0; attempt < 3; attempt++) {
+                const { error: err } = await supabaseClient
+                    .from('accounts')
+                    .insert([{ 
+                        email: email,
+                        nome: nome,
+                        telefono: telefono,
+                        data_nascita: dataNascita,
+                        password: password
+                    }]);
+                
+                if (!err) {
+                    profileError = null;
+                    break;
+                }
+                profileError = err;
+                if (attempt < 2) await new Promise(r => setTimeout(r, 500));
+            }
+            
             if (profileError) {
-                showError('signup-error', 'Errore nel salvare il profilo: ' + profileError.message);
+                showError('signup-error', 'Errore nel salvare il profilo: ' + profileError.message + ' (assicurati che il RLS sia disabilitato su profiles o che la policy sia corretta)');
             } else {
                 showSignupPopup();
                 document.getElementById('signup-nome').value = '';
@@ -493,9 +665,9 @@ Grazie.`);
         if (!currentUser) return;
         try {
             const { data, error } = await supabaseClient
-                .from('profiles')
+                .from('accounts')
                 .select('*')
-                .eq('user_id', currentUser.id);
+                .eq('email', currentUser.email);
             
             if (error) {
                 console.error('Errore query profilo:', error);
@@ -518,15 +690,23 @@ Grazie.`);
             }
             
             const profileData = data[0];
+            // Aggiorna isOwner dal database
+            isOwner = profileData.is_owner === true;
+            
             if (isOwner) {
                 // Profilo Owner
+                document.getElementById('section-profile-owner').style.display = 'block';
+                document.getElementById('section-profile').style.display = 'none';
                 document.getElementById('owner-profile-nome').innerText = profileData.nome || 'Owner';
                 document.getElementById('owner-profile-email').innerText = profileData.email || currentUser.email;
                 document.getElementById('owner-last-login').innerText = 'Ultimo accesso: ' + new Date().toLocaleString('it-IT');
             } else {
                 // Profilo Standard
+                document.getElementById('section-profile-owner').style.display = 'none';
+                document.getElementById('section-profile').style.display = 'block';
                 document.getElementById('profile-nome').value = profileData.nome || '';
                 document.getElementById('profile-email').value = profileData.email || '';
+                document.getElementById('profile-password').value = '';
                 document.getElementById('profile-telefono').value = profileData.telefono || '';
                 document.getElementById('profile-data').value = profileData.data_nascita || '';
                 const roleLabel = document.getElementById('profile-role');
@@ -546,36 +726,103 @@ Grazie.`);
 
     // Aggiorna profilo
     async function updateProfile() {
+        const nome = document.getElementById('profile-nome').value;
+        const email = document.getElementById('profile-email').value;
+        const password = document.getElementById('profile-password').value;
         const telefono = document.getElementById('profile-telefono').value;
         const dataNascita = document.getElementById('profile-data').value;
-        if (!telefono || !dataNascita) {
-            showError('profile-error', 'Telefono e data di nascita sono obbligatori.');
+        if (!nome || !email || !telefono || !dataNascita) {
+            showError('profile-error', 'Nome, email, telefono e data di nascita sono obbligatori.');
             return;
         }
+
+        const updateData = {
+            nome: nome,
+            email: email,
+            telefono: telefono,
+            data_nascita: dataNascita
+        };
+        if (password) {
+            updateData.password = password;
+        }
+
         const { error } = await supabaseClient
-            .from('profiles')
-            .update({
-                telefono: telefono,
-                data_nascita: dataNascita
-            })
-            .eq('user_id', currentUser.id);
+            .from('accounts')
+            .update(updateData)
+            .eq('email', currentUser.email);
         if (error) {
             showError('profile-error', error.message);
-        } else {
-            showSuccess('profile-success', 'Profilo aggiornato con successo!');
+            return;
         }
+
+        currentUser.email = email;
+        if (currentUser.user_metadata) {
+            currentUser.user_metadata.nome = nome;
+        }
+        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        sessionStorage.setItem('isOwner', isOwner ? 'true' : 'false');
+
+        showSuccess('profile-success', 'Profilo aggiornato con successo!');
+        document.getElementById('profile-password').value = '';
     }
 
     // Logout
     async function logoutUser() {
-        const { error } = await supabaseClient.auth.signOut();
-        if (error) {
-            alert('Errore nel logout: ' + error.message);
-        } else {
-            currentUser = null;
-            window.location.href = 'account.html';
+        // Clear custom session state first
+        currentUser = null;
+        isOwner = false;
+        sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('isOwner');
+
+        // Try to sign out any Supabase auth session if present
+        try {
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) {
+                console.warn('Supabase logout error:', error.message);
+            }
+        } catch (err) {
+            console.warn('Supabase logout failed:', err);
+        }
+
+        window.location.href = 'account.html';
+    }
+
+    // Temporary function to delete all accounts (for resetting the database architecture)
+    async function deleteAllAccounts() {
+        try {
+            // Delete all accounts from the accounts table
+            const { data: accounts, error: fetchError } = await supabaseClient
+                .from('accounts')
+                .select('email');
+            
+            if (fetchError) {
+                showError('profile-owner-error', 'Errore nel caricamento account: ' + fetchError.message);
+                return;
+            }
+
+            // Delete from accounts table
+            const { error: deleteError } = await supabaseClient
+                .from('accounts')
+                .delete()
+                .neq('email', '');
+
+            if (deleteError) {
+                showError('profile-owner-error', 'Errore nell\'eliminazione: ' + deleteError.message);
+                return;
+            }
+
+            if (accounts && accounts.length > 0) {
+                console.log('Eliminati ' + accounts.length + ' account dal database.');
+            }
+
+            showSuccess('profile-owner-success', 'Tutti gli account sono stati eliminati dal database.');
+            setTimeout(() => window.location.href = 'account.html', 2000);
+        } catch (err) {
+            showError('profile-owner-error', 'Errore durante l\'eliminazione: ' + err.message);
         }
     }
+
+    
 
     // Inizializza
     checkSession();

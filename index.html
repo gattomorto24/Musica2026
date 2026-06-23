@@ -13,6 +13,8 @@
     <script src="admin-panel.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Material Symbols (Material You) for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -26,6 +28,25 @@
             window.location.href = 'account.html';
         }
     }
+        // Load shared header and menu dynamically
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const [hResp, mResp] = await Promise.all([fetch('header.html'), fetch('menu.html')]);
+                if (hResp.ok) {
+                    document.getElementById('site-header').innerHTML = await hResp.text();
+                } else {
+                    console.error('Failed to load header.html', hResp.status);
+                }
+                if (mResp.ok) {
+                    document.getElementById('site-menu').innerHTML = await mResp.text();
+                } else {
+                    console.error('Failed to load menu.html', mResp.status);
+                }
+            } catch (err) {
+                console.error('Error loading shared fragments', err);
+            }
+        });
+
 </script>
 
 <div id="loader-overlay">
@@ -69,7 +90,18 @@
     </div>
 </div>
 
-
+<div id="sort-overlay" class="modal-overlay" onclick="closeSortMenu()" style="display: none;">
+    <div class="popup-card sort-popup" onclick="event.stopPropagation()">
+        <h3>Ordina Classifica</h3>
+        <p>Scegli come visualizzare la classifica.</p>
+        <div class="sort-options">
+            <button type="button" class="sort-option-btn" onclick="applySort('pts')">Punti</button>
+            <button type="button" class="sort-option-btn" onclick="applySort('name')">Nome</button>
+            <button type="button" class="sort-option-btn" onclick="applySort('serie')">Serie</button>
+            <button type="button" class="sort-option-btn secondary" onclick="closeSortMenu()">Annulla</button>
+        </div>
+    </div>
+</div>
 
 <div id="export-overlay">
     <div class="system-alert-card export-card">
@@ -131,82 +163,20 @@
 
 <div class="app-container">
     <!-- Header Section -->
-    <header class="main-header">
-        <div class="header-content">
-            <div class="logo-section">
-                <h1 onclick="showTab('live')" title="Torna a Classifica Generale">CRONOSOUND</h1>
-                <p class="subtitle">Professional Cloud OS</p>
-            </div>
-            <div class="user-section">
-                <p id="user-name" class="user-greeting"></p>
-            </div>
-        </div>
-        <div class="header-compact-title">CRONOSOUND</div>
-    </header>
-
-    <!-- Navigation -->
-    <nav class="main-nav">
-        <div class="nav-content">
-            <div class="nav-tabs">
-                <button id="nav-live" class="nav-tab active" onclick="showTab('live')">
-                    <span class="tab-icon">🏆</span>
-                    <span class="tab-text" data-i18n="ranking">Ranking</span>
-                </button>
-                <button id="nav-upd" class="nav-tab" onclick="showTab('upd')">
-                    <span class="tab-icon">📊</span>
-                    <span class="tab-text" data-i18n="update">Aggiorna</span>
-                </button>
-                <button id="nav-hist" class="nav-tab" onclick="showTab('hist')">
-                    <span class="tab-icon">📚</span>
-                    <span class="tab-text" data-i18n="archive">Archivio</span>
-                </button>
-                <button id="nav-mod" class="nav-tab" style="display:none" onclick="showTab('mod')">
-                    <span class="tab-icon">✏️</span>
-                    <span class="tab-text">Modifica</span>
-                </button>
-                <button id="nav-album" class="nav-tab" style="display:none" onclick="showTab('album')">
-                    <span class="tab-icon">💿</span>
-                    <span class="tab-text">Album</span>
-                </button>
-                <button id="nav-news" class="nav-tab" style="display:none" onclick="showTab('news')">
-                    <span class="tab-icon">📰</span>
-                    <span class="tab-text">Notizie</span>
-                </button>
-            </div>
-        </div>
-    </nav>
+    <!-- Shared header and menu will be loaded here -->
+    <div id="site-header"></div>
+    <div id="site-menu"></div>
 
     <!-- Main Content -->
     <main class="main-content">
         <!-- Live Ranking Tab -->
         <section id="tab-live" class="content-section active">
-            <div class="section-header">
-                <h2 data-i18n="general_ranking">Classifica Generale</h2>
-                <div class="section-actions">
-                    <button class="action-btn caps-btn" onclick="toggleCoverVisibility()" title="Mostra o nascondi le copertine delle canzoni">
-                        <span class="btn-icon">🖼️</span>
-                        <span class="btn-text">Disattiva Copertine</span>
-                    </button>
-                    <button class="action-btn export-btn" onclick="toggleExportOverlay()" data-i18n-title="title_export" title="Apri le opzioni di esportazione">
-                        <span class="btn-icon">📊</span>
-                        <span class="btn-text" data-i18n="export">Esporta</span>
-                    </button>
-                </div>
-            </div>
-            
             <div class="ranking-container">
-                <div class="ranking-table-wrapper">
-                    <table class="ranking-table">
-                        <thead>
-                            <tr>
-                                <th class="pos-col" data-i18n="position_header">Pos</th>
-                                <th class="song-col" data-i18n="song_series">Canzone / Serie</th>
-                                <th class="pts-col" data-i18n="points_header">Punti Totali</th>
-                            </tr>
-                        </thead>
-                        <tbody id="live-body"></tbody>
-                    </table>
+                <div class="ranking-list-header">
+                    <span class="ranking-badge">Classifica Generale</span>
+                    <div class="ranking-status">Settimana <strong id="ranking-week-display">-</strong></div>
                 </div>
+                <div id="live-body" class="ranking-list"></div>
             </div>
         </section>
         <!-- Modifica (Owner) Tab -->
@@ -395,118 +365,42 @@
         </section>
     </main>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <div class="search-wrapper">
-            <input type="text" id="global-search" class="search-input" data-i18n="search_placeholder" placeholder="Cerca canzoni o album..." oninput="filterData()">
-            <div class="search-icon">🔍</div>
-        </div>
-    </div>
+    <!-- Mobile menu now loaded from menu.html -->
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="mobile-menu">
-        <div class="mobile-menu-header">
-            <h3 data-i18n="system_menu">MENU SISTEMA</h3>
-            <button class="mobile-menu-close" type="button" onclick="toggleMenu()">✕</button>
-        </div>
-        <div class="mobile-menu-content">
-            <div class="mobile-menu-group accordion-group">
-                <button class="mobile-menu-group-toggle" type="button" onclick="toggleMenuGroup(this)">
-                    <span>Navigazione</span>
-                    <span class="group-arrow">▶</span>
-                </button>
-                <div class="mobile-menu-group-body">
-                    <button class="mobile-menu-item" onclick="mobileTab('live')">
-                        <span class="menu-icon">🏆</span>
-                        <span class="menu-text" data-i18n="general_ranking_menu">Classifica Generale</span>
-                    </button>
-                    <button id="mobile-upd-btn" class="mobile-menu-item" onclick="mobileTab('upd')">
-                        <span class="menu-icon">📊</span>
-                        <span class="menu-text" data-i18n="new_week">Nuova Settimana</span>
-                    </button>
-                    <button class="mobile-menu-item" onclick="mobileTab('hist')">
-                        <span class="menu-icon">📚</span>
-                        <span class="menu-text" data-i18n="archive_menu">Archivio</span>
-                    </button>
-                </div>
-            </div>
-            <div class="mobile-menu-group accordion-group">
-                <button class="mobile-menu-group-toggle" type="button" onclick="toggleMenuGroup(this)">
-                    <span>Owner</span>
-                    <span class="group-arrow">▶</span>
-                </button>
-                <div class="mobile-menu-group-body">
-                    <button id="mobile-upd-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('upd')">
-                        <span class="menu-icon">🛠️</span>
-                        <span class="menu-text">Update (Owner)</span>
-                    </button>
-                    <button id="mobile-mod-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('mod')">
-                        <span class="menu-icon">✏️</span>
-                        <span class="menu-text">Modifica (Owner)</span>
-                    </button>
-                    <button id="mobile-album-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('album')">
-                        <span class="menu-icon">💿</span>
-                        <span class="menu-text">Album</span>
-                    </button>
-                    <button id="mobile-news-btn" class="mobile-menu-item" style="display:none" onclick="mobileTab('news')">
-                        <span class="menu-icon">📰</span>
-                        <span class="menu-text">Notizie</span>
-                    </button>
-                </div>
-            </div>
-            <div class="mobile-menu-group accordion-group">
-                <button class="mobile-menu-group-toggle" type="button" onclick="toggleMenuGroup(this)">
-                    <span>Azioni rapide</span>
-                    <span class="group-arrow">▶</span>
-                </button>
-                <div class="mobile-menu-group-body">
-                    <button class="mobile-menu-item" onclick="mobileNavigate('info.html')">
-                        <span class="menu-icon">ℹ️</span>
-                        <span class="menu-text" data-i18n="info">Info</span>
-                    </button>
-                    <button class="mobile-menu-item" onclick="mobileNavigate('account.html#profile')">
-                        <span class="menu-icon">👤</span>
-                        <span class="menu-text" data-i18n="profile">Profilo</span>
-                    </button>
-                    <button class="mobile-menu-item" onclick="toggleExportOverlay()">
-                        <span class="menu-icon">📤</span>
-                        <span class="menu-text" data-i18n="export">Esporta</span>
-                    </button>
-                </div>
-            </div>
-            <div class="mobile-menu-divider"></div>
-            <div class="mobile-menu-group accordion-group">
-                <button class="mobile-menu-group-toggle" type="button" onclick="toggleMenuGroup(this)">
-                    <span>Impostazioni</span>
-                    <span class="group-arrow">▶</span>
-                </button>
-                <div class="mobile-menu-group-body">
-                    <button class="mobile-menu-item" onclick="window.cycleLanguage()">
-                        <span class="menu-icon">🌐</span>
-                        <span class="menu-text" data-i18n="language">Lingua</span>
-                    </button>
-                    <button class="mobile-menu-item" onclick="window.toggleTheme()">
-                        <span class="menu-icon">🎨</span>
-                        <span class="menu-text" data-i18n="theme">Tema</span>
-                    </button>
-                </div>
-            </div>
-            <button class="mobile-menu-item logout" onclick="logout()">
-                <span class="menu-icon">🚪</span>
-                <span class="menu-text" data-i18n="logout">Logout</span>
+    </main>
+
+    <!-- Mobile Bottom Bar: left search bubble + right action icons -->
+    <div class="mobile-bottom" aria-hidden="false">
+        <div class="mobile-action-group">
+            <button class="mobile-action-btn" onclick="showTab('live')" aria-label="Classifica">
+                <span class="material-symbols-outlined">emoji_events</span>
+            </button>
+            <button class="mobile-action-btn" onclick="showTab('upd')" aria-label="Aggiungi">
+                <span class="material-symbols-outlined">add</span>
+            </button>
+            <button class="mobile-action-btn" onclick="showTab('hist')" aria-label="Archivio">
+                <span class="material-symbols-outlined">library_books</span>
+            </button>
+            <button class="mobile-action-btn" onclick="toggleExportOverlay()" aria-label="Esporta">
+                <span class="material-symbols-outlined">file_upload</span>
             </button>
         </div>
+
+        <button id="mobile-search-toggle" class="mobile-search-bubble" onclick="showMobileSearch()" aria-label="Cerca">
+            <span class="material-symbols-outlined">search</span>
+        </button>
     </div>
 
-    <!-- Mobile Menu Toggle -->
-    <button class="mobile-account-toggle" onclick="mobileNavigate('account.html#profile')" title="Profilo">
-        <span class="menu-icon">👤</span>
-    </button>
-    <button class="mobile-menu-toggle" onclick="toggleMenu()">
-        <div class="hamburger-line"></div>
-        <div class="hamburger-line"></div>
-        <div class="hamburger-line"></div>
-    </button>
+    <!-- Mobile bottom search (hidden by default) -->
+    <div id="mobile-bottom-search" class="mobile-bottom-search" style="display:none;">
+        <div class="mobile-search-input-wrapper">
+            <span class="material-symbols-outlined">search</span>
+            <input id="mobile-search-input" class="mobile-search-input" type="text" placeholder="Cerca canzoni o album..." oninput="filterData()" />
+        </div>
+        <button class="mobile-search-close" onclick="closeMobileSearch()" aria-label="Chiudi">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
 
     <!-- Status Bar -->
     <div class="status-bar">
@@ -525,8 +419,41 @@
     const supabaseClient = window.supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
     let state = { week: 1, songs: {}, history: [], hIdx: 0, news: [], albums: {}, backups: [], showCovers: true };
+    window.currentSortMethod = 'pts';
 
     async function enforceAuthAndOwner() {
+        // Controlla prima sessionStorage (da login custom in account.html)
+        const savedUser = sessionStorage.getItem('currentUser');
+        const savedIsOwner = sessionStorage.getItem('isOwner');
+        
+        if (savedUser) {
+            const userObj = JSON.parse(savedUser);
+            window.currentUserId = userObj.id;
+            window.currentUserEmail = userObj.email;
+            isOwner = savedIsOwner === 'true';
+
+            // Prova a caricare il nome dalla tabella accounts del nuovo Supabase project.
+            // Non bloccare l'inizializzazione se la request fallisce (CORS, rete, ecc.).
+            try {
+                const newSBClient = supabase.createClient('https://hsizmfcdgisfxoeqptyb.supabase.co', 'sb_publishable_B54wNo9XyP6k5lDZIdarvA_NiHQ5Wk4');
+                const { data: accountData, error: accountError } = await newSBClient
+                    .from('accounts')
+                    .select('nome')
+                    .eq('email', userObj.email)
+                    .single();
+                if (accountError) console.warn('accounts fetch failed:', accountError.message || accountError);
+                if (accountData) {
+                    const el = document.getElementById('user-name');
+                    if (el) el.innerText = 'Benvenuto, ' + accountData.nome;
+                }
+            } catch (err) {
+                console.warn('Failed to fetch account name from new supabase:', err);
+            }
+
+            return;
+        }
+        
+        // Fallback a Supabase Auth (vecchio project)
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (!session) {
             window.location.href = 'account.html';
@@ -559,19 +486,16 @@
         const mobileNews = document.getElementById('mobile-news-btn');
 
         if (!isOwner) {
+            // Nascondi solo le azioni sensibili agli owner
             if (navUpdate) navUpdate.style.display = 'none';
             if (mobileUpdate) mobileUpdate.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
             if (backupBtn) backupBtn.style.display = 'none';
-            if (navMod) navMod.style.display = 'none';
-            if (mobileMod) mobileMod.style.display = 'none';
-            if (navAlbum) navAlbum.style.display = 'none';
-            if (mobileAlbum) mobileAlbum.style.display = 'none';
         } else {
-            if (navMod) navMod.style.display = '';
-            if (mobileMod) mobileMod.style.display = '';
-            if (navAlbum) navAlbum.style.display = '';
-            if (mobileAlbum) mobileAlbum.style.display = '';
+            if (navUpdate) navUpdate.style.display = '';
+            if (mobileUpdate) mobileUpdate.style.display = '';
+            if (resetBtn) resetBtn.style.display = '';
+            if (backupBtn) backupBtn.style.display = '';
         }
         // Notizie tab: visibile a tutti per lettura; mobile as well
         if (navNews) navNews.style.display = '';
@@ -602,13 +526,34 @@
     function refreshUI() {
         renderLive();
         document.getElementById('next-week-id').innerText = state.week;
+        const weekNodes = [
+            document.getElementById('ranking-week-display'),
+            document.getElementById('hero-week-display')
+        ];
+        weekNodes.forEach(node => { if (node) node.innerText = state.week; });
+        const songsCount = document.getElementById('metric-songs-count');
+        if (songsCount) songsCount.innerText = Object.keys(state.songs || {}).length;
         updateBackupPanel();
     }
 
     function renderLive(filter = "") {
         const body = document.getElementById('live-body');
-        let sorted = Object.entries(state.songs).sort((a,b) => b[1].pts - a[1].pts);
-        
+        let sorted = Object.entries(state.songs);
+        if (window.currentSortMethod === 'name') {
+            sorted = sorted.sort((a, b) => a[0].localeCompare(b[0]));
+        } else if (window.currentSortMethod === 'serie') {
+            const order = { A: 0, B: 1, C: 2 };
+            sorted = sorted.sort((a, b) => {
+                const aL = (a[1].l || 'C').toUpperCase();
+                const bL = (b[1].l || 'C').toUpperCase();
+                const diff = (order[aL] ?? 3) - (order[bL] ?? 3);
+                if (diff !== 0) return diff;
+                return (b[1].pts || 0) - (a[1].pts || 0);
+            });
+        } else {
+            sorted = sorted.sort((a, b) => (b[1].pts || 0) - (a[1].pts || 0));
+        }
+
         if (filter) {
             const query = filter.toLowerCase();
             sorted = sorted.filter(([name, d]) => {
@@ -621,28 +566,26 @@
 
         body.innerHTML = sorted.map(([name, d], i) => {
             const safeName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-            const hasLiked = window.currentUserId && d.likedBy && d.likedBy.includes(window.currentUserId);
-            const likeAction = hasLiked ? '' : `onclick="likeSong('${safeName}')"`;
-            const likeText = `❤️ ${d.likes || 0}`;
+            const coverUrl = d.cover || (d.albumId && state.albums?.[d.albumId]?.cover) || 'https://brucecoughlin.com/data/default_artwork/music_ph.png';
             return `
-            <tr>
-                <td>#${i+1}</td>
-                <td class="song-cell">
-                    <div class="song-cover-wrapper" style="display: ${state.showCovers ? 'grid' : 'none'};">
-                        <img class="song-cover" src="${d.cover || (d.albumId && state.albums?.[d.albumId]?.cover) || 'https://via.placeholder.com/80?text=?'}" alt="Copertina ${name}" onerror="this.src='https://via.placeholder.com/80?text=?'">
-                    </div>
-                    <div class="song-label">
-                        <span class="song-name">${name}</span>
-                        <div class="song-actions">
-                            <div class="info-trigger" onclick="openInfo('${safeName}')">i</div>
-                            <button class="like-btn${hasLiked ? ' liked' : ''}" ${likeAction} title="${window.t('like_song_button')}" ${hasLiked ? 'disabled' : ''}>${likeText}</button>
+                <div class="ranking-card">
+                    <div class="ranking-card-main">
+                        <div class="pos-pill">${i+1}</div>
+                        <div class="song-card-meta">
+                            <div class="song-cover-wrapper" style="display: ${state.showCovers ? 'grid' : 'none'};">
+                                <img class="song-cover" src="${coverUrl}" alt="Copertina ${name}" onerror="this.src='https://brucecoughlin.com/data/default_artwork/music_ph.png'">
+                            </div>
+                            <div>
+                                <div class="song-name">${name}</div>
+                                <div class="song-subtitle">Serie ${d.l || 'C'} • <span class="song-points">${d.pts} pts</span></div>
+                            </div>
                         </div>
                     </div>
-                    <span class="badge badge-${(d.l || 'C').toLowerCase()}">Serie ${d.l}</span>
-                </td>
-                <td class="pts-value">${d.pts}</td>
-            </tr>
-        `;
+                    <button type="button" class="button-mobile-action-btn" onclick="openInfo('${safeName}')" aria-label="Informazioni ${name}">
+                        <span class="material-symbols-outlined">info</span>
+                    </button>
+                </div>
+            `;
         }).join('');
     }
 
@@ -870,6 +813,26 @@
         }).join('');
     }
 
+    function openSortMenu() {
+        showTab('live');
+        const overlay = document.getElementById('sort-overlay');
+        if (!overlay) return;
+        overlay.style.display = 'flex';
+    }
+
+    function closeSortMenu() {
+        const overlay = document.getElementById('sort-overlay');
+        if (!overlay) return;
+        overlay.style.display = 'none';
+    }
+
+    function applySort(method) {
+        window.currentSortMethod = method;
+        closeSortMenu();
+        const query = document.getElementById('global-search')?.value || '';
+        renderLive(query);
+    }
+
     function showTab(t) {
         if ((t === 'upd' || t === 'mod' || t === 'album') && !isOwner) {
             alert('Solo l\'Owner può accedere a questa sezione. Richiedi lo status manager su account.html.');
@@ -881,7 +844,8 @@
             if (section) section.classList.toggle('active', t === id);
             if (navBtn) navBtn.classList.toggle('active', t === id);
         });
-        document.querySelector('.search-container').style.display = (t === 'live' ? 'block' : 'none');
+        const heroPanel = document.querySelector('.hero-panel');
+        if (heroPanel) heroPanel.style.display = (t === 'live' ? 'block' : 'none');
         if (t === 'hist') renderArchive();
     }
 
@@ -1112,9 +1076,13 @@
 
     function toggleCoverVisibility() {
         state.showCovers = !state.showCovers;
-        const coverButton = document.querySelector('.caps-btn .btn-text');
-        if (coverButton) {
-            coverButton.innerText = state.showCovers ? 'Disattiva Copertine' : 'Attiva Copertine';
+        const sectionCoverButton = document.querySelector('.caps-btn .btn-text');
+        if (sectionCoverButton) {
+            sectionCoverButton.innerText = state.showCovers ? 'Disattiva Copertine' : 'Attiva Copertine';
+        }
+        const heroCoverButton = document.getElementById('hero-cover-toggle-btn');
+        if (heroCoverButton) {
+            heroCoverButton.innerText = state.showCovers ? 'Disattiva copertine' : 'Attiva copertine';
         }
         refreshUI();
     }
@@ -1129,6 +1097,13 @@
         await loadData();
         applyTranslations();
         if (window.initAdmin) window.initAdmin();
+        // If arrived with a hash (e.g. index.html#mod) open the corresponding tab
+        try {
+            const h = window.location.hash.replace('#', '');
+            if (h && typeof showTab === 'function') showTab(h);
+        } catch (err) {
+            console.warn('Error applying initial hash tab:', err);
+        }
     }
 
     init();
@@ -1140,6 +1115,29 @@
             event.preventDefault();
             await hardReset();
         });
+    }
+
+    // Mobile bottom search toggles
+    function showMobileSearch() {
+        const mobileBottom = document.querySelector('.mobile-bottom');
+        const mobileSearch = document.getElementById('mobile-bottom-search');
+        if (mobileBottom) mobileBottom.style.display = 'none';
+        if (mobileSearch) {
+            mobileSearch.style.display = 'flex';
+            const input = document.getElementById('mobile-search-input');
+            if (input) input.focus();
+        }
+    }
+
+    function closeMobileSearch() {
+        const mobileBottom = document.querySelector('.mobile-bottom');
+        const mobileSearch = document.getElementById('mobile-bottom-search');
+        if (mobileSearch) mobileSearch.style.display = 'none';
+        if (mobileBottom) mobileBottom.style.display = 'flex';
+        const input = document.getElementById('mobile-search-input');
+        if (input) input.value = '';
+        // refresh full list when closing
+        filterData();
     }
 </script>
 </div>

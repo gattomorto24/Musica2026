@@ -7,25 +7,29 @@
     
     <script src="language-engine.js"></script>
     <script src="theme-engine.js"></script>
+    <script src="shared-ui.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Material Symbols for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style id="force-hide-info-style">
+    /* Force-hide hero actions and back-link on info page */
+    body.info .hero-actions, body.info .back-link {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+    </style>
     
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="info">
 
-<div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
-<div id="mobile-menu">
-    <h2 style="color: var(--accent); letter-spacing: 4px; margin-bottom: 20px; font-size: 0.8rem;" data-i18n="system_menu">MENU SISTEMA</h2>
-    <button class="nav-btn" onclick="mobileNavigate('index.html')" data-i18n="general_ranking_menu">Classifica Generale</button>
-    <button class="nav-btn" onclick="mobileNavigate('account.html')" data-i18n="profile">Profilo</button>
-    <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;"></div>
-    <button class="nav-btn" onclick="window.cycleLanguage()" style="background: var(--glass); border-color: var(--accent); color: var(--accent);">🌐 <span data-i18n="language">Lingua</span></button>
-    <button class="nav-btn" onclick="window.toggleTheme()" style="background: var(--glass); border-color: var(--accent); color: var(--accent);">🎨 <span data-i18n="theme">Tema</span></button>
-</div>
+<!-- Shared header and menu will be loaded here -->
+<div id="site-header"></div>
+<div id="site-menu"></div>
 
 <div class="container info">
-    <a href="index.html" class="back-link" data-i18n="back_link">← Indietro</a>
 
     <header>
         <h1 data-i18n="documentation_title">CRONOSOUND | DOCUMENTAZIONE & REGOLAMENTO</h1>
@@ -97,17 +101,49 @@
 </div>
 
 <script>
-    function toggleMenu() {
-        const m = document.getElementById('mobile-menu');
-        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
-    }
+    // Load shared header and menu dynamically
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const [hResp, mResp] = await Promise.all([fetch('header.html'), fetch('menu.html')]);
+            if (hResp.ok) document.getElementById('site-header').innerHTML = await hResp.text();
+            if (mResp.ok) document.getElementById('site-menu').innerHTML = await mResp.text();
 
-    function mobileNavigate(url) {
-        window.location.href = url;
-    }
+            // If this is the info page, force-remove hero-actions and any back-link remnants
+            if (document.body.classList.contains('info')) {
+                const removeTargets = () => {
+                    document.querySelectorAll('.hero-actions, .back-link').forEach(el => el.remove());
+                };
+                // immediate removal
+                removeTargets();
+                // observe DOM for reinjections and remove them as they appear
+                const mo = new MutationObserver(() => removeTargets());
+                mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+                // also aggressively overwrite inline styles repeatedly for a short time
+                const aggressiveClear = () => {
+                    document.querySelectorAll('.hero-actions, .hero-actions * , .back-link').forEach(el => {
+                        try {
+                            // attempt removal
+                            el.remove();
+                        } catch (e) {}
+                        try {
+                            // force hide via inline styles
+                            el.style.setProperty('display', 'none', 'important');
+                            el.style.opacity = '0';
+                            el.style.pointerEvents = 'none';
+                            el.setAttribute('aria-hidden', 'true');
+                        } catch (e) {}
+                    });
+                };
+                // run immediately and then repeatedly for 6s
+                aggressiveClear();
+                const intId = setInterval(aggressiveClear, 200);
+                setTimeout(() => { clearInterval(intId); mo.disconnect(); }, 6000);
+            }
+        } catch (err) {
+            console.error('Error loading shared fragments', err);
+        }
 
-    // Applica traduzioni al caricamento
-    document.addEventListener('DOMContentLoaded', () => {
+        // Applica traduzioni al caricamento
         applyTranslations();
         // Genera changelog dinamico
         const changelogContainer = document.getElementById('changelog-container');
