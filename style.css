@@ -188,12 +188,12 @@ body.glass-mode::before {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 3px;
-        border: 1px solid rgba(150,190,255,0.22);
+        border: 1px solid var(--glass-border);
         border-radius: 25px;
-        background: rgba(16,27,47,0.76);
+        background: var(--glass);
         -webkit-backdrop-filter: blur(34px) saturate(155%);
         backdrop-filter: blur(34px) saturate(155%);
-        box-shadow: 0 18px 48px rgba(0,0,0,0.38);
+        box-shadow: 0 18px 48px rgba(0,0,0,0.18);
     }
 
     body .mobile-bottom .mobile-action-group > .mobile-action-btn {
@@ -210,22 +210,22 @@ body.glass-mode::before {
         border-radius: 21px;
         background: transparent;
         box-shadow: none;
-        color: rgba(255,255,255,0.72);
+        color: var(--text);
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
     }
 
     body .mobile-bottom .mobile-action-group > .mobile-action-btn:hover {
         transform: none;
-        background: rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.08);
         box-shadow: none;
     }
 
     body .mobile-bottom .mobile-action-group > .mobile-action-btn.active {
-        background: rgba(238,247,255,0.15);
-        border: 1px solid rgba(180,215,255,0.16);
+        background: var(--accent);
+        border: 1px solid var(--accent);
         border-radius: 40px;
-        color: #4ca3ff;
+        color: var(--accent-contrast);
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
@@ -372,6 +372,8 @@ position: absolute;
     /* keep horizontal inset so header buttons are centered away from edges */
     padding: 1rem 2rem 0.9rem;
     border-bottom: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
     box-shadow: 0 18px 50px rgba(0,0,0,0.18);
 }
 
@@ -4366,6 +4368,8 @@ body.light-mode .main-header.compact {
     background: var(--chrome-surface-soft);
     border-bottom-color: var(--chrome-border);
     color: var(--text);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    backdrop-filter: blur(24px) saturate(150%);
 }
 
 .icon-btn,
