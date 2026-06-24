@@ -12,7 +12,6 @@
                 <span class="tab-icon">📊</span>
                 <span class="tab-text" data-i18n="update">Aggiorna</span>
             </button>
-            <button id="nav-hist" class="nav-tab" onclick="showTab('hist')">
             <button id="nav-hist" class="nav-tab" onclick="navigateToSection('hist')">
                 <span class="tab-icon">📚</span>
                 <span class="tab-text" data-i18n="archive">Archivio</span>
@@ -37,37 +36,45 @@
 
 <script>
 // Provide minimal menu functions if not defined by the page
-window.toggleMenu = window.toggleMenu || function() {
+window.toggleMenu = window.toggleMenu || function(forceOpen) {
     const m = document.getElementById('mobile-menu');
     if (!m) return;
-    const isOpen = m.style.display === 'flex';
-    m.style.display = isOpen ? 'none' : 'flex';
-    document.body.classList.toggle('mobile-menu-open', !isOpen);
-    document.body.style.overflow = !isOpen ? 'hidden' : '';
-};
-
-window.mobileTab = window.mobileTab || function(t) {
-    if (typeof showTab === 'function') {
-        showTab(t);
-        if (typeof toggleMenu === 'function') toggleMenu();
-        return;
+    const isOpen = typeof forceOpen === 'boolean' ? forceOpen : !m.classList.contains('active');
+    window.clearTimeout(window.mobileMenuCloseTimer);
+    if (isOpen) {
+        m.style.display = 'flex';
+        m.classList.remove('is-closing');
+        void m.offsetWidth;
+        m.classList.add('active');
+    } else {
+        m.classList.remove('active');
+        m.classList.add('is-closing');
+        window.mobileMenuCloseTimer = window.setTimeout(() => {
+            m.classList.remove('is-closing');
+            m.style.display = 'none';
+        }, 280);
     }
-    if (typeof toggleMenu === 'function') toggleMenu();
-    // fallback: navigate to index with hash
-    window.location.href = 'index.html#' + t;
+    document.body.classList.toggle('mobile-menu-open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
 };
 
 window.navigateToSection = window.navigateToSection || function(t) {
-    if (typeof showTab === 'function') {
+    const onIndex = /(^|\/)index\.html$/.test(window.location.pathname) || window.location.pathname.endsWith('/');
+    if (onIndex && typeof showTab === 'function') {
         showTab(t);
+        window.location.hash = t;
+        if (typeof toggleMenu === 'function') toggleMenu(false);
         return;
     }
-    // If we're not on index, go there with the hash so index will open the section
-    window.location.href = 'index.html#' + t;
+    window.location.href = 'index.html#' + encodeURIComponent(t);
+};
+
+window.mobileTab = window.mobileTab || function(t) {
+    window.navigateToSection(t);
 };
 
 window.mobileNavigate = window.mobileNavigate || function(url) {
-    if (typeof toggleMenu === 'function') toggleMenu();
+    if (typeof toggleMenu === 'function') toggleMenu(false);
     window.location.href = url;
 };
 </script>
@@ -84,15 +91,15 @@ window.mobileNavigate = window.mobileNavigate || function(url) {
     <div class="mobile-menu-body">
         <div class="mobile-menu-section">
             <p class="mobile-menu-section-title">Navigazione</p>
-            <button class="mobile-menu-item" onclick="mobileTab('live')">
+            <button class="mobile-menu-item" onclick="navigateToSection('live')">
                 <span class="menu-icon material-symbols-outlined">leaderboard</span>
                 <span class="menu-text" data-i18n="general_ranking_menu">Classifica Generale</span>
             </button>
-            <button id="mobile-upd-btn" class="mobile-menu-item" onclick="mobileTab('upd')">
+            <button id="mobile-upd-btn" class="mobile-menu-item" onclick="navigateToSection('upd')">
                 <span class="menu-icon material-symbols-outlined">calendar_month</span>
                 <span class="menu-text" data-i18n="new_week">Nuova Settimana</span>
             </button>
-            <button class="mobile-menu-item" onclick="mobileTab('hist')">
+            <button class="mobile-menu-item" onclick="navigateToSection('hist')">
                 <span class="menu-icon material-symbols-outlined">library_books</span>
                 <span class="menu-text" data-i18n="archive_menu">Archivio</span>
             </button>
@@ -105,15 +112,15 @@ window.mobileNavigate = window.mobileNavigate || function(url) {
                 <span class="menu-text" data-i18n="info">Info</span>
             </button>
             
-                <button id="mobile-mod-btn" class="mobile-menu-item" onclick="mobileTab('mod')">
+                <button id="mobile-mod-btn" class="mobile-menu-item" onclick="navigateToSection('mod')">
                     <span class="menu-icon material-symbols-outlined">edit</span>
                     <span class="menu-text">Modifica</span>
                 </button>
-                <button id="mobile-album-btn" class="mobile-menu-item" onclick="mobileTab('album')">
+                <button id="mobile-album-btn" class="mobile-menu-item" onclick="navigateToSection('album')">
                     <span class="menu-icon material-symbols-outlined">album</span>
                     <span class="menu-text">Album</span>
                 </button>
-                <button id="mobile-news-btn" class="mobile-menu-item" onclick="mobileTab('news')">
+                <button id="mobile-news-btn" class="mobile-menu-item" onclick="navigateToSection('news')">
                     <span class="menu-icon material-symbols-outlined">newspaper</span>
                     <span class="menu-text">Notizie</span>
                 </button>

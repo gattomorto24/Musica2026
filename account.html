@@ -223,10 +223,32 @@
             } else {
                 console.error('Failed to load menu.html', mResp.status);
             }
+            setupAccountStickyHeader();
         } catch (err) {
             console.error('Error loading shared fragments', err);
         }
     });
+
+    function setupAccountStickyHeader() {
+        const header = document.querySelector('.main-header');
+        if (!header || header.dataset.compactScrollReady === 'true') return;
+        header.dataset.compactScrollReady = 'true';
+        let ticking = false;
+        const updateHeader = () => {
+            const scrolled = window.scrollY > 18;
+            header.classList.toggle('compact', scrolled);
+            document.body.classList.toggle('header-compact', scrolled);
+        };
+        window.addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(() => {
+                updateHeader();
+                ticking = false;
+            });
+        }, { passive: true });
+        updateHeader();
+    }
 
     // Funzione per mostrare le sezioni
     function showTab(tab) {
@@ -359,18 +381,49 @@
         el.style.display = 'block';
     }
 
-    function toggleMenu() {
+    function toggleMenu(forceOpen) {
         const m = document.getElementById('mobile-menu');
-        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+        if (!m) return;
+        const isOpen = typeof forceOpen === 'boolean' ? forceOpen : m.style.display !== 'flex';
+        window.clearTimeout(window.mobileMenuCloseTimer);
+        if (isOpen) {
+            m.style.display = 'flex';
+            m.classList.remove('is-closing');
+            void m.offsetWidth;
+            m.classList.add('active');
+        } else {
+            m.classList.remove('active');
+            m.classList.add('is-closing');
+            window.mobileMenuCloseTimer = window.setTimeout(() => {
+                m.classList.remove('is-closing');
+                m.style.display = 'none';
+            }, 280);
+        }
+        document.body.classList.toggle('mobile-menu-open', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
     }
 
     function mobileTab(tab) {
-        showTab(tab);
-        toggleMenu();
+        if (['login', 'signup', 'reset', 'profile'].includes(tab)) {
+            showTab(tab);
+            toggleMenu(false);
+            return;
+        }
+        navigateToSection(tab);
+    }
+
+    function navigateToSection(tab) {
+        toggleMenu(false);
+        window.location.href = 'index.html#' + encodeURIComponent(tab);
     }
 
     function mobileNavigate(url) {
-        toggleMenu();
+        toggleMenu(false);
+        if (url === 'account.html#profile' || url === '#profile') {
+            showTab('profile');
+            window.location.hash = 'profile';
+            return;
+        }
         window.location.href = url;
     }
 

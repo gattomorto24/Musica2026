@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#07090f">
+    <meta name="color-scheme" content="dark light">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>CRONOSOUND | PROFESSIONAL CLOUD OS</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,6 +21,133 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     
     <link rel="stylesheet" href="style.css">
+    <style id="index-mobile-optimizations">
+        @media (max-width: 768px) {
+            html {
+                scroll-padding-top: 72px;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            body {
+                min-width: 0;
+                overflow-x: hidden;
+                padding-bottom: calc(84px + env(safe-area-inset-bottom));
+            }
+
+            .app-container,
+            .main-content,
+            .content-section,
+            .ranking-container,
+            .admin-container {
+                min-width: 0;
+                max-width: 100%;
+            }
+
+            .ranking-list {
+                width: 100%;
+                min-width: 0;
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .ranking-card {
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            .ranking-card-main,
+            .song-card-meta,
+            .song-card-meta > div:last-child {
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+            }
+
+            .song-name {
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .main-content {
+                padding-inline: max(12px, env(safe-area-inset-left));
+            }
+
+            input,
+            select,
+            textarea {
+                max-width: 100%;
+                font-size: 16px;
+            }
+
+            button,
+            [role="button"],
+            .nav-btn,
+            .mobile-action-btn {
+                min-height: 44px;
+                touch-action: manipulation;
+            }
+
+            .info-popup,
+            .popup-card,
+            .system-alert-card {
+                width: min(calc(100vw - 24px), 560px);
+                max-height: calc(100dvh - 24px);
+                overflow-y: auto;
+                overscroll-behavior: contain;
+            }
+
+            .info-data-grid,
+            .admin-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .form-row {
+                flex-wrap: wrap;
+            }
+
+            .form-row > * {
+                min-width: 0;
+                flex: 1 1 100%;
+            }
+
+            .mobile-bottom,
+            .mobile-bottom-search {
+                height: auto;
+                padding-bottom: max(10px, env(safe-area-inset-bottom));
+            }
+        }
+
+        @media (max-width: 420px) {
+            .ranking-list-header,
+            .archive-nav {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .ranking-status,
+            .nav-export {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+    </style>
 </head>
 <body class="dark-mode">
 
@@ -42,6 +173,7 @@
                 } else {
                     console.error('Failed to load menu.html', mResp.status);
                 }
+                setupStickyHeader();
             } catch (err) {
                 console.error('Error loading shared fragments', err);
             }
@@ -173,7 +305,13 @@
         <section id="tab-live" class="content-section active">
             <div class="ranking-container">
                 <div class="ranking-list-header">
-                    <span class="ranking-badge">Classifica Generale</span>
+                    <div class="ranking-header-primary">
+                        <span class="ranking-badge">Classifica Generale</span>
+                        <button class="ranking-export-btn" type="button" onclick="toggleExportOverlay()" aria-label="Esporta classifica">
+                            <span class="material-symbols-outlined">file_upload</span>
+                            <span class="ranking-export-label">Esporta</span>
+                        </button>
+                    </div>
                     <div class="ranking-status">Settimana <strong id="ranking-week-display">-</strong></div>
                 </div>
                 <div id="live-body" class="ranking-list"></div>
@@ -343,9 +481,14 @@
         <section id="tab-hist" class="content-section">
             <div class="archive-container">
                 <div class="archive-nav">
-                    <button id="prev-btn" class="nav-arrow" onclick="changeArchive(-1)">◀</button>
-                    <h2 id="archive-title" data-i18n="archive_menu">Settimana -</h2>
-                    <button id="next-btn" class="nav-arrow" onclick="changeArchive(1)">▶</button>
+                    <div class="archive-period-controls">
+                        <button id="prev-btn" class="nav-arrow" onclick="changeArchive(-1)" aria-label="Settimana precedente">◀</button>
+                        <div class="archive-heading">
+                            <span class="archive-eyebrow">Archivio settimanale</span>
+                            <h2 id="archive-title" data-i18n="archive_menu">Settimana -</h2>
+                        </div>
+                        <button id="next-btn" class="nav-arrow" onclick="changeArchive(1)" aria-label="Settimana successiva">▶</button>
+                    </div>
                     <button class="nav-export" onclick="openArchiveExport()" data-i18n="export_week">Esporta Settimana</button>
                 </div>
                 
@@ -372,17 +515,17 @@
     <!-- Mobile Bottom Bar: left search bubble + right action icons -->
     <div class="mobile-bottom" aria-hidden="false">
         <div class="mobile-action-group">
-            <button class="mobile-action-btn" onclick="showTab('live')" aria-label="Classifica">
+            <button class="mobile-action-btn active" data-mobile-tab="live" onclick="showTab('live')" aria-label="Classifica">
                 <span class="material-symbols-outlined">emoji_events</span>
+                <span class="mobile-action-label">Classifica</span>
             </button>
-            <button class="mobile-action-btn" onclick="showTab('upd')" aria-label="Aggiungi">
+            <button class="mobile-action-btn" data-mobile-tab="upd" onclick="showTab('upd')" aria-label="Aggiungi">
                 <span class="material-symbols-outlined">add</span>
+                <span class="mobile-action-label">Aggiungi</span>
             </button>
-            <button class="mobile-action-btn" onclick="showTab('hist')" aria-label="Archivio">
+            <button class="mobile-action-btn" data-mobile-tab="hist" onclick="showTab('hist')" aria-label="Archivio">
                 <span class="material-symbols-outlined">library_books</span>
-            </button>
-            <button class="mobile-action-btn" onclick="toggleExportOverlay()" aria-label="Esporta">
-                <span class="material-symbols-outlined">file_upload</span>
+                <span class="mobile-action-label">Archivio</span>
             </button>
         </div>
 
@@ -844,6 +987,9 @@
             if (section) section.classList.toggle('active', t === id);
             if (navBtn) navBtn.classList.toggle('active', t === id);
         });
+        document.querySelectorAll('.mobile-action-btn[data-mobile-tab]').forEach(button => {
+            button.classList.toggle('active', button.dataset.mobileTab === t);
+        });
         const heroPanel = document.querySelector('.hero-panel');
         if (heroPanel) heroPanel.style.display = (t === 'live' ? 'block' : 'none');
         if (t === 'hist') renderArchive();
@@ -869,12 +1015,25 @@
         renderArchive();
     }
 
-    function toggleMenu() {
+    function toggleMenu(forceOpen) {
         const m = document.getElementById('mobile-menu');
-        const isOpen = !m.classList.contains('active');
-        m.classList.toggle('active', isOpen);
+        if (!m) return;
+        const isOpen = typeof forceOpen === 'boolean' ? forceOpen : !m.classList.contains('active');
+        window.clearTimeout(window.mobileMenuCloseTimer);
+        if (isOpen) {
+            m.style.display = 'flex';
+            m.classList.remove('is-closing');
+            void m.offsetWidth;
+            m.classList.add('active');
+        } else {
+            m.classList.remove('active');
+            m.classList.add('is-closing');
+            window.mobileMenuCloseTimer = window.setTimeout(() => {
+                m.classList.remove('is-closing');
+                m.style.display = 'none';
+            }, 280);
+        }
         document.body.classList.toggle('mobile-menu-open', isOpen);
-        m.style.display = isOpen ? 'flex' : 'none';
         document.body.style.overflow = isOpen ? 'hidden' : '';
     }
 
@@ -890,16 +1049,24 @@
         }
     }
 
-    function mobileTab(t) { showTab(t); toggleMenu(); }
+    function navigateToSection(t) {
+        showTab(t);
+        window.location.hash = t;
+        toggleMenu(false);
+    }
+
+    function mobileTab(t) { navigateToSection(t); }
 
     function setupStickyHeader() {
         const header = document.querySelector('.main-header');
         const searchWrapper = document.querySelector('.search-wrapper');
         if (!header) return;
+        if (header.dataset.compactScrollReady === 'true') return;
+        header.dataset.compactScrollReady = 'true';
         let ticking = false;
         let lastScrollY = window.scrollY || 0;
         const updateHeader = () => {
-            const scrolled = window.scrollY > 16;
+            const scrolled = window.scrollY > 18;
             header.classList.toggle('compact', scrolled);
             document.body.classList.toggle('header-compact', scrolled);
         };
@@ -930,19 +1097,7 @@
     }
 
     function mobileNavigate(url) {
-        const m = document.getElementById('mobile-menu');
-        if (url.includes('#hist') && window.location.pathname.endsWith('index.html')) {
-            showTab('hist');
-            m.style.display = 'none';
-            window.location.hash = 'hist';
-            return;
-        }
-        if (url.includes('#hist')) {
-            toggleMenu();
-            window.location.href = url;
-            return;
-        }
-        toggleMenu();
+        toggleMenu(false);
         window.location.href = url;
     }
 
@@ -1088,8 +1243,18 @@
     }
 
     async function logout() {
-        await supabaseClient.auth.signOut();
-        window.location.href = 'account.html';
+        sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('isOwner');
+        window.currentUserId = null;
+        window.currentUserEmail = null;
+
+        try {
+            await supabaseClient.auth.signOut();
+        } catch (error) {
+            console.warn('Supabase sign-out failed; local session was cleared.', error);
+        } finally {
+            window.location.replace('account.html');
+        }
     }
 
     async function init() {
@@ -1118,22 +1283,47 @@
     }
 
     // Mobile bottom search toggles
+    let mobileSearchAnimationTimer;
+
     function showMobileSearch() {
         const mobileBottom = document.querySelector('.mobile-bottom');
         const mobileSearch = document.getElementById('mobile-bottom-search');
-        if (mobileBottom) mobileBottom.style.display = 'none';
+        window.clearTimeout(mobileSearchAnimationTimer);
         if (mobileSearch) {
             mobileSearch.style.display = 'flex';
+            mobileSearch.classList.remove('is-closing');
+            void mobileSearch.offsetWidth;
+            mobileSearch.classList.add('is-opening');
+        }
+        if (mobileBottom) {
+            mobileBottom.classList.remove('is-returning');
+            mobileBottom.classList.add('is-searching');
+        }
+        window.setTimeout(() => {
             const input = document.getElementById('mobile-search-input');
             if (input) input.focus();
-        }
+        }, 430);
     }
 
     function closeMobileSearch() {
         const mobileBottom = document.querySelector('.mobile-bottom');
         const mobileSearch = document.getElementById('mobile-bottom-search');
-        if (mobileSearch) mobileSearch.style.display = 'none';
-        if (mobileBottom) mobileBottom.style.display = 'flex';
+        window.clearTimeout(mobileSearchAnimationTimer);
+        if (mobileSearch) {
+            mobileSearch.classList.remove('is-opening');
+            mobileSearch.classList.add('is-closing');
+        }
+        if (mobileBottom) {
+            mobileBottom.classList.remove('is-searching');
+            mobileBottom.classList.add('is-returning');
+        }
+        mobileSearchAnimationTimer = window.setTimeout(() => {
+            if (mobileSearch) {
+                mobileSearch.style.display = 'none';
+                mobileSearch.classList.remove('is-closing');
+            }
+            if (mobileBottom) mobileBottom.classList.remove('is-returning');
+        }, 720);
         const input = document.getElementById('mobile-search-input');
         if (input) input.value = '';
         // refresh full list when closing
