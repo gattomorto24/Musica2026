@@ -34,6 +34,43 @@
 
     let state = { week: 1, songs: {}, history: [], hIdx: 0, news: [], albums: {}, backups: [], showCovers: true };
     window.currentSortMethod = 'pts';
+    const searchMetadataCache = new Map();
+
+    const normalizeSearchValue = (value) => String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase()
+        .trim();
+
+    function getSearchQuery() {
+        return document.getElementById('mobile-search-input')?.value
+            || document.getElementById('global-search')?.value
+            || '';
+    }
+
+    function getSearchableMetadata(name, song) {
+        if (!searchMetadataCache.has(name)) {
+            const title = name.split(' - ').pop().trim();
+            const metadata = typeof window.getFullMetadata === 'function'
+                ? window.getFullMetadata(title)
+                : {};
+            searchMetadataCache.set(name, metadata || {});
+        }
+        const metadata = searchMetadataCache.get(name);
+        const linkedAlbum = song.albumId ? state.albums?.[song.albumId] : null;
+        return [
+            name,
+            song.artist,
+            song.artista,
+            song.album,
+            song.albumName,
+            linkedAlbum?.name,
+            linkedAlbum?.artist,
+            metadata.titolo,
+            metadata.artista,
+            metadata.album
+        ].map(normalizeSearchValue).join(' ');
+    }
 
     async function enforceAuthAndOwner() {
         // Controlla prima sessionStorage (da login custom in account.html)
@@ -171,13 +208,8 @@
         }
 
         if (filter) {
-            const query = filter.toLowerCase();
-            sorted = sorted.filter(([name, d]) => {
-                const album = d.albumId ? state.albums?.[d.albumId] : null;
-                return name.toLowerCase().includes(query)
-                    || (album?.name || '').toLowerCase().includes(query)
-                    || (album?.artist || '').toLowerCase().includes(query);
-            });
+            const query = normalizeSearchValue(filter);
+            sorted = sorted.filter(([name, song]) => getSearchableMetadata(name, song).includes(query));
         }
 
         body.innerHTML = sorted.map(([name, d], i) => {
@@ -206,7 +238,7 @@
     }
 
     function filterData() {
-        renderLive(document.getElementById('global-search').value);
+        renderLive(getSearchQuery());
     }
 
     function openInfo(fullName) {
@@ -427,7 +459,7 @@
     function applySort(method) {
         window.currentSortMethod = method;
         closeSortMenu();
-        const query = document.getElementById('global-search')?.value || '';
+        const query = getSearchQuery();
         renderLive(query);
     }
 

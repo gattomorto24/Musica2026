@@ -494,7 +494,7 @@
     Object.assign(translations.it, {
         professional_cloud_os: 'Sistema cloud professionale', navigation: 'Navigazione', quick_actions: 'Azioni rapide', settings: 'Impostazioni',
         open_menu: 'Apri menu', user_profile: 'Profilo utente', return_to_ranking: 'Torna alla classifica generale',
-        edit: 'Modifica', news: 'Notizie', add: 'Aggiungi', search: 'Cerca', search_songs_albums: 'Cerca canzoni o album…',
+        edit: 'Modifica', news: 'Notizie', add: 'Aggiungi', search: 'Cerca', search_songs_albums: 'Cerca per canzone, artista o album…',
         export_ranking: 'Esporta classifica', weekly_archive: 'Archivio settimanale', previous_week: 'Settimana precedente', next_week: 'Settimana successiva',
         sort_ranking: 'Ordina classifica', sort_description: 'Scegli come visualizzare la classifica.', by_points: 'Punti', by_name: 'Nome', by_series: 'Serie',
         backup: 'Backup', emergency_backup: 'Backup di emergenza', general_ranking_short: 'Classifica', system_menu: 'Menu sistema',
@@ -515,7 +515,7 @@
     Object.assign(translations.en, {
         professional_cloud_os: 'Professional Cloud OS', navigation: 'Navigation', quick_actions: 'Quick actions', settings: 'Settings',
         open_menu: 'Open menu', user_profile: 'User profile', return_to_ranking: 'Return to general ranking',
-        edit: 'Edit', news: 'News', add: 'Add', search: 'Search', search_songs_albums: 'Search songs or albums…',
+        edit: 'Edit', news: 'News', add: 'Add', search: 'Search', search_songs_albums: 'Search by song, artist or album…',
         export_ranking: 'Export ranking', weekly_archive: 'Weekly archive', previous_week: 'Previous week', next_week: 'Next week',
         sort_ranking: 'Sort ranking', sort_description: 'Choose how to display the ranking.', by_points: 'Points', by_name: 'Name', by_series: 'Series',
         backup: 'Backup', emergency_backup: 'Emergency backup', general_ranking_short: 'Ranking', system_menu: 'System menu',
@@ -536,7 +536,7 @@
     Object.assign(translations.es, {
         professional_cloud_os: 'Sistema cloud profesional', navigation: 'Navegación', quick_actions: 'Acciones rápidas', settings: 'Ajustes',
         open_menu: 'Abrir menú', user_profile: 'Perfil de usuario', return_to_ranking: 'Volver a la clasificación general',
-        edit: 'Editar', news: 'Noticias', add: 'Añadir', search: 'Buscar', search_songs_albums: 'Buscar canciones o álbumes…',
+        edit: 'Editar', news: 'Noticias', add: 'Añadir', search: 'Buscar', search_songs_albums: 'Buscar por canción, artista o álbum…',
         export_ranking: 'Exportar clasificación', weekly_archive: 'Archivo semanal', previous_week: 'Semana anterior', next_week: 'Semana siguiente',
         sort_ranking: 'Ordenar clasificación', sort_description: 'Elige cómo mostrar la clasificación.', by_points: 'Puntos', by_name: 'Nombre', by_series: 'Serie',
         backup: 'Copia de seguridad', emergency_backup: 'Copia de emergencia', general_ranking_short: 'Clasificación', system_menu: 'Menú del sistema',

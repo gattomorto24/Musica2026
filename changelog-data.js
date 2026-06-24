@@ -16,6 +16,7 @@
                     { title: 'Temi personalizzati', desc: 'Introdotta la creazione di palette personali tramite colori di sfondo, primario, secondario ed elementi/testo.' },
                     { title: 'Controlli movimento', desc: 'Aggiunti toggle globali per animazioni, luci ambientali, ombre e animazione dell’header durante lo scorrimento.' },
                     { title: 'Modalità semplice', desc: 'Nuova navigazione semplificata con bottom bar statica e ricerca sempre visibile sopra la barra.' },
+                    { title: 'Ricerca intelligente', desc: 'La barra di ricerca filtra ora realmente la classifica per nome della canzone, artista o album, includendo metadata automatici e album personalizzati.' },
                     { title: 'Interfaccia adattiva unificata', desc: 'Eliminate le differenze comportamentali tra mobile e desktop: desktop ora usa la stessa interfaccia mobile in versione ampliata.' },
                     { title: 'Pulizia e prestazioni', desc: 'CSS e JavaScript riordinati, codice obsoleto rimosso e runtime separati in moduli cacheabili e differiti.' }
                 ]
@@ -153,6 +154,7 @@
                     { title: 'Custom themes', desc: 'Introduced personal palettes using background, primary, secondary and element/text colors.' },
                     { title: 'Motion controls', desc: 'Added global toggles for animations, ambient lights, shadows and header scroll animation.' },
                     { title: 'Simple mode', desc: 'New simplified navigation with a static bottom bar and search always visible above it.' },
+                    { title: 'Smart search', desc: 'The search bar now filters the ranking by song name, artist or album, including automatic metadata and custom albums.' },
                     { title: 'Unified adaptive interface', desc: 'Removed behavioral differences between mobile and desktop; desktop now uses an expanded mobile interface.' },
                     { title: 'Cleanup and performance', desc: 'Reorganized CSS and JavaScript, removed obsolete code and split runtimes into deferred cacheable modules.' }
                 ]
@@ -290,6 +292,7 @@
                     { title: 'Temas personalizados', desc: 'Introducidas paletas personales con colores de fondo, primario, secundario y elementos/texto.' },
                     { title: 'Controles de movimiento', desc: 'Añadidos toggles globales para animaciones, luces ambientales, sombras y animación del header al desplazarse.' },
                     { title: 'Modo simple', desc: 'Nueva navegación simplificada con barra inferior estática y búsqueda siempre visible encima.' },
+                    { title: 'Búsqueda inteligente', desc: 'La barra de búsqueda ahora filtra la clasificación por canción, artista o álbum, incluidos metadatos automáticos y álbumes personalizados.' },
                     { title: 'Interfaz adaptativa unificada', desc: 'Eliminadas las diferencias de comportamiento entre móvil y escritorio; escritorio utiliza ahora la interfaz móvil ampliada.' },
                     { title: 'Limpieza y rendimiento', desc: 'CSS y JavaScript reorganizados, código obsoleto eliminado y runtimes separados en módulos diferidos y cacheables.' }
                 ]
