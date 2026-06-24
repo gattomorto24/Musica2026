@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#07101f">
+    <title>CRONOSOUND | SETTINGS</title>
+    <script src="language-engine.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="settings-engine.js"></script>
+    <script src="shared-ui.js" defer></script>
+    <script src="settings.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body class="settings-page">
+    <div id="site-header"></div>
+    <div id="site-menu"></div>
+
+    <main class="settings-shell">
+        <header class="settings-heading">
+            <span class="settings-kicker" data-i18n="settings_universal">Impostazioni universali</span>
+            <h1 data-i18n="settings_title">Personalizza CronoSound</h1>
+            <p data-i18n="settings_intro">Le modifiche vengono applicate immediatamente a tutto il sito.</p>
+        </header>
+
+        <section class="settings-card">
+            <div class="settings-card-title">
+                <span class="material-symbols-outlined">text_fields</span>
+                <div><h2 data-i18n="settings_typography">Testo e leggibilità</h2><p data-i18n="settings_typography_desc">Regola peso, dimensione e contrasto.</p></div>
+            </div>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_bold">Testo in grassetto</strong><small data-i18n="settings_bold_desc">Rende più marcati tutti i testi.</small></span>
+                <input type="checkbox" data-setting="boldText" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+            <label class="setting-range-row">
+                <span><strong data-i18n="settings_text_size">Dimensione testo</strong><output data-output="fontScale">100%</output></span>
+                <input type="range" min="80" max="135" step="1" data-setting="fontScale">
+            </label>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_contrast">Contrasto elevato</strong><small data-i18n="settings_contrast_desc">Aumenta separazione e leggibilità.</small></span>
+                <input type="checkbox" data-setting="highContrast" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_large_targets">Controlli più grandi</strong><small data-i18n="settings_large_targets_desc">Aumenta l’area di pulsanti e controlli.</small></span>
+                <input type="checkbox" data-setting="largeTargets" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+        </section>
+
+        <section class="settings-card">
+            <div class="settings-card-title">
+                <span class="material-symbols-outlined">blur_on</span>
+                <div><h2 data-i18n="settings_appearance">Frost e superfici</h2><p data-i18n="settings_appearance_desc">Controlla trasparenza, profondità e sfondo.</p></div>
+            </div>
+            <label class="setting-range-row">
+                <span><strong>Frost</strong><output data-output="frost">78%</output></span>
+                <input type="range" min="0" max="100" step="1" data-setting="frost">
+            </label>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_ambient">Luci ambientali</strong><small data-i18n="settings_ambient_desc">Mostra le sfumature animate dello sfondo.</small></span>
+                <input type="checkbox" data-setting="ambientBackground" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_shadows">Ombre e profondità</strong><small data-i18n="settings_shadows_desc">Mantiene sollevati pannelli e pulsanti.</small></span>
+                <input type="checkbox" data-setting="shadows" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_compact">Layout compatto</strong><small data-i18n="settings_compact_desc">Riduce spazi e padding delle schede.</small></span>
+                <input type="checkbox" data-setting="compactLayout" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+        </section>
+
+        <section class="settings-card">
+            <div class="settings-card-title">
+                <span class="material-symbols-outlined">palette</span>
+                <div><h2 data-i18n="settings_custom_theme">Tema personalizzato</h2><p data-i18n="settings_custom_theme_desc">Crea una palette universale scegliendo quattro colori.</p></div>
+            </div>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_enable_custom_theme">Usa palette personalizzata</strong></span>
+                <input type="checkbox" data-setting="customTheme" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+            <div class="settings-color-grid">
+                <label><span data-i18n="settings_color_background">Sfondo</span><input type="color" data-color-setting="background"></label>
+                <label><span data-i18n="settings_color_primary">Primario</span><input type="color" data-color-setting="primary"></label>
+                <label><span data-i18n="settings_color_secondary">Secondario</span><input type="color" data-color-setting="secondary"></label>
+                <label><span data-i18n="settings_color_elements">Elementi e testo</span><input type="color" data-color-setting="elements"></label>
+            </div>
+            <div class="settings-palette-preview" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </section>
+
+        <section class="settings-card">
+            <div class="settings-card-title">
+                <span class="material-symbols-outlined">motion_photos_off</span>
+                <div><h2 data-i18n="settings_motion">Movimento e navigazione</h2><p data-i18n="settings_motion_desc">Semplifica animazioni, header e tab bar.</p></div>
+            </div>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_animations">Animazioni</strong><small data-i18n="settings_animations_desc">Transizioni, aperture e movimenti dell’interfaccia.</small></span>
+                <input type="checkbox" data-setting="animations" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+            <label class="setting-row setting-toggle-row">
+                <span><strong data-i18n="settings_header_collapse">Animazione header durante lo scroll</strong><small data-i18n="settings_header_collapse_desc">Compatta l’header mentre scorri.</small></span>
+                <input type="checkbox" data-setting="headerCollapse" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+            <label class="setting-row setting-toggle-row featured-setting">
+                <span><strong data-i18n="settings_simple_mode">Modalità semplice</strong><small data-i18n="settings_simple_mode_desc">Tab bar statica e ricerca sempre visibile sopra la barra.</small></span>
+                <input type="checkbox" data-setting="simpleMode" class="settings-switch-input"><span class="settings-switch" aria-hidden="true"></span>
+            </label>
+        </section>
+
+        <button class="settings-reset" type="button" id="settings-reset"><span class="material-symbols-outlined">restart_alt</span><span data-i18n="settings_reset">Ripristina impostazioni</span></button>
+    </main>
+</body>
+</html>

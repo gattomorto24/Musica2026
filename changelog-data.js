@@ -8,7 +8,20 @@
     const changelogs = {
         it: [
             {
-                version: 'v2.1', date: '25 GIUGNO 2026', latest: true,
+                version: 'v2.1.1', date: '25 GIUGNO 2026', latest: true,
+                items: [
+                    { title: 'Settings Engine', desc: 'Nuovo sistema di impostazioni universali persistenti, sincronizzate automaticamente in tutte le pagine.' },
+                    { title: 'Personalizzazione e accessibilità', desc: 'Aggiunti testo in grassetto, dimensione caratteri regolabile, contrasto elevato, controlli più grandi e layout compatto.' },
+                    { title: 'Frost dinamico', desc: 'Nuovo slider per controllare in tempo reale opacità e sfocatura delle superfici glass.' },
+                    { title: 'Temi personalizzati', desc: 'Introdotta la creazione di palette personali tramite colori di sfondo, primario, secondario ed elementi/testo.' },
+                    { title: 'Controlli movimento', desc: 'Aggiunti toggle globali per animazioni, luci ambientali, ombre e animazione dell’header durante lo scorrimento.' },
+                    { title: 'Modalità semplice', desc: 'Nuova navigazione semplificata con bottom bar statica e ricerca sempre visibile sopra la barra.' },
+                    { title: 'Interfaccia adattiva unificata', desc: 'Eliminate le differenze comportamentali tra mobile e desktop: desktop ora usa la stessa interfaccia mobile in versione ampliata.' },
+                    { title: 'Pulizia e prestazioni', desc: 'CSS e JavaScript riordinati, codice obsoleto rimosso e runtime separati in moduli cacheabili e differiti.' }
+                ]
+            },
+            {
+                version: 'v2.1', date: '25 GIUGNO 2026', latest: false,
                 items: [
                     { title: 'Redesign Completo Temi', desc: 'Sistema di temi riadattato allo stile v2.0. Risolti definitivamente i problemi della v2.0.1.' },
                     { title: 'Performance Boost (+40%)', desc: 'Aumento significativo della fluidità, rimozione di 1200+ righe di CSS ridondante.' },
@@ -132,7 +145,20 @@
         ],
         en: [
             {
-                version: 'v2.1', date: 'JUNE 25, 2026', latest: true,
+                version: 'v2.1.1', date: 'JUNE 25, 2026', latest: true,
+                items: [
+                    { title: 'Settings Engine', desc: 'New persistent universal settings system, automatically synchronized across every page.' },
+                    { title: 'Customization and accessibility', desc: 'Added bold text, adjustable font size, high contrast, larger controls and compact layout.' },
+                    { title: 'Dynamic Frost', desc: 'New slider to control glass surface opacity and blur in real time.' },
+                    { title: 'Custom themes', desc: 'Introduced personal palettes using background, primary, secondary and element/text colors.' },
+                    { title: 'Motion controls', desc: 'Added global toggles for animations, ambient lights, shadows and header scroll animation.' },
+                    { title: 'Simple mode', desc: 'New simplified navigation with a static bottom bar and search always visible above it.' },
+                    { title: 'Unified adaptive interface', desc: 'Removed behavioral differences between mobile and desktop; desktop now uses an expanded mobile interface.' },
+                    { title: 'Cleanup and performance', desc: 'Reorganized CSS and JavaScript, removed obsolete code and split runtimes into deferred cacheable modules.' }
+                ]
+            },
+            {
+                version: 'v2.1', date: 'JUNE 25, 2026', latest: false,
                 items: [
                     { title: 'Complete Theme Redesign', desc: 'Themes system fully adapted to v2.0 style. Fixed v2.0.1 visual issues.' },
                     { title: 'Performance Boost (+40%)', desc: 'Significant fluidity increase, removed 1200+ lines of redundant CSS.' },
@@ -256,7 +282,20 @@
         ],
         es: [
             {
-                version: 'v2.1', date: '25 JUNIO 2026', latest: true,
+                version: 'v2.1.1', date: '25 JUNIO 2026', latest: true,
+                items: [
+                    { title: 'Settings Engine', desc: 'Nuevo sistema persistente de ajustes universales, sincronizado automáticamente en todas las páginas.' },
+                    { title: 'Personalización y accesibilidad', desc: 'Añadidos texto en negrita, tamaño ajustable, contraste alto, controles más grandes y diseño compacto.' },
+                    { title: 'Frost dinámico', desc: 'Nuevo slider para controlar en tiempo real la opacidad y el desenfoque de las superficies glass.' },
+                    { title: 'Temas personalizados', desc: 'Introducidas paletas personales con colores de fondo, primario, secundario y elementos/texto.' },
+                    { title: 'Controles de movimiento', desc: 'Añadidos toggles globales para animaciones, luces ambientales, sombras y animación del header al desplazarse.' },
+                    { title: 'Modo simple', desc: 'Nueva navegación simplificada con barra inferior estática y búsqueda siempre visible encima.' },
+                    { title: 'Interfaz adaptativa unificada', desc: 'Eliminadas las diferencias de comportamiento entre móvil y escritorio; escritorio utiliza ahora la interfaz móvil ampliada.' },
+                    { title: 'Limpieza y rendimiento', desc: 'CSS y JavaScript reorganizados, código obsoleto eliminado y runtimes separados en módulos diferidos y cacheables.' }
+                ]
+            },
+            {
+                version: 'v2.1', date: '25 JUNIO 2026', latest: false,
                 items: [
                     { title: 'Rediseño Completo de Temas', desc: 'Sistema de temas adaptado al estilo v2.0. Problemas de la v2.0.1 resueltos.' },
                     { title: 'Aumento de Rendimiento (+40%)', desc: 'Mayor fluidez, eliminación de 1200+ líneas de CSS redundante.' },

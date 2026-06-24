@@ -28,32 +28,11 @@
             } else {
                 console.error('Failed to load menu.html', mResp.status);
             }
-            setupAccountStickyHeader();
+            if (window.setupSharedStickyHeader) window.setupSharedStickyHeader();
         } catch (err) {
             console.error('Error loading shared fragments', err);
         }
     });
-
-    function setupAccountStickyHeader() {
-        const header = document.querySelector('.main-header');
-        if (!header || header.dataset.compactScrollReady === 'true') return;
-        header.dataset.compactScrollReady = 'true';
-        let ticking = false;
-        const updateHeader = () => {
-            const scrolled = window.scrollY > 18;
-            header.classList.toggle('compact', scrolled);
-            document.body.classList.toggle('header-compact', scrolled);
-        };
-        window.addEventListener('scroll', () => {
-            if (ticking) return;
-            ticking = true;
-            window.requestAnimationFrame(() => {
-                updateHeader();
-                ticking = false;
-            });
-        }, { passive: true });
-        updateHeader();
-    }
 
     // Funzione per mostrare le sezioni
     function showTab(tab) {

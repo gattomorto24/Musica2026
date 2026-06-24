@@ -17,7 +17,7 @@
                 } else {
                     console.error('Failed to load menu.html', mResp.status);
                 }
-                setupStickyHeader();
+                if (window.setupSharedStickyHeader) window.setupSharedStickyHeader();
             } catch (err) {
                 console.error('Error loading shared fragments', err);
             }
@@ -438,9 +438,7 @@
         }
         ['live', 'upd', 'hist', 'mod', 'album', 'news'].forEach(id => {
             const section = document.getElementById('tab-' + id);
-            const navBtn = document.getElementById('nav-' + id);
             if (section) section.classList.toggle('active', t === id);
-            if (navBtn) navBtn.classList.toggle('active', t === id);
         });
         document.querySelectorAll('.mobile-action-btn[data-mobile-tab]').forEach(button => {
             button.classList.toggle('active', button.dataset.mobileTab === t);
@@ -497,45 +495,6 @@
     }
 
     function mobileTab(t) { navigateToSection(t); }
-
-    function setupStickyHeader() {
-        const header = document.querySelector('.main-header');
-        const searchWrapper = document.querySelector('.search-wrapper');
-        if (!header) return;
-        if (header.dataset.compactScrollReady === 'true') return;
-        header.dataset.compactScrollReady = 'true';
-        let ticking = false;
-        let lastScrollY = window.scrollY || 0;
-        const updateHeader = () => {
-            const scrolled = window.scrollY > 18;
-            header.classList.toggle('compact', scrolled);
-            document.body.classList.toggle('header-compact', scrolled);
-        };
-        const updateSearchVisibility = () => {
-            if (!searchWrapper) return;
-            const currentScroll = window.scrollY;
-            const scrollingDown = currentScroll > lastScrollY + 1;
-            const scrollingUp = currentScroll < lastScrollY - 1;
-            if (scrollingDown && currentScroll > 32) {
-                searchWrapper.classList.add('hide-on-scroll');
-            } else if (scrollingUp || currentScroll <= 8) {
-                searchWrapper.classList.remove('hide-on-scroll');
-            }
-            lastScrollY = currentScroll;
-        };
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                ticking = true;
-                window.requestAnimationFrame(() => {
-                    updateHeader();
-                    updateSearchVisibility();
-                    ticking = false;
-                });
-            }
-        }, { passive: true });
-        updateHeader();
-        updateSearchVisibility();
-    }
 
     function mobileNavigate(url) {
         toggleMenu(false);
@@ -718,8 +677,6 @@
     });
 
     init();
-    setupStickyHeader();
-
     const resetButton = document.querySelector('.reset-btn');
     if (resetButton) {
         resetButton.addEventListener('click', async (event) => {

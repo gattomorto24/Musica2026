@@ -373,28 +373,6 @@ position: absolute;
     box-shadow: 0 18px 50px rgba(0,0,0,0.18);
 }
 
-.search-container {
-position: relative;
-    width: min(100%, 980px);
-    margin: 1.25rem auto;
-    padding: 0 1rem;
-    z-index: 900;
-}
-
-.search-container .search-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: 100%;
-    border-radius: 28px;
-    padding: 0.6rem 0.9rem;
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-    border: 1px solid rgba(255,255,255,0.06);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.02);
-}
-
 /* Material Symbols helpers */
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -679,12 +657,7 @@ position: relative;
 }
 
 @media (max-width: 900px) {
-    .main-nav { display: none; }
     .main-header { padding-top: 1.4rem; padding-bottom: 0.9rem; }
-}
-
-@media (max-width: 500px) {
-    .search-container { margin: 0.75rem auto 1rem; }
 }
 
 /* New mobile bottom layout */
@@ -859,7 +832,6 @@ body.light-mode .main-header.compact {
 }
 
 @media (max-width: 600px) {
-    .main-nav { display: none; }
     .header-row {
         gap: 0.6rem;
     }
@@ -1004,8 +976,7 @@ position: relative;
 button:active,
 .logout-btn:active,
 .nav-btn:active,
-.system-alert-btn:active,
-.nav-tab:active {
+.system-alert-btn:active {
     transform: scale(0.97);
     opacity: 0.88;
 }
@@ -1020,78 +991,9 @@ button:active,
     color: #fff;
 }
 
-/* ===== NAVIGATION ===== */
-.main-nav {
-    background: rgba(20, 20, 20, 0.5);
-    backdrop-filter: blur(22px) saturate(150%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-}
-
-body.light-mode .main-nav {
-    background: rgba(255, 255, 255, 0.85);
-    border-bottom: 1px solid rgba(60, 60, 67, 0.12);
-    backdrop-filter: blur(20px) saturate(190%);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-}
-
-.nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.nav-tabs {
-    display: flex;
-    gap: 0.5rem;
-    padding: 1rem 0;
-}
-
-.nav-tab {
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    color: var(--text-dim);
-    padding: 0.75rem 1.5rem;
-    border-radius: 1rem;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
-    min-width: 120px;
-    justify-content: center;
-}
-
-.nav-tab:hover {
-    border-color: var(--accent);
-    color: var(--text);
-    transform: translateY(-2px);
-}
-
-.nav-tab.active {
-    background: var(--accent);
-    color: #000;
-    border-color: var(--accent);
-    box-shadow: 0 8px 25px var(--accent-glow);
-}
-
-.nav-tab .tab-icon {
-    font-size: 1.1rem;
-}
-
-.nav-tab .tab-text {
-    font-size: 0.85rem;
-}
-
 /* Make shared header and nav sticky across pages */
 #site-header { position: sticky; top: 0; z-index: 2000; }
 #site-header .main-header { position: sticky; top: 0; z-index: 2000; }
-#site-menu .main-nav { position: sticky; top: 72px; z-index: 1999; }
 
 /* Info page: extend header to full width and borders */
 body.info #site-header {
@@ -1131,18 +1033,6 @@ html.light-mode body.info #site-header .main-header {
 .container.account .header-title { text-align: center; flex: 1; }
 .container.account .header-title h1 { margin: 0; font-size: 1.35rem; }
 .container.account .header-title .subtitle { font-size: 0.65rem; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; }
-.container.account .nav-content { max-width: 900px; margin: 0 auto; padding: 0 1rem; }
-.container.account .nav-tabs { justify-content: center; }
-.container.account .nav-tab {
-    border-radius: 999px;
-    padding: 0.6rem 1.1rem;
-    min-width: 110px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-}
-.container.account .nav-tab .tab-icon { font-size: 1.2rem; }
 .container.account .nav-btn {
     border-radius: 999px;
 }
@@ -1211,8 +1101,6 @@ header p {
     margin-top: 10px;
     font-weight: 600;
 }
-
-.nav { display: flex; gap: 12px; }
 
 .nav-btn {
     background: rgba(10, 10, 10, 0.7);
@@ -2141,28 +2029,6 @@ position: fixed;
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
 
-    .nav-tabs {
-        padding: 0.75rem 0;
-        gap: 0.25rem;
-        overflow-x: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .nav-tabs::-webkit-scrollbar {
-        display: none;
-    }
-
-    .nav-tab {
-        min-width: 100px;
-        padding: 0.6rem 1rem;
-        font-size: 0.8rem;
-    }
-
-    .nav-tab .tab-text {
-        display: none;
-    }
-
     .main-content {
         padding: 1rem;
     }
@@ -2197,10 +2063,6 @@ position: fixed;
 }
 
 @media (max-width: 480px) {
-    .nav-tab {
-        min-width: 80px;
-        padding: 0.5rem 0.75rem;
-    }
 
     .main-content {
         padding: 0.75rem;
@@ -2751,14 +2613,6 @@ body.light-mode .info-item { background: rgba(0,0,0,0.03); }
     font-size: 1.2rem;
 }
 
-.container.account .nav-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 30px;
-}
-
 .container.account .glass-card {
     padding: 30px;
 }
@@ -2789,8 +2643,6 @@ body.light-mode .info-item { background: rgba(0,0,0,0.03); }
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-
-    .container.account .nav-tabs { justify-content: center; }
 }
 
 .input-field {
@@ -2846,21 +2698,6 @@ body.light-mode .info-item { background: rgba(0,0,0,0.03); }
 .btn-secondary:hover {
     background: var(--accent);
     color: #000;
-}
-
-.nav-tabs {
-    display: none;
-}
-
-/* Account page overrides */
-.container.account .nav-tabs {
-    display: flex;
-}
-
-.container.account .nav-tabs .nav-btn {
-    min-width: 140px;
-    flex: 1 1 auto;
-    text-align: center;
 }
 
 .section-card {
@@ -3155,10 +2992,6 @@ body.info {
 /* Utility class per sfocatura semplice */
 .sfocata {
     filter: blur(5px); /* Regola i pixel per aumentare/diminuire l'effetto */
-}
-
-@media (max-width: 600px) {
-    .search-container { bottom: 1rem; width: 95%; }
 }
 
 /* Archive: mobile-first readable layout */
@@ -3496,7 +3329,7 @@ body:not(.light-mode):not(.glass-mode) :is(
 }
 
 /* Search bubble -> search bar: one continuous, reversible morph */
-@media (max-width: 899px) {
+@media (min-width: 0px) {
     body .mobile-bottom {
         will-change: transform, opacity;
     }
@@ -4142,7 +3975,7 @@ position: relative;
 }
 
 /* Once the search morph is complete, peel the close control off as its own bubble. */
-@media (max-width: 899px) {
+@media (min-width: 0px) {
     body .mobile-bottom-search {
         transition:
             gap 260ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -4458,7 +4291,7 @@ body td { background: var(--table-surface); }
     color: var(--accent);
 }
 
-@media (max-width: 899px) {
+@media (min-width: 0px) {
     body .mobile-bottom .mobile-action-group,
     body .mobile-bottom .mobile-search-bubble,
     body .mobile-bottom-search {
@@ -4612,4 +4445,199 @@ body:is(.light-mode, .glass-mode) .mobile-menu-item.logout :is(.menu-icon, .menu
 
 .menu-text {
     min-width: 0;
+}
+
+/* Unified adaptive shell: desktop is the same mobile UI with more room. */
+:root {
+    --adaptive-tab-width: min(calc(100vw - 24px), 680px);
+}
+
+body {
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
+}
+
+.main-header {
+    padding: 1rem clamp(1rem, 3vw, 2rem) 0.9rem;
+}
+
+.main-header.compact {
+    min-height: 46px;
+    padding: 0.42rem clamp(1rem, 3vw, 1.25rem);
+}
+
+.header-row {
+    width: 100%;
+    max-width: 1120px;
+    gap: clamp(0.6rem, 2vw, 1rem);
+}
+
+.icon-btn {
+    width: 42px;
+    height: 42px;
+}
+
+.header-title h1 {
+    font-size: 1.2rem;
+}
+
+body .mobile-bottom {
+    width: var(--adaptive-tab-width);
+    grid-template-columns: minmax(0, 1fr) 60px;
+    gap: 10px;
+}
+
+body .mobile-bottom-search {
+    --search-expanded-width: var(--adaptive-tab-width);
+    right: max(12px, calc((100vw - 680px) / 2));
+}
+
+body .mobile-bottom .mobile-action-group,
+body .mobile-bottom .mobile-search-bubble {
+    height: 60px;
+}
+
+body .mobile-bottom .mobile-action-group > .mobile-action-btn {
+    height: 50px;
+    min-height: 50px;
+}
+
+/* Universal settings hooks */
+html {
+    font-size: var(--settings-font-size, 16px);
+}
+
+html[data-setting-bold="true"] body :not(.material-symbols-outlined) {
+    font-weight: 700 !important;
+}
+
+html[data-setting-animations="false"] *,
+html[data-setting-animations="false"] *::before,
+html[data-setting-animations="false"] *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+}
+
+html[data-setting-ambient="false"] body::before,
+html[data-setting-ambient="false"] body::after {
+    display: none !important;
+}
+
+html[data-setting-shadows="false"] body * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+html[data-setting-contrast="true"] body {
+    --glass-border: color-mix(in srgb, var(--text) 34%, transparent);
+    --card-border: color-mix(in srgb, var(--text) 30%, transparent);
+    --chrome-border: color-mix(in srgb, var(--text) 34%, transparent);
+    --text-dim: color-mix(in srgb, var(--text) 76%, transparent);
+}
+
+html[data-setting-large-targets="true"] body :is(button, .icon-btn, input, select, textarea, [role="button"]) {
+    min-height: 52px;
+}
+
+html[data-setting-compact="true"] body :is(.ranking-card, .admin-section-card, .section-card, .update-card, .backup-info-card, .settings-card) {
+    padding: 0.8rem;
+}
+
+html[data-setting-custom-theme="true"] body {
+    --settings-frost-base: var(--settings-secondary);
+    --bg: var(--settings-bg) !important;
+    --accent: var(--settings-primary) !important;
+    --accent-glow: color-mix(in srgb, var(--settings-primary) 24%, transparent) !important;
+    --text: var(--settings-elements) !important;
+    --text-dim: color-mix(in srgb, var(--settings-elements) 62%, transparent) !important;
+    --glass: color-mix(in srgb, var(--settings-secondary) var(--settings-frost-percent), transparent) !important;
+    --glass-border: color-mix(in srgb, var(--settings-elements) 18%, transparent) !important;
+    --chrome-surface: color-mix(in srgb, var(--settings-secondary) var(--settings-frost-percent), transparent) !important;
+    --chrome-surface-soft: color-mix(in srgb, var(--settings-secondary) 72%, transparent) !important;
+    --chrome-surface-active: color-mix(in srgb, var(--settings-primary) 28%, var(--settings-secondary)) !important;
+    --chrome-border: color-mix(in srgb, var(--settings-elements) 20%, transparent) !important;
+    --chrome-border-active: color-mix(in srgb, var(--settings-primary) 55%, transparent) !important;
+    --chrome-text: color-mix(in srgb, var(--settings-elements) 76%, transparent) !important;
+    --chrome-icon: var(--settings-elements) !important;
+    --card-surface: color-mix(in srgb, var(--settings-secondary) var(--settings-frost-percent), transparent) !important;
+    --card-surface-hover: color-mix(in srgb, var(--settings-secondary) 88%, var(--settings-primary)) !important;
+    --card-border: color-mix(in srgb, var(--settings-elements) 18%, transparent) !important;
+    --table-surface: color-mix(in srgb, var(--settings-secondary) 78%, transparent) !important;
+    background-color: var(--settings-bg) !important;
+    background-image: radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--settings-primary) 24%, transparent), transparent 40%), linear-gradient(155deg, var(--settings-bg), color-mix(in srgb, var(--settings-bg) 78%, var(--settings-secondary))) !important;
+}
+
+html body {
+    --settings-frost-base: var(--bg);
+}
+
+html body :is(
+    .main-header,
+    .mobile-menu,
+    .mobile-bottom .mobile-action-group,
+    .mobile-bottom .mobile-search-bubble,
+    .mobile-bottom-search,
+    .ranking-container,
+    .ranking-card,
+    .archive-container,
+    .update-card,
+    .admin-section-card,
+    .backup-info-card,
+    .section-card,
+    .settings-card
+) {
+    background: color-mix(in srgb, var(--settings-frost-base) var(--settings-frost-percent, 78%), transparent);
+    -webkit-backdrop-filter: blur(var(--settings-frost-blur, 36px)) saturate(145%);
+    backdrop-filter: blur(var(--settings-frost-blur, 36px)) saturate(145%);
+}
+
+html[data-setting-simple="true"] body .main-header,
+html[data-setting-header-collapse="false"] body .main-header {
+    min-height: 72px;
+    padding: 1rem clamp(1rem, 3vw, 2rem) 0.9rem;
+}
+
+html[data-setting-simple="true"] body .main-header .header-title,
+html[data-setting-header-collapse="false"] body .main-header .header-title {
+    opacity: 1;
+    transform: none;
+}
+
+html[data-setting-simple="true"] body .mobile-bottom {
+    grid-template-columns: minmax(0, 1fr);
+    opacity: 1 !important;
+    transform: translateX(-50%) !important;
+    animation: none !important;
+    pointer-events: auto !important;
+}
+
+html[data-setting-simple="true"] body .mobile-bottom .mobile-search-bubble {
+    display: none;
+}
+
+html[data-setting-simple="true"] body .mobile-bottom-search {
+    display: flex !important;
+    width: var(--adaptive-tab-width) !important;
+    height: 60px;
+    min-height: 60px;
+    bottom: calc(82px + env(safe-area-inset-bottom));
+    overflow: visible;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    pointer-events: auto !important;
+    border-radius: 999px;
+}
+
+html[data-setting-simple="true"] body .mobile-bottom-search::before,
+html[data-setting-simple="true"] body .mobile-bottom-search .mobile-search-close {
+    display: none !important;
+}
+
+html[data-setting-simple="true"] body .mobile-bottom-search .mobile-search-input-wrapper {
+    min-height: 52px;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
 }

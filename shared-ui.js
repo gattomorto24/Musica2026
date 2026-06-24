@@ -78,7 +78,9 @@
         header.dataset.compactScrollReady = 'true';
         let ticking = false;
         const updateHeader = () => {
-            const scrolled = window.scrollY > 18;
+            const settings = document.documentElement.dataset;
+            const collapseEnabled = settings.settingHeaderCollapse !== 'false' && settings.settingSimple !== 'true';
+            const scrolled = collapseEnabled && window.scrollY > 18;
             header.classList.toggle('compact', scrolled);
             document.body.classList.toggle('header-compact', scrolled);
         };
@@ -90,6 +92,7 @@
                 ticking = false;
             });
         }, { passive: true });
+        document.addEventListener('cronosound:settingschange', updateHeader);
         updateHeader();
     };
 
