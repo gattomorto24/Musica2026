@@ -7,7 +7,9 @@
     
     <script src="language-engine.js"></script>
     <script src="theme-engine.js"></script>
-    <script src="shared-ui.js"></script>
+    <script src="changelog-data.js" defer></script>
+    <script src="shared-ui.js" defer></script>
+    <script src="info.js" defer></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- Material Symbols for icons -->
@@ -38,22 +40,7 @@
 
     <div class="glass-card">
         <h2 data-i18n="changelog">📜 Changelog Storico</h2>
-        <div id="changelog-container">
-            <div class="log-entry">
-                <div class="log-header">
-                    <span class="version-tag latest">v2.0.1 - LATEST</span>
-                    <span class="log-date">24 GIUGNO 2026</span>
-                </div>
-                <ul>
-                    <li><b>Esperienza mobile ridisegnata:</b> ottimizzate le card delle canzoni, l’archivio e la disposizione dei contenuti per eliminare sbordamenti e migliorare respiro e leggibilità sugli schermi piccoli.</li>
-                    <li><b>Nuova tab bar mobile:</b> introdotta una navigazione inferiore in stile iOS con tre sezioni principali e pulsante di ricerca circolare sempre adattivo.</li>
-                    <li><b>Ricerca con morph fluido:</b> la tab bar scivola lateralmente mentre la bolla di ricerca si espande verso sinistra trasformandosi nella barra; la chiusura riproduce il movimento al contrario.</li>
-                    <li><b>Superfici blur più leggibili:</b> tab bar, bolla e barra di ricerca ora utilizzano fondi blu-notte quasi opachi con sfocatura profonda, eliminando l’effetto eccessivamente trasparente.</li>
-                    <li><b>Interfaccia e sfondo:</b> aggiunto lo sfondo nero dinamico con bagliori blu animati e uniformato il trattamento sfocato delle card.</li>
-                    <li><b>Classifica ed esportazione:</b> spostato il comando Esporta accanto al titolo “Classifica Generale” e corretto il comportamento del logout.</li>
-                </ul>
-            </div>
-        </div>
+        <div id="changelog-container"></div>
     </div>
 
     <div class="glass-card">

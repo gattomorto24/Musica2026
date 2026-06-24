@@ -6,11 +6,30 @@
  */
 
 (function() {
+    const THEME_CLASSES = ['dark-mode', 'light-mode', 'red-mode', 'glass-mode', 'blue-mode', 'gold-mode'];
+    const THEME_COLORS = {
+        'dark-mode': '#020308',
+        'light-mode': '#f2f2f7',
+        'red-mode': '#170809',
+        'glass-mode': '#eaf5fb',
+        'blue-mode': '#07111f',
+        'gold-mode': '#140f05'
+    };
+
     // --- 1. LOGICA PRE-RENDER (Eseguita prima del caricamento della pagina) ---
-    const getSavedTheme = () => localStorage.getItem('cronosound-theme') || 'dark-mode';
+    const getSavedTheme = () => {
+        const savedTheme = localStorage.getItem('cronosound-theme');
+        return THEME_CLASSES.includes(savedTheme) ? savedTheme : 'dark-mode';
+    };
     const applyTheme = (theme) => {
-        document.documentElement.className = theme;
-        if (document.body) document.body.className = theme;
+        const safeTheme = THEME_CLASSES.includes(theme) ? theme : 'dark-mode';
+        [document.documentElement, document.body].filter(Boolean).forEach((element) => {
+            element.classList.remove(...THEME_CLASSES);
+            element.classList.add(safeTheme);
+        });
+
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) themeColor.setAttribute('content', THEME_COLORS[safeTheme]);
     };
 
     // Applica subito all'elemento root per evitare il flash bianco
@@ -20,15 +39,16 @@
     document.addEventListener('DOMContentLoaded', () => {
         const currentTheme = getSavedTheme();
         applyTheme(currentTheme); // Riapplica al body per sicurezza
-        
+
         // Sincronizza lo stato delle icone
         updateIcons(currentTheme);
 
         // Listener per cambiamenti da altre schede/finestre
         window.addEventListener('storage', (e) => {
             if (e.key === 'cronosound-theme') {
-                applyTheme(e.newValue);
-                updateIcons(e.newValue);
+                const nextTheme = THEME_CLASSES.includes(e.newValue) ? e.newValue : 'dark-mode';
+                applyTheme(nextTheme);
+                updateIcons(nextTheme);
             }
         });
     });
@@ -65,31 +85,33 @@
         content.appendChild(closeBtn);
 
         const title = document.createElement('h3');
-        title.textContent = 'Scegli Tema';
+        title.dataset.i18n = 'theme_menu_title';
+        title.textContent = window.t ? window.t('theme_menu_title') : 'Scegli tema';
         content.appendChild(title);
 
         const subtitle = document.createElement('p');
-        subtitle.textContent = 'Usa un tema rapido e coerente con lo stile CronoSound 1.8.';
+        subtitle.dataset.i18n = 'theme_menu_description';
+        subtitle.textContent = window.t ? window.t('theme_menu_description') : 'Scegli una palette per CronoSound.';
         content.appendChild(subtitle);
 
         const options = document.createElement('div');
         options.className = 'theme-options';
 
         const themes = [
-            { title: 'Dark', emoji: '🌓', description: 'Notte classica', class: 'dark-mode' },
-            { title: 'Light', emoji: '☀️', description: 'Chiaro e pulito', class: 'light-mode' },
-            { title: 'Red', emoji: '🔴', description: 'Energia rossa', class: 'red-mode' },
-            { title: 'Glass', emoji: '💎', description: 'Vetro e luce', class: 'glass-mode' },
-            { title: 'Blue', emoji: '🔵', description: 'Profondità blu', class: 'blue-mode' },
-            { title: 'Gold', emoji: '🟡', description: 'Nuovo tema gold', class: 'gold-mode' }
+            { titleKey: 'theme_dark', emoji: '🌓', descriptionKey: 'theme_dark_desc', class: 'dark-mode' },
+            { titleKey: 'theme_light', emoji: '☀️', descriptionKey: 'theme_light_desc', class: 'light-mode' },
+            { titleKey: 'theme_red', emoji: '🔴', descriptionKey: 'theme_red_desc', class: 'red-mode' },
+            { titleKey: 'theme_glass', emoji: '💎', descriptionKey: 'theme_glass_desc', class: 'glass-mode' },
+            { titleKey: 'theme_blue', emoji: '🔵', descriptionKey: 'theme_blue_desc', class: 'blue-mode' },
+            { titleKey: 'theme_gold', emoji: '🟡', descriptionKey: 'theme_gold_desc', class: 'gold-mode' }
         ];
 
-        themes.forEach(({ title, emoji, description, class: themeClass }) => {
+        themes.forEach(({ titleKey, emoji, descriptionKey, class: themeClass }) => {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'theme-option';
             button.dataset.theme = themeClass;
-            button.innerHTML = `<strong>${emoji} ${title}</strong><span>${description}</span>`;
+            button.innerHTML = `<strong>${emoji} <span data-i18n="${titleKey}">${window.t ? window.t(titleKey) : titleKey}</span></strong><span data-i18n="${descriptionKey}">${window.t ? window.t(descriptionKey) : descriptionKey}</span>`;
             button.onclick = () => {
                 applyTheme(themeClass);
                 localStorage.setItem('cronosound-theme', themeClass);
@@ -124,7 +146,7 @@
             document.getElementById('theme-toggle-desk'),
             document.getElementById('theme-toggle-mobile')
         ];
-        
+
         let symbol;
         if (theme === 'light-mode') {
             symbol = '☀️';
@@ -139,7 +161,7 @@
         } else {
             symbol = '🌓'; // dark-mode
         }
-        
+
         icons.forEach(icon => {
             if (icon) {
                 if (icon.tagName === 'BUTTON' || icon.tagName === 'DIV') {

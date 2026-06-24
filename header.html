@@ -1,16 +1,16 @@
 <!-- Shared header only -->
 <header class="main-header">
     <div class="header-row">
-        <button class="icon-btn menu-btn" onclick="toggleMenu()" aria-label="Apri menu">
+        <button class="icon-btn menu-btn" onclick="toggleMenu()" aria-label="Apri menu" data-i18n-aria-label="open_menu">
             <span class="material-symbols-outlined">menu</span>
         </button>
         <div class="header-title">
-            <h1 title="Torna a Classifica Generale"><a href="index.html#live" onclick="if (window.navigateToSection) { navigateToSection('live'); return false; }">CRONOSOUND</a></h1>
-            <p class="subtitle">Professional Cloud OS</p>
+            <h1 title="Torna a Classifica Generale" data-i18n-title="return_to_ranking"><a href="index.html#live" onclick="if (window.navigateToSection) { navigateToSection('live'); return false; }">CRONOSOUND</a></h1>
+            <p class="subtitle" data-i18n="professional_cloud_os">Sistema cloud professionale</p>
         </div>
-        <button class="icon-btn profile-btn" onclick="mobileNavigate('account.html#profile')" aria-label="Profilo utente">
+        <button class="icon-btn profile-btn" onclick="mobileNavigate('account.html#profile')" aria-label="Profilo utente" data-i18n-aria-label="user_profile">
             <span class="material-symbols-outlined">account_circle</span>
         </button>
     </div>
-    <div class="header-compact-title"></div>
+    <div class="header-compact-title" aria-hidden="true">CRONOSOUND</div>
 </header>

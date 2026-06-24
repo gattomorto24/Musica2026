@@ -22,7 +22,7 @@ function runCronoSync() {
     if (CONFIG.DEBUG_MODE) console.log("%c[CronoSync] Avvio scansione metadati...", "color: #00f2ff; font-weight: bold;");
 
     const rows = document.querySelectorAll(CONFIG.SELECTORS.ROWS);
-    
+
     if (rows.length === 0) {
         console.warn("[CronoSync] Nessuna riga trovata. Controlla le classi HTML!");
         return;
@@ -33,7 +33,7 @@ function runCronoSync() {
         if (!titleNode) return;
 
         const rawTitle = titleNode.innerText.trim();
-        
+
         // --- FALLBACK 1: Ricerca Diretta nel Mapper ---
         let info = null;
         if (typeof window.getSongInfo === 'function') {

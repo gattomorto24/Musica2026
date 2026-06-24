@@ -181,7 +181,7 @@ function renderAlbumSongSelect() {
     const assigned = new Set(album.songs || []);
     const available = Object.keys(state.songs || {}).filter(name => !assigned.has(name));
     sel.innerHTML = '<option value="" disabled selected>Seleziona una canzone...</option>' + available.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
-    
+
     // Render multi-select
     if (multiSel) {
         multiSel.innerHTML = available.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
@@ -301,17 +301,17 @@ async function addMultipleSongsToAlbum() {
     if (!albumSelect || !multiSelect) return;
     const albumId = albumSelect.value;
     if (!albumId) return alert('Seleziona un album prima di aggiungere le canzoni');
-    
+
     const album = state.albums?.[albumId];
     if (!album) return alert('Album non trovato');
     if (!Array.isArray(album.songs)) album.songs = [];
-    
+
     const selectedOptions = Array.from(multiSelect.selectedOptions);
     if (selectedOptions.length === 0) return alert('Seleziona almeno una canzone da aggiungere');
-    
+
     let addedCount = 0;
     const songsToAdd = [];
-    
+
     selectedOptions.forEach(option => {
         const songName = option.value;
         if (songName && !album.songs.includes(songName)) {
@@ -321,7 +321,7 @@ async function addMultipleSongsToAlbum() {
             addedCount++;
         }
     });
-    
+
     if (addedCount > 0) {
         pushNews({ type: 'album', by: window.currentUserEmail || 'owner', msg: `Aggiunte ${addedCount} canzione/i all'album ${album.name}: ${songsToAdd.join(', ')}` });
         await saveState();

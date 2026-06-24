@@ -164,7 +164,7 @@ function smartMultiArtistMatcher(input) {
     for (const key of databaseKeys) {
         // Normalizza SEMPRE la chiave in CAPS (anche se già lo è)
         const normalizedKey = key.toUpperCase();
-        
+
         // Rimuovi simboli dalla chiave normalizzata per confronto pulito
         const cleanKey = normalizedKey.replace(/[\(\)\[\]\{\}\-\+\=\*\^\$\|\?\.\,\:\;\!\"\'\\\/]/g, ' ').replace(/\s+/g, ' ').trim();
 
@@ -223,7 +223,7 @@ function getSongInfo(title) {
  */
 function getFullMetadata(title) {
     const result = smartMultiArtistMatcher(title);
-    
+
     if (result.titolo === "CANZONE NON RICONOSCIUTA") {
         return {
             titolo: "Canzone Sconosciuta",
@@ -234,10 +234,10 @@ function getFullMetadata(title) {
             status: "not_found"
         };
     }
-    
+
     // Lookup nel database per ottenere genere e anno
     const dbEntry = musicDatabase[result.titolo];
-    
+
     return {
         titolo: result.titolo,
         artista: result.artista,

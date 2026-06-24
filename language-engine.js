@@ -1,12 +1,12 @@
 /**
- * CRONOSOUND LANGUAGE ENGINE v1.0
- * Multi-language Support System
- * Supporta: Italiano (it), English (en)
+ * CRONOSOUND LANGUAGE ENGINE 3
+ * Runtime i18n for static pages, injected fragments and accessible UI labels.
+ * Languages: Italiano (it), English (en), Español (es)
  */
 
 (function() {
     const DEFAULT_LANGUAGE = 'it';
-    
+
     const translations = {
         it: {
             // Header & Navigation
@@ -15,24 +15,21 @@
             'update': 'Aggiorna',
             'archive': 'Archivio',
             'general_ranking': 'Classifica Generale',
-            
+
             // Buttons
             'caps': 'CAPS',
             'export': 'Esporta',
             'close': 'CHIUDI',
-            'cancel': 'Annulla',
             'publish': 'Pubblica nel Cloud',
             'format_db': 'Formatta Database',
             'send': 'Invia',
-            'save': 'Salva',
             'logout': 'Logout',
-            
+
             // Export Modal
             'export_options': 'OPZIONI ESPORTAZIONE',
             'position': 'Posizione (#1, #2...)',
             'total_points': 'Punti Totali',
-            'series': 'Serie (A, B, C)',
-            
+
             // Info Popup
             'music_metadata': '🎵 Music Metadata',
             'song_title': 'Titolo Canzone',
@@ -42,12 +39,12 @@
             'year': 'Anno',
             'current_league': 'Lega Attuale',
             'total_points_label': 'Punti Totali',
-            
+
             // Search & Input
             'search_placeholder': 'Cerca canzoni per titolo...',
             'week_label': 'Settimana',
             'week_placeholder': '1. Canzone A\n2. Canzone B...\n\nIncolla qui la classifica settimanale',
-            
+
             // Mobile Menu
             'system_menu': 'MENU SISTEMA',
             'general_ranking_menu': 'Classifica Generale',
@@ -56,14 +53,14 @@
             'info': 'Info',
             'profile': 'Profilo',
             'theme': 'Tema',
-            
+
             // Table Headers
             'position_header': 'Pos',
             'song_series': 'Canzone / Serie',
             'points_header': 'Punti Totali',
             'song': 'Canzone',
             'points_gained': 'Punti Guadagnati',
-            
+
             // Messages & Alerts
             'secure_connection': 'SECURE CONNECTION: PENDING',
             'system_online': 'SYSTEM ONLINE: CLOUD SYNCHRONIZED',
@@ -91,12 +88,11 @@
             'language_option_en': 'English',
             'language_option_es': 'Español',
             'ok': 'Ok',
-            'cancel': 'Annulla',
             'login_required_title': 'Accesso richiesto',
             'login_required_text': 'Devi accedere per mettere like.',
             'already_liked_title': 'Like già inviato',
             'already_liked_text': 'Hai già messo like a questa canzone.',
-            
+
             // Account Page
             'login': 'Accedi',
             'register': 'Registrati',
@@ -109,23 +105,21 @@
             'request_manager': 'Richiedi Status Manager',
             'password_recovery': 'Recupero Password',
             'back_to_command': 'Torna al Terminale',
-            
+
             // Info Page
             'documentation': 'DOCUMENTAZIONE & REGOLAMENTO',
             'official': 'Documentazione & Regolamento Ufficiale',
-            'changelog': 'Changelog Storico',
             'rules': '⚖️ Regolamento & Protocolli',
-            'point_attribution': 'Attribuzione Punti',
             'series': 'Serie',
             'series_a': 'Serie A (Posizioni 1-20)',
             'series_b': 'Serie B (Posizioni 21-50)',
             'series_c': 'Serie C (Posizioni 51+)',
-            
+
             // Language
             'language': 'Lingua',
             'italian': 'Italiano',
             'english': 'English',
-            
+
             // Account Page Additional
             'account_management': 'Account Management System',
             'account_menu': 'MENU ACCOUNT',
@@ -166,7 +160,7 @@
             'registration_sent': 'Registrazione Inviata',
             'account_created': 'Il tuo account è stato creato con successo. Controlla la tua casella di posta per confermare l\'email prima dell\'accesso.',
             'go_to_login': 'Vai al Login',
-            
+
             // Info Page Additional
             'documentation_title': 'DOCUMENTAZIONE & REGOLAMENTO',
             'official_docs': 'Documentazione & Regolamento Ufficiale',
@@ -211,24 +205,21 @@
             'update': 'Update',
             'archive': 'Archive',
             'general_ranking': 'General Ranking',
-            
+
             // Buttons
             'caps': 'CAPS',
             'export': 'Export',
             'close': 'CLOSE',
-            'cancel': 'Cancel',
             'publish': 'Publish to Cloud',
             'format_db': 'Format Database',
             'send': 'Send',
-            'save': 'Save',
             'logout': 'Logout',
-            
+
             // Export Modal
             'export_options': 'EXPORT OPTIONS',
             'position': 'Position (#1, #2...)',
             'total_points': 'Total Points',
-            'series': 'Series (A, B, C)',
-            
+
             // Info Popup
             'music_metadata': '🎵 Music Metadata',
             'song_title': 'Song Title',
@@ -238,12 +229,12 @@
             'year': 'Year',
             'current_league': 'Current League',
             'total_points_label': 'Total Points',
-            
+
             // Search & Input
             'search_placeholder': 'Search songs by title...',
             'week_label': 'Week',
             'week_placeholder': '1. Song A\n2. Song B...\n\nPaste the weekly ranking here',
-            
+
             // Mobile Menu
             'system_menu': 'SYSTEM MENU',
             'general_ranking_menu': 'General Ranking',
@@ -252,14 +243,14 @@
             'info': 'Info',
             'profile': 'Profile',
             'theme': 'Theme',
-            
+
             // Table Headers
             'position_header': 'Pos',
             'song_series': 'Song / Series',
             'points_header': 'Total Points',
             'song': 'Song',
             'points_gained': 'Points Gained',
-            
+
             // Messages & Alerts
             'secure_connection': 'SECURE CONNECTION: PENDING',
             'system_online': 'SYSTEM ONLINE: CLOUD SYNCHRONIZED',
@@ -287,12 +278,11 @@
             'language_option_en': 'English',
             'language_option_es': 'Español',
             'ok': 'Ok',
-            'cancel': 'Cancel',
             'login_required_title': 'Login Required',
             'login_required_text': 'You need to log in to like songs.',
             'already_liked_title': 'Already Liked',
             'already_liked_text': 'You have already liked this song.',
-            
+
             // Account Page
             'login': 'Login',
             'register': 'Register',
@@ -305,23 +295,21 @@
             'request_manager': 'Request Manager Status',
             'password_recovery': 'Password Recovery',
             'back_to_command': 'Back to Terminal',
-            
+
             // Info Page
             'documentation': 'DOCUMENTATION & RULES',
             'official': 'Official Documentation & Rules',
-            'changelog': 'Historical Changelog',
             'rules': '⚖️ Rules & Protocols',
-            'point_attribution': 'Point Attribution',
             'series': 'Series',
             'series_a': 'Series A (Positions 1-20)',
             'series_b': 'Series B (Positions 21-50)',
             'series_c': 'Series C (Positions 51+)',
-            
+
             // Language
             'language': 'Language',
             'italian': 'Italiano',
             'english': 'English',
-            
+
             // Account Page Additional
             'account_management': 'Account Management System',
             'account_menu': 'ACCOUNT MENU',
@@ -362,7 +350,7 @@
             'registration_sent': 'Registration Sent',
             'account_created': 'Your account has been created successfully. Check your email to confirm before logging in.',
             'go_to_login': 'Go to Login',
-            
+
             // Info Page Additional
             'documentation_title': 'DOCUMENTATION & RULES',
             'official_docs': 'Official Documentation & Rules',
@@ -421,7 +409,6 @@
         'export_options': 'OPCIONES DE EXPORTACIÓN',
         'position': 'Posición (#1, #2...)',
         'total_points': 'Puntos Totales',
-        'series': 'Serie (A, B, C)',
         'music_metadata': '🎵 Metadatos Musicales',
         'song_title': 'Título de la Canción',
         'artist_name': 'Nombre del Artista',
@@ -504,487 +491,225 @@
         'doc_version': 'TONY EXECUTIVE SYSTEMS — VERSIÓN DE DOCUMENTO 2.0.2'
     });
 
-    // Get saved language or default
-    const getSavedLanguage = () => localStorage.getItem('cronosound-language') || DEFAULT_LANGUAGE;
-    
-    // Set current language
-    const savedLanguage = getSavedLanguage();
-    window.currentLanguage = translations[savedLanguage] ? savedLanguage : DEFAULT_LANGUAGE;
+    Object.assign(translations.it, {
+        professional_cloud_os: 'Sistema cloud professionale', navigation: 'Navigazione', quick_actions: 'Azioni rapide', settings: 'Impostazioni',
+        open_menu: 'Apri menu', user_profile: 'Profilo utente', return_to_ranking: 'Torna alla classifica generale',
+        edit: 'Modifica', news: 'Notizie', add: 'Aggiungi', search: 'Cerca', search_songs_albums: 'Cerca canzoni o album…',
+        export_ranking: 'Esporta classifica', weekly_archive: 'Archivio settimanale', previous_week: 'Settimana precedente', next_week: 'Settimana successiva',
+        sort_ranking: 'Ordina classifica', sort_description: 'Scegli come visualizzare la classifica.', by_points: 'Punti', by_name: 'Nome', by_series: 'Serie',
+        backup: 'Backup', emergency_backup: 'Backup di emergenza', general_ranking_short: 'Classifica', system_menu: 'Menu sistema',
+        theme_menu_title: 'Scegli tema', theme_menu_description: 'Scegli una palette coerente con il nuovo design CronoSound.',
+        archive_current: 'Archivio: settimana', full_archive: 'Archivio completo', navigate: 'naviga', export_txt: 'Esporta TXT', export_csv: 'Esporta CSV',
+        backup_summary: 'Backup salvati: {count}. Ultimo backup fino alla settimana {week}.', backup_none: 'Nessun backup salvato. Usa Backup per creare un salvataggio di emergenza.',
+        backup_empty: 'Nessun salvataggio di emergenza creato.', backup_created_at: 'Creato:', backup_until_week: 'Fino alla settimana:', backup_created: 'Backup di emergenza creato e scaricato.',
+        theme_dark: 'Dark', theme_dark_desc: 'Notte classica', theme_light: 'Light', theme_light_desc: 'Chiaro e pulito',
+        theme_red: 'Red', theme_red_desc: 'Energia rossa', theme_glass: 'Glass', theme_glass_desc: 'Vetro e luce',
+        theme_blue: 'Blue', theme_blue_desc: 'Profondità blu', theme_gold: 'Gold', theme_gold_desc: 'Calore dorato',
+        language_engine_name: 'Language Engine 3'
+    });
+    Object.assign(translations.en, {
+        professional_cloud_os: 'Professional Cloud OS', navigation: 'Navigation', quick_actions: 'Quick actions', settings: 'Settings',
+        open_menu: 'Open menu', user_profile: 'User profile', return_to_ranking: 'Return to general ranking',
+        edit: 'Edit', news: 'News', add: 'Add', search: 'Search', search_songs_albums: 'Search songs or albums…',
+        export_ranking: 'Export ranking', weekly_archive: 'Weekly archive', previous_week: 'Previous week', next_week: 'Next week',
+        sort_ranking: 'Sort ranking', sort_description: 'Choose how to display the ranking.', by_points: 'Points', by_name: 'Name', by_series: 'Series',
+        backup: 'Backup', emergency_backup: 'Emergency backup', general_ranking_short: 'Ranking', system_menu: 'System menu',
+        theme_menu_title: 'Choose theme', theme_menu_description: 'Choose a palette designed for the new CronoSound interface.',
+        archive_current: 'Archive: week', full_archive: 'Full archive', navigate: 'navigate', export_txt: 'Export TXT', export_csv: 'Export CSV',
+        backup_summary: 'Saved backups: {count}. Latest backup includes week {week}.', backup_none: 'No backups saved yet. Use Backup to create an emergency copy.',
+        backup_empty: 'No emergency backup has been created.', backup_created_at: 'Created:', backup_until_week: 'Through week:', backup_created: 'Emergency backup created and downloaded.',
+        theme_dark: 'Dark', theme_dark_desc: 'Classic night', theme_light: 'Light', theme_light_desc: 'Bright and clean',
+        theme_red: 'Red', theme_red_desc: 'Red energy', theme_glass: 'Glass', theme_glass_desc: 'Glass and light',
+        theme_blue: 'Blue', theme_blue_desc: 'Blue depth', theme_gold: 'Gold', theme_gold_desc: 'Golden warmth',
+        language_engine_name: 'Language Engine 3'
+    });
+    Object.assign(translations.es, {
+        professional_cloud_os: 'Sistema cloud profesional', navigation: 'Navegación', quick_actions: 'Acciones rápidas', settings: 'Ajustes',
+        open_menu: 'Abrir menú', user_profile: 'Perfil de usuario', return_to_ranking: 'Volver a la clasificación general',
+        edit: 'Editar', news: 'Noticias', add: 'Añadir', search: 'Buscar', search_songs_albums: 'Buscar canciones o álbumes…',
+        export_ranking: 'Exportar clasificación', weekly_archive: 'Archivo semanal', previous_week: 'Semana anterior', next_week: 'Semana siguiente',
+        sort_ranking: 'Ordenar clasificación', sort_description: 'Elige cómo mostrar la clasificación.', by_points: 'Puntos', by_name: 'Nombre', by_series: 'Serie',
+        backup: 'Copia de seguridad', emergency_backup: 'Copia de emergencia', general_ranking_short: 'Clasificación', system_menu: 'Menú del sistema',
+        theme_menu_title: 'Elegir tema', theme_menu_description: 'Elige una paleta diseñada para la nueva interfaz de CronoSound.',
+        archive_current: 'Archivo: semana', full_archive: 'Archivo completo', navigate: 'navegar', export_txt: 'Exportar TXT', export_csv: 'Exportar CSV',
+        backup_summary: 'Copias guardadas: {count}. La última incluye la semana {week}.', backup_none: 'Aún no hay copias. Usa Copia de seguridad para crear una copia de emergencia.',
+        backup_empty: 'No se ha creado ninguna copia de emergencia.', backup_created_at: 'Creada:', backup_until_week: 'Hasta la semana:', backup_created: 'Copia de emergencia creada y descargada.',
+        theme_dark: 'Dark', theme_dark_desc: 'Noche clásica', theme_light: 'Light', theme_light_desc: 'Claro y limpio',
+        theme_red: 'Red', theme_red_desc: 'Energía roja', theme_glass: 'Glass', theme_glass_desc: 'Cristal y luz',
+        theme_blue: 'Blue', theme_blue_desc: 'Profundidad azul', theme_gold: 'Gold', theme_gold_desc: 'Calidez dorada',
+        language_engine_name: 'Language Engine 3'
+    });
+
+    const ENGINE_VERSION = 3;
+    const STORAGE_KEY = 'cronosound-language';
+    const SUPPORTED_LANGUAGES = Object.freeze(['it', 'en', 'es']);
+    const isSupported = (lang) => SUPPORTED_LANGUAGES.includes(lang);
+    const readSavedLanguage = () => {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return isSupported(saved) ? saved : DEFAULT_LANGUAGE;
+        } catch (_) {
+            return DEFAULT_LANGUAGE;
+        }
+    };
+    const interpolate = (value, params = {}) => String(value).replace(/\{(\w+)\}/g, (match, name) => (
+        Object.prototype.hasOwnProperty.call(params, name) ? params[name] : match
+    ));
+
+    window.currentLanguage = readSavedLanguage();
     document.documentElement.lang = window.currentLanguage;
 
-    // Translation function with fallback to English
-    window.t = function(key) {
-        const lang = window.currentLanguage || DEFAULT_LANGUAGE;
-        return (translations[lang] && translations[lang][key]) || translations.en[key] || key;
+    window.t = function(key, params) {
+        const lang = isSupported(window.currentLanguage) ? window.currentLanguage : DEFAULT_LANGUAGE;
+        const value = translations[lang]?.[key] ?? translations[DEFAULT_LANGUAGE]?.[key] ?? translations.en?.[key] ?? key;
+        return interpolate(value, params);
     };
 
-    // Change language function
-    window.changeLanguage = function(lang) {
-        if (lang && translations[lang]) {
-            window.currentLanguage = lang;
-        } else {
-            const available = Object.keys(translations);
-            const currentIndex = available.indexOf(window.currentLanguage);
-            const nextIndex = (currentIndex + 1) % available.length;
-            window.currentLanguage = available[nextIndex] || DEFAULT_LANGUAGE;
+    const translateElement = (element) => {
+        if (!(element instanceof Element)) return;
+        const textKey = element.dataset.i18n;
+        if (textKey) {
+            const value = window.t(textKey);
+            if (element.matches('input, textarea')) {
+                if (element.placeholder !== value) element.placeholder = value;
+            } else if (element.textContent !== value) {
+                element.textContent = value;
+            }
         }
-        localStorage.setItem('cronosound-language', window.currentLanguage);
+        const bindings = [
+            ['i18nPlaceholder', 'placeholder'], ['i18nTitle', 'title'], ['i18nAriaLabel', 'aria-label'], ['i18nAlt', 'alt']
+        ];
+        bindings.forEach(([datasetKey, attribute]) => {
+            const key = element.dataset[datasetKey];
+            if (key) element.setAttribute(attribute, window.t(key));
+        });
+    };
+
+    window.applyTranslations = function(root = document) {
+        if (root instanceof Element) translateElement(root);
+        root.querySelectorAll?.('[data-i18n], [data-i18n-placeholder], [data-i18n-title], [data-i18n-aria-label], [data-i18n-alt]')
+            .forEach(translateElement);
         document.documentElement.lang = window.currentLanguage;
-        location.reload();
+    };
+
+    const updateLanguageSelection = (lang) => {
+        const overlay = document.getElementById('language-confirm-overlay');
+        if (!overlay || !isSupported(lang)) return;
+        overlay.dataset.selected = lang;
+        const label = document.getElementById('language-confirm-selected');
+        if (label) label.textContent = `${window.t('language_confirm_text')} ${window.t(`language_option_${lang}`)}`;
+        overlay.querySelectorAll('.language-option').forEach((button) => {
+            button.classList.toggle('selected', button.dataset.lang === lang);
+        });
+    };
+
+    window.changeLanguage = function(lang) {
+        const nextLanguage = isSupported(lang)
+            ? lang
+            : SUPPORTED_LANGUAGES[(SUPPORTED_LANGUAGES.indexOf(window.currentLanguage) + 1) % SUPPORTED_LANGUAGES.length];
+        window.currentLanguage = nextLanguage;
+        try { localStorage.setItem(STORAGE_KEY, nextLanguage); } catch (_) {}
+        window.applyTranslations();
+        updateLanguageSelection(nextLanguage);
+        document.dispatchEvent(new CustomEvent('cronosound:languagechange', { detail: { language: nextLanguage } }));
+        return nextLanguage;
     };
 
     window.showLanguageConfirm = function() {
         const overlay = document.getElementById('language-confirm-overlay');
         if (!overlay) return;
+        updateLanguageSelection(window.currentLanguage);
         overlay.classList.add('active');
-        const defaultLang = window.currentLanguage || DEFAULT_LANGUAGE;
-        const selected = overlay.dataset.selected || defaultLang;
-        setLanguageSelection(selected);
     };
-
-    window.setLanguageSelection = function(lang) {
-        const overlay = document.getElementById('language-confirm-overlay');
-        if (!overlay) return;
-        overlay.dataset.selected = lang;
-        const label = document.getElementById('language-confirm-selected');
-        if (label) {
-            label.textContent = `${window.t('language_confirm_text')} ${window.t('language_option_' + lang)}`;
-        }
-        overlay.querySelectorAll('.language-option').forEach(el => {
-            el.classList.toggle('selected', el.dataset.lang === lang);
-        });
-    };
-
+    window.setLanguageSelection = updateLanguageSelection;
     window.confirmLanguageChange = function() {
         const overlay = document.getElementById('language-confirm-overlay');
         if (!overlay) return;
         const selected = overlay.dataset.selected || window.currentLanguage;
         overlay.classList.remove('active');
-        if (translations[selected] && selected !== window.currentLanguage) {
-            window.changeLanguage(selected);
-        }
+        window.changeLanguage(selected);
     };
-
     window.closeLanguageConfirm = function() {
-        const overlay = document.getElementById('language-confirm-overlay');
-        if (overlay) overlay.classList.remove('active');
+        document.getElementById('language-confirm-overlay')?.classList.remove('active');
     };
+    window.cycleLanguage = window.showLanguageConfirm;
 
     window.showSystemAlert = function(title, message, okText, cancelText, onConfirm) {
         const overlay = document.getElementById('system-alert-overlay');
         if (!overlay) return;
-        const titleNode = document.getElementById('system-alert-title');
-        const messageNode = document.getElementById('system-alert-message');
+        overlay.querySelector('#system-alert-title').textContent = title || '';
+        overlay.querySelector('#system-alert-message').textContent = message || '';
         const okButton = overlay.querySelector('.system-alert-btn.ok');
         const cancelButton = overlay.querySelector('.system-alert-btn.cancel');
-
-        titleNode.innerText = title || '';
-        messageNode.innerText = message || '';
-        okButton.innerText = okText || window.t('ok');
-        if (cancelText) {
-            cancelButton.style.display = 'inline-flex';
-            cancelButton.innerText = cancelText;
-        } else {
-            cancelButton.style.display = 'none';
-        }
-
-        window._systemAlertCallback = onConfirm || null;
+        okButton.textContent = okText || window.t('ok');
+        cancelButton.textContent = cancelText || window.t('cancel');
+        cancelButton.style.display = cancelText ? 'inline-flex' : 'none';
+        window._systemAlertCallback = typeof onConfirm === 'function' ? onConfirm : null;
         overlay.classList.add('active');
     };
-
     window.confirmSystemAlert = function() {
         const callback = window._systemAlertCallback;
-        if (typeof callback === 'function') callback();
         window.hideSystemAlert();
+        if (callback) callback();
     };
-
     window.hideSystemAlert = function() {
-        const overlay = document.getElementById('system-alert-overlay');
-        if (overlay) overlay.classList.remove('active');
+        document.getElementById('system-alert-overlay')?.classList.remove('active');
         window._systemAlertCallback = null;
     };
 
-    window.cycleLanguage = function() {
-        window.showLanguageConfirm();
-    };
-
-    // Update page content with translations
-    window.applyTranslations = function() {
-        const lang = window.currentLanguage || DEFAULT_LANGUAGE;
-        
-        // Update all elements with data-i18n attribute
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (key) {
-                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                    el.placeholder = window.t(key);
-                } else {
-                    el.textContent = window.t(key);
-                }
-            }
-        });
-
-        // Update all elements with data-i18n-title attribute
-        document.querySelectorAll('[data-i18n-title]').forEach(el => {
-            const key = el.getAttribute('data-i18n-title');
-            if (key) {
-                el.title = window.t(key);
-            }
-        });
-    };
-
-    // Inject language confirm overlay and apply translations on DOM ready
-    document.addEventListener('DOMContentLoaded', () => {
-        applyTranslations();
+    const injectEngineUI = () => {
         if (!document.getElementById('language-confirm-overlay')) {
             document.body.insertAdjacentHTML('beforeend', `
                 <div id="language-confirm-overlay" class="language-confirm-overlay">
                     <div class="language-confirm-card">
-                        <h3>${window.t('language_confirm_title')}</h3>
-                        <p id="language-confirm-selected">${window.t('language_confirm_text')} ${window.t('language_option_en')}</p>
+                        <h3 data-i18n="language_confirm_title"></h3>
+                        <p id="language-confirm-selected"></p>
                         <div class="language-confirm-options">
-                            <button class="language-option" data-lang="it" onclick="window.setLanguageSelection('it')">${window.t('language_option_it')}</button>
-                            <button class="language-option" data-lang="en" onclick="window.setLanguageSelection('en')">${window.t('language_option_en')}</button>
-                            <button class="language-option" data-lang="es" onclick="window.setLanguageSelection('es')">${window.t('language_option_es')}</button>
+                            ${SUPPORTED_LANGUAGES.map((lang) => `<button class="language-option" data-lang="${lang}" onclick="window.setLanguageSelection('${lang}')" data-i18n="language_option_${lang}"></button>`).join('')}
                         </div>
                         <div class="language-confirm-actions">
-                            <button class="confirm-btn cancel" onclick="window.closeLanguageConfirm()">${window.t('cancel')}</button>
-                            <button class="confirm-btn ok" onclick="window.confirmLanguageChange()">${window.t('ok')}</button>
+                            <button class="confirm-btn cancel" onclick="window.closeLanguageConfirm()" data-i18n="cancel"></button>
+                            <button class="confirm-btn ok" onclick="window.confirmLanguageChange()" data-i18n="ok"></button>
                         </div>
                     </div>
-                </div>
-            `);
+                </div>`);
         }
-
         if (!document.getElementById('system-alert-overlay')) {
             document.body.insertAdjacentHTML('beforeend', `
                 <div id="system-alert-overlay" class="system-alert-overlay">
                     <div class="system-alert-card">
-                        <h3 id="system-alert-title"></h3>
-                        <p id="system-alert-message"></p>
+                        <h3 id="system-alert-title"></h3><p id="system-alert-message"></p>
                         <div class="system-alert-actions">
-                            <button class="system-alert-btn cancel" onclick="window.hideSystemAlert()">${window.t('cancel')}</button>
-                            <button class="system-alert-btn ok" onclick="window.confirmSystemAlert()">${window.t('ok')}</button>
+                            <button class="system-alert-btn cancel" onclick="window.hideSystemAlert()" data-i18n="cancel"></button>
+                            <button class="system-alert-btn ok" onclick="window.confirmSystemAlert()" data-i18n="ok"></button>
                         </div>
                     </div>
-                </div>
-            `);
+                </div>`);
         }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        injectEngineUI();
+        window.applyTranslations();
+        updateLanguageSelection(window.currentLanguage);
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) window.applyTranslations(node);
+            }));
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        window.LanguageEngine3.observer = observer;
     });
 
-    // Make available globally
     window.translations = translations;
-
-    // Changelog data structure
-    const changelogs = {
-        it: [
-            {
-                version: 'v2.0',
-                date: '23 GIUGNO 2026',
-                latest: true,
-                items: [
-                    { title: 'CronoFrost UI 1.0', desc: 'Nuova interfaccia con tab bar centrale arrotondata, pulsanti blur e bordo contrastato per un look moderno e coerente.' },
-                    { title: 'Crono Account System 2.0', desc: 'Reingegnerizzato il sistema account con login personalizzato, gestione profilo completa e ruolo proprietario persistente.' },
-                    { title: 'Ranking Engine 5', desc: 'Aggiornato il motore di classifica per elaborazioni più veloci e formato dati migliorato per mobile e desktop.' },
-                    { title: 'Material You icons', desc: 'Introdotte icone Material You e pill buttons arrotondati per una navigazione più immediata.' },
-                    { title: 'Mobile optimization', desc: 'Ottimizzazione mobile con larghezze dinamiche responsive, menu ridotti e caricamento fluido dei tab.' },
-                    { title: 'Blur e superfici glassy', desc: 'Aggiunti effetti blur su header, menu e modali per un design più premium e spazioso.' },
-                    { title: 'Responsive dynamic width', desc: 'Aggiornata la logica responsive per adattare il layout alle larghezze dei dispositivi in tempo reale.' },
-                    { title: 'Contrast borders', desc: 'Rifinite le cornici del menu e dei pulsanti per migliorare leggibilità e accessibilità.' },
-                    { title: 'Future theme support 2.1', desc: 'Preparato il codice per il prossimo rilascio di temi avanzati con nuove palette e modalità fluidhe.' },
-                    { title: 'Crono API roadmapped', desc: 'Pianificata nuova API Crono per integrazione esterna e automazione dei dati della classifica.' }
-                ]
-            },
-            {
-                version: 'v1.9',
-                date: '25 MAGGIO 2026',
-                latest: false,
-                items: [
-                    { title: 'Gestione Album Owner', desc: 'Introdotto tab album con creazione, modifica, eliminazione e associazione canzoni ad album.' },
-                    { title: 'Artista Album', desc: 'Aggiunto campo artista nella creazione/modifica album per una migliore catalogazione.' },
-                    { title: 'Ricerca per Album/Artista', desc: 'La barra globale ora filtra anche per nome album e artista associato alle canzoni.' },
-                    { title: 'Fallback Copertina Album', desc: 'Le canzoni senza cover usano la cover dell\'album associato per coerenza visiva.' },
-                    { title: 'Alert-style Theme Menu', desc: 'Convertito il menu cambio tema in overlay stile alert-card (`.theme-menu-card`) per coerenza visiva.' },
-                    { title: 'Export: nuove modalità e formati', desc: 'Aggiunte modalità di esportazione `general`, `archive_current`, `archive_all` e formati `TXT` e `CSV` con logica client-side in `exportData(format)`.' },
-                    { title: 'Export Modal restyling', desc: 'Rifatto il modale di esportazione come `system-alert-card export-card` con stile frosted glass e azioni dedicate.' },
-                    { title: 'Archivio: navigazione settimana', desc: 'Visualizzazione settimana attiva con due freccette (▲/▼) e funzione `changeExportWeek(dir, evt)` che usa `evt.stopPropagation()` e seleziona correttamente l\'opzione radio.' },
-                    { title: 'Barra di ricerca: frosted blur consolidato', desc: 'Rimosse regole duplicate e creato un unico blocco `.search-container .search-wrapper` con `backdrop-filter: blur(25px)` e compatibilità `-webkit-backdrop-filter`.' },
-                    { title: 'Search UI refinements', desc: 'Ridotta altezza barra, icona di ricerca posizionata a destra, padding e font ottimizzati per layout compatto.' },
-                    { title: 'Utility .sfocata', desc: 'Aggiunta la classe `.sfocata { filter: blur(5px); }` come utility richiesta per effetti locali.' },
-                    { title: 'Fix CSS parsing & overlays', desc: 'Corrette regole CSS corrotte (`#loader-overlay`, `.language-confirm-overlay`) e rimosse proprietà non avvolte che rompevano il parsing.' },
-                    { title: 'Event & interaction fixes', desc: 'Risolti conflitti di selettori e comportamento eventi (nav settimane non attivano radio per errore).'}
-                ]
-            },
-            {
-                version: 'v1.8',
-                date: '18 MAGGIO 2026',
-                latest: false,
-                items: [
-                    { title: 'Alert-style Theme Menu', desc: 'Convertito il menu cambio tema in overlay stile alert-card (`.theme-menu-card`) per coerenza visiva.' },
-                    { title: 'Export: nuove modalità e formati', desc: 'Aggiunte modalità di esportazione `general`, `archive_current`, `archive_all` e formati `TXT` e `CSV` con logica client-side in `exportData(format)`.' },
-                    { title: 'Export Modal restyling', desc: 'Rifatto il modale di esportazione come `system-alert-card export-card` con stile frosted glass e azioni dedicate.' },
-                    { title: 'Archivio: navigazione settimana', desc: 'Visualizzazione settimana attiva con due freccette (▲/▼) e funzione `changeExportWeek(dir, evt)` che usa `evt.stopPropagation()` e seleziona correttamente l\'opzione radio.' },
-                    { title: 'Barra di ricerca: frosted blur consolidato', desc: 'Rimosse regole duplicate e creato un unico blocco `.search-container .search-wrapper` con `backdrop-filter: blur(25px)` e compatibilità `-webkit-backdrop-filter`.' },
-                    { title: 'Search UI refinements', desc: 'Ridotta altezza barra, icona di ricerca posizionata a destra, padding e font ottimizzati per layout compatto.' },
-                    { title: 'Utility .sfocata', desc: 'Aggiunta la classe `.sfocata { filter: blur(5px); }` come utility richiesta per effetti locali.' },
-                    { title: 'Fix CSS parsing & overlays', desc: 'Corrette regole CSS corrotte (`#loader-overlay`, `.language-confirm-overlay`) e rimosse proprietà non avvolte che rompevano il parsing.' },
-                    { title: 'Event & interaction fixes', desc: 'Risolti conflitti di selettori e comportamento eventi (nav settimane non attivano radio per errore).'}
-                ]
-            },
-            {
-                version: 'v1.7',
-                date: '9 MAGGIO 2026',
-                latest: false,
-                items: [
-                    { title: 'Completo Redesign Totale', desc: 'Rinnovato l\'intero design dell\'applicazione con un approccio moderno e più intuitivo.' },
-                    { title: 'UI Cleanup - Desktop Theme Toggle Removed', desc: 'Eliminato il pulsante toggle tema automatico dal desktop per un\'interfaccia più pulita. L\'accesso al menu tema rimane disponibile dal menu mobile.' },
-                    { title: 'Export Modal Redesign', desc: 'Implementato sistema dinamico per il modale di esportazione - ora nascosto di default e visibile solo al click del pulsante "Esporta".' },
-                    { title: 'Export Button Restoration', desc: 'Ripristinato pulsante "Esporta" desktop nella sezione "Classifica Generale" con icona 📊 per accesso rapido alle opzioni di esportazione.' },
-                    { title: 'Class-Based Toggle System', desc: 'Migrazione dalla manipolazione diretta dello stile inline a sistema di classList per il toggle dell\'overlay - migliore gestione CSS e performance.' },
-                    { title: 'Modal Overlay Styling', desc: 'Aggiunto stile fullscreen con backdrop blur per il modale di esportazione con transizioni fluide e posizionamento centrato.' },
-                    { title: 'Responsive Design Enhancements', desc: 'Miglioramenti significativi alla responsività dell\'applicazione per garantire un\'esperienza utente ottimale su tutti i dispositivi.' },
-                    { title: 'Codebase Optimization', desc: 'Refactoring del codice per migliorare la manutenibilità e le performance complessive dell\'applicazione.' },
-                    { title: 'Bug Fixes', desc: 'Risolti vari bug minori segnalati dagli utenti per migliorare la stabilità dell\'applicazione.' },
-                    { title: 'Cambio UI minimo', desc: 'Piccoli cambiamenti estetici per migliorare l\'esperienza utente.' },
-                    { title: 'Changelog Dinamico', desc: 'Introdotto sistema di changelog dinamico per documentare tutte le modifiche in modo chiaro e accessibile.' },
-                    { title: 'Supporto multi-lingua per il changelog', desc: 'Aggiunto il supporto multilingua con descrizioni dettagliate per ogni versione.' },
-                    { title: 'Interfaccia tradotta', desc: 'Supporto traduzione per l\'intera interfaccia, compresi modali e notifiche.' }
-                ]
-            },
-            {
-                version: 'v1.6',
-                date: '25 APRILE 2026',
-                items: [
-                    { title: 'Complete Authentication System', desc: 'Implementato account.html con Supabase Auth integrato.' },
-                    { title: 'User Registration & Profile Management', desc: 'Nuovo sistema di registrazione con profili utente persistenti su Supabase Cloud.' },
-                    { title: 'Role-Based Access Control', desc: 'Sistema di ruoli con distinzione Owner vs Utenti Standard.' },
-                    { title: 'Password Recovery Protocol', desc: 'Flusso di recupero password a due step con verifiche di sicurezza.' },
-                    { title: 'Session Protection', desc: 'Protezione della pagina index.html con controllo sessione automatico e reindirizzamento a login.' },
-                    { title: 'Profile Editing', desc: 'Interfaccia completa per la modifica profilo.' },
-                    { title: 'Manager Request System', desc: 'Sistema di richiesta status manager con email automatica.' },
-                    { title: 'Theme Persistence', desc: 'Integrazione con theme-engine.js per sincronizzazione tema tra tutte le pagine.' },
-                    { title: 'RLS Security Policies', desc: 'Implementate Row Level Security policies in Supabase per proteggere i dati utente.' },
-                    { title: 'Ultimate Metadata Mapper', desc: 'Introdotto album-mapper.js con database centralizzato per artisti e album.' },
-                    { title: 'CronoSync Engine', desc: 'Implementato ranking-engine.js per la formattazione automatica dei dati in classifica.' },
-                    { title: 'Triple-Fallback System', desc: 'Sistema di recupero metadati a tre livelli per garantire la coerenza visiva.' },
-                    { title: 'Real-time Injection', desc: 'Sincronizzazione automatica dei dati ogni 30 secondi con feedback visivo.' }
-                ]
-            },
-            {
-                version: 'v1.5',
-                date: '11 APRILE 2026',
-                items: [
-                    { title: 'Persistent Theme Engine', desc: 'Implementato theme-engine.js per la gestione universale del tema.' },
-                    { title: 'Navy Blue Contrast', desc: 'Ottimizzazione leggibilità Light Mode per i dati numerici e i punti.' },
-                    { title: 'Advanced Exporting', desc: 'Modulo di esportazione potenziato con selettori di colonna dinamici.' }
-                ]
-            },
-            {
-                version: 'v1.4',
-                date: '05 APRILE 2026',
-                items: [
-                    { title: 'Protocollo Il Notaio', desc: 'Sistema di controllo coerenza per le oscillazioni drastiche in classifica.' },
-                    { title: 'Performance Update', desc: 'Ottimizzazione del caricamento dei dati da Supabase Cloud.' }
-                ]
-            },
-            {
-                version: 'v1.3',
-                date: '28 MARZO 2026',
-                items: [
-                    { title: 'Rebranding', desc: 'Transizione ufficiale del brand in CRONOSOUND.' },
-                    { title: 'Mobile First', desc: 'Integrazione Hamburger Menu fullscreen per dispositivi piccoli.' }
-                ]
-            },
-            {
-                version: 'v1.2',
-                date: '15 MARZO 2026',
-                items: [
-                    { title: 'Archivio Storico', desc: 'Sistema di consultazione delle settimane precedenti.' },
-                    { title: 'Design Refresh', desc: 'Passaggio allo stile Glassmorphism con Plus Jakarta Sans.' }
-                ]
-            },
-            {
-                version: 'v1.0',
-                date: '01 MARZO 2026',
-                items: [
-                    { title: 'Genesis', desc: 'Lancio della prima versione alpha del sistema.' }
-                ]
-            }
-        ],
-        en: [
-            {
-                version: 'v2.0',
-                date: 'JUNE 23, 2026',
-                latest: true,
-                items: [
-                    { title: 'CronoFrost UI 1.0', desc: 'New interface with rounded center tab bar, blur buttons, and contrast borders for a modern cohesive look.' },
-                    { title: 'Crono Account System 2.0', desc: 'Rebuilt account system with custom login, full profile editing, and persistent owner roles.' },
-                    { title: 'Ranking Engine 5', desc: 'Updated ranking engine for faster processing and improved data formatting on mobile and desktop.' },
-                    { title: 'Material You icons', desc: 'Added Material You iconography and rounded pill buttons for faster in-app navigation.' },
-                    { title: 'Mobile optimization', desc: 'Optimized mobile flow with responsive dynamic width behavior, compact menus, and smooth tab transitions.' },
-                    { title: 'Blurs & glassy surfaces', desc: 'Added blur effects on headers, menus, and overlays for a more premium visual feel.' },
-                    { title: 'Responsive dynamic width', desc: 'Enhanced responsive layout logic to adapt in real time across device widths.' },
-                    { title: 'Contrast borders', desc: 'Refined menu and button borders for better readability and visual separation.' },
-                    { title: 'Future theme support 2.1', desc: 'Prepared code for the next theme release with advanced palettes and fluid mode switching.' },
-                    { title: 'Crono API roadmap', desc: 'Planned the new Crono API for external integration and automated ranking data flows.' }
-                ]
-            },
-            {
-                version: 'v1.9',
-                date: 'MAY 25, 2026',
-                latest: false,
-                items: [
-                    { title: 'Album Owner Management', desc: 'Added album tab with create/edit/delete album flows and song-to-album assignment.' },
-                    { title: 'Album Artist Field', desc: 'Added artist field to album creation/edit UI for better album metadata.' },
-                    { title: 'Album/Artist search', desc: 'Global search now filters by album name and associated album artist.' },
-                    { title: 'Album cover fallback', desc: 'Songs without their own cover now fallback to the associated album cover.' },
-                    { title: 'Alert-style Theme Menu', desc: 'Converted theme menu to alert-card overlay (`.theme-menu-card`) for visual consistency.' },
-                    { title: 'Export: new modes & formats', desc: 'Added export modes `general`, `archive_current`, `archive_all` and formats `TXT`/`CSV` with client-side `exportData(format)` logic.' },
-                    { title: 'Export Modal restyling', desc: 'Reworked export modal into `system-alert-card export-card` with frosted glass styling and dedicated actions.' },
-                    { title: 'Archive week navigation', desc: 'Added week display with up/down arrows and `changeExportWeek(dir, evt)` using `evt.stopPropagation()` and correct radio selection.' },
-                    { title: 'Search bar: consolidated frosted blur', desc: 'Removed duplicate rules and added single `.search-container .search-wrapper` block with `backdrop-filter: blur(25px)` and `-webkit-backdrop-filter`.' },
-                    { title: 'Search UI refinements', desc: 'Thinner search bar, search icon aligned to the right, adjusted padding and font-size for compact layout.' },
-                    { title: 'Utility .sfocata', desc: 'Added `.sfocata { filter: blur(5px); }` utility class.' },
-                    { title: 'CSS parsing & overlay fixes', desc: 'Fixed broken CSS blocks (`#loader-overlay`, `.language-confirm-overlay`) and removed stray properties that broke parsing.' },
-                    { title: 'Interaction fixes', desc: 'Fixed event handling so week nav buttons don\'t unintentionally toggle radios; improved selector overrides and responsive behavior.' }
-                ]
-            },
-            {
-                version: 'v1.8',
-                date: 'MAY 18, 2026',
-                latest: false,
-                items: [
-                    { title: 'Alert-style Theme Menu', desc: 'Converted theme menu to alert-card overlay (`.theme-menu-card`) for visual consistency.' },
-                    { title: 'Export: new modes & formats', desc: 'Added export modes `general`, `archive_current`, `archive_all` and formats `TXT`/`CSV` with client-side `exportData(format)` logic.' },
-                    { title: 'Export Modal restyling', desc: 'Reworked export modal into `system-alert-card export-card` with frosted glass styling and dedicated actions.' },
-                    { title: 'Archive week navigation', desc: 'Added week display with up/down arrows and `changeExportWeek(dir, evt)` using `evt.stopPropagation()` and correct radio selection.' },
-                    { title: 'Search bar: consolidated frosted blur', desc: 'Removed duplicate rules and added single `.search-container .search-wrapper` block with `backdrop-filter: blur(25px)` and `-webkit-backdrop-filter`.' },
-                    { title: 'Search UI refinements', desc: 'Thinner search bar, search icon aligned to the right, adjusted padding and font-size for compact layout.' },
-                    { title: 'Utility .sfocata', desc: 'Added `.sfocata { filter: blur(5px); }` utility class.' },
-                    { title: 'CSS parsing & overlay fixes', desc: 'Fixed broken CSS blocks (`#loader-overlay`, `.language-confirm-overlay`) and removed stray properties that broke parsing.' },
-                    { title: 'Interaction fixes', desc: 'Fixed event handling so week nav buttons don\'t unintentionally toggle radios; improved selector overrides and responsive behavior.' }
-                ]
-            },
-            {
-                version: 'v1.7',
-                date: 'MAY 9, 2026',
-                latest: false,
-                items: [
-                    { title: 'Complete Total Redesign', desc: 'Completely redesigned the application with a modern and intuitive approach.' },
-                    { title: 'UI Cleanup - Desktop Theme Toggle Removed', desc: 'Removed automatic theme toggle button from desktop for a cleaner interface. Theme menu access remains available from mobile menu.' },
-                    { title: 'Export Modal Redesign', desc: 'Implemented dynamic system for export modal - now hidden by default and visible only on "Export" button click.' },
-                    { title: 'Export Button Restoration', desc: 'Restored "Export" button on desktop in "General Ranking" section with 📊 icon for quick access to export options.' },
-                    { title: 'Class-Based Toggle System', desc: 'Migration from direct inline style manipulation to classList system for overlay toggle - better CSS management and performance.' },
-                    { title: 'Modal Overlay Styling', desc: 'Added fullscreen style with backdrop blur for export modal with smooth transitions and centered positioning.' },
-                    { title: 'Responsive Design Enhancements', desc: 'Significant improvements to application responsiveness for optimal user experience on all devices.' },
-                    { title: 'Codebase Optimization', desc: 'Code refactoring to improve maintainability and overall application performance.' },
-                    { title: 'Bug Fixes', desc: 'Fixed various minor bugs reported by users to improve application stability.' },
-                    { title: 'Minimal UI Changes', desc: 'Small aesthetic changes to improve user experience.' },
-                    { title: 'Dynamic Changelog', desc: 'Introduced dynamic changelog system to document all changes clearly and accessibly.' },
-                    { title: 'Multi-language changelog support', desc: 'Added multi-language support to the changelog with detailed descriptions for each version.' },
-                    { title: 'Interface translation support', desc: 'Full interface translation support across the platform, including modals and notifications.' }
-                ]
-            },
-            {
-                version: 'v1.6',
-                date: 'APRIL 25, 2026',
-                items: [
-                    { title: 'Complete Authentication System', desc: 'Implemented account.html with integrated Supabase Auth.' },
-                    { title: 'User Registration & Profile Management', desc: 'New registration system with persistent user profiles on Supabase Cloud.' },
-                    { title: 'Role-Based Access Control', desc: 'Role system with distinction between Owner and Standard Users.' },
-                    { title: 'Password Recovery Protocol', desc: 'Two-step password recovery flow with security checks.' },
-                    { title: 'Session Protection', desc: 'Protection of index.html page with automatic session check and login redirection.' },
-                    { title: 'Profile Editing', desc: 'Complete interface for profile modification.' },
-                    { title: 'Manager Request System', desc: 'Manager status request system with automatic email.' },
-                    { title: 'Theme Persistence', desc: 'Integration with theme-engine.js for theme synchronization across all pages.' },
-                    { title: 'RLS Security Policies', desc: 'Implemented Row Level Security policies in Supabase to protect user data.' },
-                    { title: 'Ultimate Metadata Mapper', desc: 'Introduced album-mapper.js with centralized database for artists and albums.' },
-                    { title: 'CronoSync Engine', desc: 'Implemented ranking-engine.js for automatic formatting of ranking data.' },
-                    { title: 'Triple-Fallback System', desc: 'Three-level metadata recovery system to ensure visual consistency.' },
-                    { title: 'Real-time Injection', desc: 'Automatic data synchronization every 30 seconds with visual feedback.' }
-                ]
-            },
-            {
-                version: 'v1.5',
-                date: 'APRIL 11, 2026',
-                items: [
-                    { title: 'Persistent Theme Engine', desc: 'Implemented theme-engine.js for universal theme management.' },
-                    { title: 'Navy Blue Contrast', desc: 'Optimized Light Mode readability for numeric data and points.' },
-                    { title: 'Advanced Exporting', desc: 'Enhanced export module with dynamic column selectors.' }
-                ]
-            },
-            {
-                version: 'v1.4',
-                date: 'APRIL 5, 2026',
-                items: [
-                    { title: 'Notary Protocol', desc: 'Coherence control system for drastic ranking fluctuations.' },
-                    { title: 'Performance Update', desc: 'Optimization of data loading from Supabase Cloud.' }
-                ]
-            },
-            {
-                version: 'v1.3',
-                date: 'MARCH 28, 2026',
-                items: [
-                    { title: 'Rebranding', desc: 'Official brand transition to CRONOSOUND.' },
-                    { title: 'Mobile First', desc: 'Integration of fullscreen Hamburger Menu for small devices.' }
-                ]
-            },
-            {
-                version: 'v1.2',
-                date: 'MARCH 15, 2026',
-                items: [
-                    { title: 'Historical Archive', desc: 'System for consulting previous weeks.' },
-                    { title: 'Design Refresh', desc: 'Transition to Glassmorphism style with Plus Jakarta Sans.' }
-                ]
-            },
-            {
-                version: 'v1.0',
-                date: 'MARCH 1, 2026',
-                items: [
-                    { title: 'Genesis', desc: 'Launch of the first alpha version of the system.' }
-                ]
-            }
-        ]
+    window.LanguageEngine3 = {
+        version: ENGINE_VERSION,
+        languages: SUPPORTED_LANGUAGES,
+        get language() { return window.currentLanguage; },
+        translate: window.t,
+        apply: window.applyTranslations,
+        setLanguage: window.changeLanguage,
+        observer: null
     };
 
-    // Spanish changelog (localized)
-    changelogs.es = [
-        {
-            version: 'v2.0',
-            date: '23 JUNIO 2026',
-            latest: true,
-            items: [
-                { title: 'CronoFrost UI 1.0', desc: 'Nueva interfaz con barra de tabs redondeada centrada, botones blur y bordes de contraste para un look más moderno.' },
-                { title: 'Crono Account System 2.0', desc: 'Reestructurado el sistema de cuentas con login personalizado, edición completa de perfil y rol propietario persistente.' },
-                { title: 'Ranking Engine 5', desc: 'Actualizado el motor de rankings para un procesamiento más rápido y mejor formato de datos en móvil y escritorio.' },
-                { title: 'Material You icons', desc: 'Añadidas iconografías Material You y botones tipo píldora para una navegación más directa.' },
-                { title: 'Optimización móvil', desc: 'Flujo móvil optimizado con anchos dinámicos responsive, menús compactos y transiciones suaves entre tabs.' },
-                { title: 'Blur y superficies glassy', desc: 'Añadidos efectos blur en headers, menús y overlays para una estética más premium.' },
-                { title: 'Ancho dinámico responsive', desc: 'Mejorada la lógica responsive para adaptarse en tiempo real a las variaciones de ancho de dispositivo.' },
-                { title: 'Bordes de contraste', desc: 'Refinados los bordes de menús y botones para mejorar la legibilidad y separación visual.' },
-                { title: 'Soporte de temas 2.1', desc: 'Preparado el código para el próximo lanzamiento de temas avanzados con nuevas paletas.' },
-                { title: 'Hoja de ruta Crono API', desc: 'Planificada la nueva API Crono para integración externa y automatización de datos de ranking.' }
-            ]
-        }
-    ].concat(changelogs.en.slice(1));
-
-    // Function to generate changelog HTML
-    window.generateChangelog = function() {
-        const lang = window.currentLanguage || DEFAULT_LANGUAGE;
-        const logs = changelogs[lang] || changelogs[DEFAULT_LANGUAGE];
-        
-        return logs.map(entry => `
-            <div class="log-entry">
-                <div class="log-header">
-                    <span class="version-tag ${entry.latest ? 'latest' : ''}">${entry.version}${entry.latest ? ' - LATEST' : ''}</span>
-                    <span class="log-date">${entry.date}</span>
-                </div>
-                <ul>
-                    ${entry.items.map(item => `<li><b>${item.title}:</b> ${item.desc}</li>`).join('')}
-                </ul>
-            </div>
-        `).join('');
-    };
-
-    // Make changelog available globally
 })();
